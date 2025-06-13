@@ -1,28 +1,35 @@
+FROM python:3.10-slim
 
-FROM meltano/meltano:latest
-
-WORKDIR /app
-
-# Instala Java
+# Instala dependências do sistema
 RUN apt-get update && \
-    apt-get install -y openjdk-17-jdk && \
+    apt-get install -y --no-install-recommends \
+    gcc \
+    python3-dev \
+    openjdk-17-jdk-headless && \
     rm -rf /var/lib/apt/lists/* && \
-    java -version  # Verifica a instalação
+    java -version
 
-RUN mkdir -p .meltano && \
-    echo -e "n\n" | meltano init .  # Responde automaticamente às prompts
+# Cria e ativa um virtualenv
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
-RUN pip install -r requirements.txt || true
+# Instala o Meltano
+RUN pip install --no-cache-dir meltano
 
-# plugins
-RUN meltano add extractor tap-postgres && \
-    meltano add loader target-csv && \
-    meltano install
+# Configura o projeto
+WORKDIR /app
+RUN meltano init . --no_install && \
+    meltano add extractor tap-postgres && \
+    meltano add loader target-csv
 
-# dopia configurações
+# Copia configurações
 COPY meltano.yml .
 
-# diretório para saída dos dados
+# Instala plugins
+RUN meltano install
+
+# Volume para saída
 VOLUME /app/meltano_output/db
 
-CMD ["meltano", "run", "tap-postgres", "target-csv"]
+# Usa o caminho absoluto do meltano no virtualenv
+CMD ["/opt/venv/bin/meltano", "run", "tap-postgres", "target-csv"]
