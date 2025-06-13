@@ -32,7 +32,7 @@ services:
     build:
       context: ./azure-ingestion
       dockerfile: azure-ingestion.Dockerfile
-    env_file: .env
+    # env_file: .env
     volumes:
       - ./meltano_output:/app/meltano_output  
 
@@ -44,7 +44,7 @@ services:
     build:
       context: ./databricks-upload
       dockerfile: databricks-upload.Dockerfile
-    env_file: .env
+    # env_file: .env
     volumes:
       - ./meltano_output:/app/meltano_output  
 
