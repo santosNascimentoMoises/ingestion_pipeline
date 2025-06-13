@@ -28,3 +28,7 @@ __pycache__/
 meltano_output/
 
 requirements.txt
+
+venv/
+
+./

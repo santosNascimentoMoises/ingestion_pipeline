@@ -1,6 +1,3 @@
-import os
-from pathlib import Path
-
 POSTGRES_DATA_DIR = r'meltano_output/api/'
 API_DATA_DIR = r'meltano_output/api/'
 

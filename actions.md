@@ -1,4 +1,5 @@
 # lembrar que fazer ctrl + shift + V, abre o preview
+<!-- conda deactivate -->
 
 # ler variável de ambiente
 source .env
@@ -40,9 +41,3 @@ docker compose down
 from azure.identity import DefaultAzureCredential
 from pyspark.sql import SparkSession
 pandas -->
-
-(base) moises-ubuntu@moises-ubuntu-Aspire-A515-45:~/ingestion_pipeline_checkpoint2$ w
-w Enable Watch
-
-
-CMD ["sh", "-c", "clear && /bin/bash"]  # Limpa a tela e abre o shell

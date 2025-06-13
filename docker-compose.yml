@@ -12,42 +12,45 @@ services:
   #   volumes:
   #     - ./meltano_output/api:/app/meltano_output/api  # Volume dedicado para API
 
-  # meltano-db:
-  #   build:
-  #     context: ./meltano-db
-  #     dockerfile: meltano.Dockerfile
-  #   env_file: .env
-  #   environment:
-  #     - DB_HOST=db
-  #     - DB_USER=${DB_USER}
-  #     - DB_PASSWORD=${DB_PASSWORD}
-  #     - DB_NAME=${DB_NAME}
-  #     - MELTANO_SELECT_TABLES='["*.*"]'  #exempo: ["schema.tabela1", "schema.tabela2"]'
-  #   volumes:
-  #     - ./meltano_output/db:/app/meltano_output/db    # Volume dedicado para DB
+  meltano-db:
+    build:
+      context: ./meltano-db
+      dockerfile: meltano.Dockerfile
+    env_file: .env
+    environment:
+      - DB_HOST=db
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    volumes:
+      - ./meltano_output/db:/app/meltano_output/db    # Volume dedicado para DB
 
   azure-ingestion:
+    depends_on:
+    - meltano-db
+  #   - meltano-api
+  #   - azure-ingestion
     build:
       context: ./azure-ingestion
       dockerfile: azure-ingestion.Dockerfile
     env_file: .env
     volumes:
       - ./meltano_output:/app/meltano_output  
-    # depends_on:
+    depends_on:
+      - meltano-db
     #   - meltano-api
-    #   - meltano-db
 
   databricks-upload:
+    depends_on:
+    - meltano-db
+  #   - meltano-api
+  #   - azure-ingestion
     build:
       context: ./databricks-upload
       dockerfile: databricks-upload.Dockerfile
     env_file: .env
     volumes:
       - ./meltano_output:/app/meltano_output  
-    # depends_on:
-    #   - meltano-api
-    #   - meltano-db
-    #   - azure-ingestion
 
 volumes:
   postgres_data:

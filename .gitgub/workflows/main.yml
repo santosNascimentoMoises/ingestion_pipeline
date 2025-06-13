@@ -1,8 +1,24 @@
-name: CI/CD Pipeline
-on: [push]
+name: Deploy Develop
+on:
+  workflow_dispatch:  # Execução apenas manual
+
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'  # Restringe à branch develop
+    
     steps:
       - uses: actions/checkout@v4
-      - run: docker-compose up --build
+        
+      - name: Rodar pipeline
+        run: |
+          echo "Executando deploy manual na develop"
+          # Seus comandos aqui (ex: docker-compose up, meltano run, etc)
+          
+        jobs:
+          deploy:
+            runs-on: ubuntu-latest
+            steps:
+              - uses: actions/checkout@v4
+              - run: docker-compose up --build -d
+              - run: docker-compose logs -f
