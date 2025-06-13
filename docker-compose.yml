@@ -27,6 +27,9 @@ services:
   #     - ./meltano_output/db:/app/meltano_output/db    # Volume dedicado para DB
 
   azure-ingestion:
+    build:
+      context: ./azure-ingestion
+      dockerfile: azure-ingestion.Dockerfile
     build: ./azure-ingestion
     env_file: .env
     volumes:
@@ -36,7 +39,9 @@ services:
     #   - meltano-db
 
   databricks-upload:
-    build: ./databricks-upload
+    build:
+      context: ./databrix-upload
+      dockerfile: databrix-upload.Dockerfile
     env_file: .env
     volumes:
       - ./meltano_output:/app/meltano_output  
