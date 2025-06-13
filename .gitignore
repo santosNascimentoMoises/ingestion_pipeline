@@ -25,4 +25,4 @@ __pycache__/
 .Python
 
 # meltano_output/
-meltano_output
+meltano_output/
