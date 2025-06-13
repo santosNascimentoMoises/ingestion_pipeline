@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-POSTGRES_DATA_DIR = r'/home/moises-ubuntu/ingestion_pipeline_checkpoint2/meltano_output/db/'
+POSTGRES_DATA_DIR = r'meltano_output/api/'
 API_DATA_DIR = r'meltano_output/api/'
 
 #------------------------------------------------------#

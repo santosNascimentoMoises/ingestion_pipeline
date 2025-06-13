@@ -9,7 +9,7 @@ plugins:
         password: ${MSQL_DB_PASSWORD}
         dbname: ${MSQL_DB_NAME}
       select:
-      - '*.*'
+      - ${MSQL_DB_EXTRACT:-["*.*"]} # se não for declarado a select na env, vai pegar tudo
   loaders:
     - name: target-csv
       config:
