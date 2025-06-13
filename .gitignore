@@ -1,0 +1,25 @@
+
+
+
+
+.env
+.enn-original
+
+# Ignorar arquivos de cache
+.cache/
+*.cache
+
+# Ignorar arquivos de pacotes
+*.log
+*.tmp
+*.temp
+*.zip
+*.tar.gz
+*.rar
+
+## Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
