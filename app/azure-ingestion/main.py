@@ -9,3 +9,7 @@ os.chdir(POSTGRES_DATA_DIR)
 file =  "arquivo_teste.csv"
 df = pd.read_csv(file)
 print(df)
+
+# Lê outputs separados
+# Pasta de dados dentro do container azure-ingest: /app/meltano_output/api/ "dados"
+#                                                  /app/meltano_output/api/ "dados"

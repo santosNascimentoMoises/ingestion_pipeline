@@ -2,6 +2,11 @@ FROM meltano/meltano:latest
 
 WORKDIR /app
 
+# Instala Java (OpenJDK 17)
+RUN apt-get update && \
+    apt-get install -y openjdk-17-jdk && \
+    rm -rf /var/lib/apt/lists/*
+    
 #plugins
 RUN meltano init . --no-interaction && \
     meltano add extractor tap-rest-api && \

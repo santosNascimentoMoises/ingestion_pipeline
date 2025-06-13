@@ -8,6 +8,8 @@ plugins:
         user: ${MSQL_DB_USER}
         password: ${MSQL_DB_PASSWORD}
         dbname: ${MSQL_DB_NAME}
+      select:
+      - '*.*'
   loaders:
     - name: target-csv
       config:

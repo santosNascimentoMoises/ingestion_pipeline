@@ -4,8 +4,15 @@ plugins:
     - name: tap-rest-api
       config:
         api_url: ${API_URL}
-        auth_type: bearer
-        auth_token: ${API_TOKEN}
+        auth_type: bearer # oauth2???
+        auth_token: ${API_TOKEN}        
+        headers:
+          Accept: application/json
+        pagination:
+          type: offset
+          limit: 100
+        request_delay_ms: 500
+
   loaders:
     - name: target-csv
       config:
