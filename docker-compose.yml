@@ -29,7 +29,6 @@ services:
     depends_on:
     - meltano-db
   #   - meltano-api
-  #   - azure-ingestion
     build:
       context: ./azure-ingestion
       dockerfile: azure-ingestion.Dockerfile
