@@ -1,0 +1,12 @@
+version: 1
+plugins:
+  extractors:
+    - name: tap-rest-api
+      config:
+        api_url: ${API_URL}
+        auth_type: bearer
+        auth_token: ${API_TOKEN}
+  loaders:
+    - name: target-csv
+      config:
+        output_dir: /app/meltano_output/api 

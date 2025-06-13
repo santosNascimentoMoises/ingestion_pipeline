@@ -1,0 +1,14 @@
+version: 1
+plugins:
+  extractors:
+    - name: tap-postgres
+      config:
+        host: ${MSQL_DB_HOST}
+        port: ${MSQL_DB_PORT}
+        user: ${MSQL_DB_USER}
+        password: ${MSQL_DB_PASSWORD}
+        dbname: ${MSQL_DB_NAME}
+  loaders:
+    - name: target-csv
+      config:
+        output_dir: /app/meltano_output/db
