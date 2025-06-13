@@ -36,9 +36,6 @@ services:
     env_file: .env
     volumes:
       - ./meltano_output:/app/meltano_output  
-    depends_on:
-      - meltano-db
-    #   - meltano-api
 
   databricks-upload:
     depends_on:
