@@ -1,30 +1,28 @@
 version: '3.8'
 
 services:
-  meltano-api:
-    build:
-      context: ./meltano-api
-      dockerfile: meltano.Dockerfile
-    environment:
-      - API_URL=${API_URL}
-      - API_TOKEN=${API_TOKEN}
-    volumes:
-      - ./meltano_output/api:/app/meltano_output/api  # Volume dedicado para API
+  # meltano-api:
+  #   build:
+  #     context: ./meltano-api
+  #     dockerfile: meltano.Dockerfile
+  #   environment:
+  #     - API_URL=${API_URL}
+  #     - API_TOKEN=${API_TOKEN}
+  #   volumes:
+  #     - ./meltano_output/api:/app/meltano_output/api  # Volume dedicado para API
 
-  meltano-db:
-    build:
-      context: ./meltano-db
-      dockerfile: meltano.Dockerfile
-    environment:
-      - DB_HOST=db
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
-      - MELTANO_SELECT_TABLES='["*.*"]'  #exempo: ["schema.tabela1", "schema.tabela2"]'
-    volumes:
-      - ./meltano_output/db:/app/meltano_output/db    # Volume dedicado para DB
-    depends_on:
-      - db
+  # meltano-db:
+  #   build:
+  #     context: ./meltano-db
+  #     dockerfile: meltano.Dockerfile
+  #   environment:
+  #     - DB_HOST=db
+  #     - DB_USER=${DB_USER}
+  #     - DB_PASSWORD=${DB_PASSWORD}
+  #     - DB_NAME=${DB_NAME}
+  #     - MELTANO_SELECT_TABLES='["*.*"]'  #exempo: ["schema.tabela1", "schema.tabela2"]'
+  #   volumes:
+  #     - ./meltano_output/db:/app/meltano_output/db    # Volume dedicado para DB
 
   azure-ingestion:
     build: ./azure-ingestion
@@ -45,4 +43,4 @@ services:
 
 volumes:
   postgres_data:
-  meltano_output:  # Volume pai (opcional)
+  meltano_output:
