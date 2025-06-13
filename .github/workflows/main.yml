@@ -2,7 +2,8 @@ name: ELT Pipeline
 
 on:
   workflow_dispatch:
-
+      branches:
+      - develop
 jobs:
   elt:
     runs-on: ubuntu-latest
