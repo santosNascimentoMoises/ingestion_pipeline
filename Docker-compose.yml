@@ -5,6 +5,7 @@ services:
   #   build:
   #     context: ./meltano-api
   #     dockerfile: meltano.Dockerfile
+  #   env_file: .env
   #   environment:
   #     - API_URL=${API_URL}
   #     - API_TOKEN=${API_TOKEN}
@@ -15,6 +16,7 @@ services:
   #   build:
   #     context: ./meltano-db
   #     dockerfile: meltano.Dockerfile
+  #   env_file: .env
   #   environment:
   #     - DB_HOST=db
   #     - DB_USER=${DB_USER}
@@ -26,20 +28,22 @@ services:
 
   azure-ingestion:
     build: ./azure-ingestion
+    env_file: .env
     volumes:
-      - ./meltano_output:/app/meltano_output  # Acessa ambos os outputs
-    depends_on:
-      - meltano-api
-      - meltano-db
+      - ./meltano_output:/app/meltano_output  
+    # depends_on:
+    #   - meltano-api
+    #   - meltano-db
 
-  db:
-    image: postgres:14
-    environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+  databricks-upload:
+    build: ./databricks-upload
+    env_file: .env
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./meltano_output:/app/meltano_output  
+    # depends_on:
+    #   - meltano-api
+    #   - meltano-db
+    #   - azure-ingestion
 
 volumes:
   postgres_data:
