@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-# Instala dependências do sistema
+# 1. Instala dependências essenciais
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     gcc \
@@ -9,27 +9,23 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     java -version
 
-# Cria e ativa um virtualenv
-RUN python -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-
-# Instala o Meltano
+# 2. Instala o Meltano globalmente
 RUN pip install --no-cache-dir meltano
 
-# Configura o projeto
+# 3. Configura o projeto
 WORKDIR /app
-RUN meltano init . --no_install && \
-    meltano add extractor tap-postgres && \
+
+# Solução alternativa para
+RUN mkdir -p .meltano && meltano init .
+
+# 4. Adiciona plugins específicos
+RUN meltano add extractor tap-postgres && \
     meltano add loader target-csv
 
-# Copia configurações
+# 5. Copia configurações e instala
 COPY meltano.yml .
-
-# Instala plugins
 RUN meltano install
 
-# Volume para saída
+# 6. Volume e comando
 VOLUME /app/meltano_output/db
-
-# Usa o caminho absoluto do meltano no virtualenv
-CMD ["/opt/venv/bin/meltano", "run", "tap-postgres", "target-csv"]
+CMD ["meltano", "run", "tap-postgres", "target-csv"]

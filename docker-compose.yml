@@ -27,7 +27,7 @@ services:
 
   azure-ingestion:
     depends_on:
-    - meltano-db
+      - meltano-db
   #   - meltano-api
     build:
       context: ./azure-ingestion
@@ -38,7 +38,7 @@ services:
 
   databricks-upload:
     depends_on:
-    - meltano-db
+      - meltano-db
   #   - meltano-api
   #   - azure-ingestion
     build:
