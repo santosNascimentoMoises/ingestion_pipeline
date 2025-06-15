@@ -5,49 +5,49 @@ services:
   #   build:
   #     context: ./meltano-api
   #     dockerfile: meltano.Dockerfile
-  #   env_file: .env
+#     env_file: .env
   #   environment:
   #     - API_URL=${API_URL}
   #     - API_TOKEN=${API_TOKEN}
   #   volumes:
   #     - ./meltano_output/api:/app/meltano_output/api  # Volume dedicado para API
 
-  meltano-db:
+  spark-db:
     build:
-      context: ./meltano-db
-      dockerfile: meltano.Dockerfile
-    # env_file: .env
+      context: ./spark-db
+      dockerfile: spark.Dockerfile
+    env_file: .env
     # environment:
-    #   - DB_HOST=db
-    #   - DB_USER=${DB_USER} teste
-    #   - DB_PASSWORD=${DB_PASSWORD}
-    #   - DB_NAME=${DB_NAME}
+    #   - DB_HOST=${MSQL_DB_HOST}
+    #   - DB_USER=${MSQL_DB_USER}
+    #   - DB_PASSWORD=${MSQL_DB_PASSWORD}
+    #   - DB_NAME=${MSQL_DB_NAME}
     volumes:
-      - ./meltano_output/db:/app/meltano_output/db    # Volume dedicado para DB
+      - ./output/db:/app/spark_output/db    # Volume dedicado para DB
 
   azure-ingestion:
     depends_on:
-      - meltano-db
+      - spark-db
   #   - meltano-api
     build:
       context: ./azure-ingestion
       dockerfile: azure-ingestion.Dockerfile
     # env_file: .env
     volumes:
-      - ./meltano_output:/app/meltano_output  
+      - ./output/db:/app/output/bd  # antes tava :/app/meltano_output 
+      # - ./output/api:/app/output/api
 
-  databricks-upload:
-    depends_on:
-      - meltano-db
-  #   - meltano-api
-  #   - azure-ingestion
-    build:
-      context: ./databricks-upload
-      dockerfile: databricks-upload.Dockerfile
-    # env_file: .env
-    volumes:
-      - ./meltano_output:/app/meltano_output  
+  # databricks-upload:
+  #   depends_on:
+  #     - meltano-db
+  # #   - meltano-api
+  # #   - azure-ingestion
+  #   build:
+  #     context: ./databricks-upload
+  #     dockerfile: databricks-upload.Dockerfile
+  #   env_file: .env
+  #   volumes:
+  #     - ./output:/app/output # antes tava :/app/meltano_output 
 
 volumes:
-  postgres_data:
-  meltano_output:
+  output:

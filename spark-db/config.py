@@ -3,9 +3,7 @@
 # ----------------NÃO APAGAR---------------------------#
 #------------------------------------------------------#
 # configurações no container = 
-DATA_BASE_DIR = '/app/meltano_output/api/'
-API_DATA_DIR = '/app/meltano_output/api/'
-
+DATA_BASE_DIR = '/app/spark_output/db/'
 
 schema_list_extract = [
 #   'dbo',
@@ -27,5 +25,3 @@ schema_list_extract = [
 #   'db_denydatareader', 
 #   'db_denydatawriter'
 ]
-
-

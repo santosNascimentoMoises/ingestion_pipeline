@@ -21,10 +21,6 @@ def spark_extract():
     password = os.getenv('MSQL_DB_PASSWORD')
     host = os.getenv('MSQL_DB_HOST')
 
-    # container_name = os.getenv('AZURE_CONTAINER_NAME')
-    # storage_account_name = os.getenv('AZURE_STORAGE_ACCOUNT_NAME')
-    # sas_token = os.getenv('AZURE_STORAGE_ACCOUNT_KEY')
-
     jdbc_url = f"jdbc:sqlserver://{host}:{port};databaseName={db};encrypt=true;trustServerCertificate=true"
     schemas_df = spark.read \
         .format("jdbc") \
@@ -35,8 +31,6 @@ def spark_extract():
         .option("user", user) \
         .option("password", password) \
         .load()
-
-    # schemas_df.show()
 
     schemas_list = [row.schema_name for row in schemas_df.collect()]
     print(schemas_list)
@@ -78,4 +72,4 @@ def spark_extract():
                     )
                     
                     df.coalesce(1).write.parquet(path=output_path,mode="overwrite")
-                    files_extract = True
+

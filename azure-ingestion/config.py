@@ -1,4 +1,4 @@
-POSTGRES_DATA_DIR = r'meltano_output/api/'
+DATA_BASE_DIR = r'meltano_output/db/'
 API_DATA_DIR = r'meltano_output/api/'
 
 #------------------------------------------------------#
