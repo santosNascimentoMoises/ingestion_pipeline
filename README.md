@@ -172,3 +172,12 @@ container_name = "<container_name>"
 - Converte para DataFrame Pandas → Spark DataFrame.
 - Realiza saneamento dos nomes das colunas (substituição de espaços, traços e pontos por underscore).
 - Persiste como tabela Delta no catálogo .
+
+# CI/CD
+Uma das formas de ativar o pipeline na ordem de execução correta é atravez do **MAKEFILE**
+
+[Clean Docker] → [Clear Memory] → [Build Spark] → [Run Spark] 
+→ [Build Azure] → [Upload Blob] → [Build Databricks] 
+→ [Trigger Notebooks] → [Cleanup]
+
+comando: *make pipeline*
