@@ -19,3 +19,11 @@ COPY meltano.yml .
 VOLUME /app/meltano_output/api
 
 CMD ["meltano", "run", "tap-rest-api", "target-csv"]
+
+
+
+
+
+
+# RUN meltano install extractor tap-rest-api-msdk || \
+#     (cd /path/to/tap-rest-api-msdk && pip install -e .)

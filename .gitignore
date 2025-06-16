@@ -16,7 +16,7 @@
 *.zip
 *.tar.gz
 *.rar
-
+teste
 ## Python
 __pycache__/
 *.pyc
@@ -31,3 +31,6 @@ requirements.txt
 
 venv/
 
+*.yml
+
+output

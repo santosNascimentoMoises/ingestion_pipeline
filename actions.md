@@ -6,6 +6,8 @@ source .env
 
 ## testar
 echo $MENSAGEM_TESTE_ENV
+echo $AZURE_STORAGE_CONNECTION_STRING
+echo $MSQL_DB_EXTRACT
 
 # criar ambiente python separado - VENV
 ## venv python
@@ -41,3 +43,6 @@ docker compose down
 from azure.identity import DefaultAzureCredential
 from pyspark.sql import SparkSession
 pandas -->
+
+<!-- pip install pyspark -->
+

@@ -1,16 +1,12 @@
-FROM python:3.11-slim
+FROM python:3.9-slim
 
+# Diretório de trabalho
 WORKDIR /app
 
-COPY . .
+COPY job_databricks.py .
 
-# instala as bibliotecas
-RUN pip install -r requirements.txt || true
+# Instala dependências (apenas requests, já que json é built-in)
+RUN pip install --no-cache-dir requests
 
-# bom pra limpar a tela
-RUN apt-get update && apt-get install -y ncurses-bin  # Garante que 'clear' esteja disponível
-
-CMD ["sh", "-c", "clear && /bin/bash"]
-
-# roda a main
-CMD ["python", "main.py"]
+# Define o comando padrão (pode ser sobrescrito com docker run)
+CMD ["python", "job_databricks.py"]
