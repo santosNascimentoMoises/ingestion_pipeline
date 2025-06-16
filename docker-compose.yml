@@ -26,28 +26,21 @@ services:
       - ./output/db:/app/spark_output/db    # Volume dedicado para DB
 
   azure-ingestion:
-    depends_on:
-      - spark-db
-  #   - meltano-api
     build:
       context: ./azure-ingestion
       dockerfile: azure-ingestion.Dockerfile
-    # env_file: .env
+    env_file: .env
     volumes:
-      - ./output/db:/app/output/bd  # antes tava :/app/meltano_output 
-      # - ./output/api:/app/output/api
+      - ./output/db:/app/output/bd
+      - ./output/api:/app/output/api
 
-  # databricks-upload:
-  #   depends_on:
-  #     - meltano-db
-  # #   - meltano-api
-  # #   - azure-ingestion
+  # databricks-load:
   #   build:
-  #     context: ./databricks-upload
-  #     dockerfile: databricks-upload.Dockerfile
   #   env_file: .env
   #   volumes:
-  #     - ./output:/app/output # antes tava :/app/meltano_output 
+  #     - ./notebooks:/app/notebooks
+  #   environment:
+  #     - PYTHONUNBUFFERED=1
 
 volumes:
   output:

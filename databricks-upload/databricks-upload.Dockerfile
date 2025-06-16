@@ -1,16 +1,12 @@
-FROM python:3.11-slim
+FROM python:3.9-slim
 
 WORKDIR /app
-
 COPY . .
 
-# instala as bibliotecas
-RUN pip install -r requirements.txt || true
+RUN pip install --no-cache-dir \
+    databricks-cli \
+    databricks-sql-connector \
+    pyspark \
+    python-dotenv
 
-# bom pra limpar a tela
-RUN apt-get update && apt-get install -y ncurses-bin  # Garante que 'clear' esteja disponível
-
-CMD ["sh", "-c", "clear && /bin/bash"]
-
-# roda a main
-CMD ["python", "main.py"]
+CMD ["python", "run_local.py"]
