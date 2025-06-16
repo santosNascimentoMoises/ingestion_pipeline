@@ -13,5 +13,4 @@ RUN apt-get update && apt-get install -y ncurses-bin  # Garante que 'clear' este
 CMD ["sh", "-c", "clear && /bin/bash"]
 
 # roda a main
-CMD ["python", "file_rename.py"]
-CMD ["python", "azure_ingest.py"]
+CMD ["sh", "-c", "python file_rename.py && python azure_ingest.py"]

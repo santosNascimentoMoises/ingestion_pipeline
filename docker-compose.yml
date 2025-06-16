@@ -34,13 +34,12 @@ services:
       - ./output/db:/app/output/bd
       - ./output/api:/app/output/api
 
-  # databricks-load:
-  #   build:
-  #   env_file: .env
-  #   volumes:
-  #     - ./notebooks:/app/notebooks
-  #   environment:
-  #     - PYTHONUNBUFFERED=1
+  databricks-upload:
+    build: 
+      context: ./databricks-upload
+      dockerfile: databricks-upload.Dockerfile
+    image: databricks_job
+    env_file: .env
 
 volumes:
   output:

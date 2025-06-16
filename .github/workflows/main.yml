@@ -14,21 +14,17 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: MELTANO DB
+      - name: SPARK DB
         run: 
-          docker compose run --rm meltano-db
-
-      - name: serviços
-        run: |
-          docker compose logs
+          docker compose run --rm spark-db
 
       - name: AZURE
         run: 
           docker compose run --rm azure-ingestion
 
-      - name: DATABRIX
-        run: 
-          docker compose run --rm databricks-upload
+      # - name: DATABRIX
+      #   run: 
+      #     docker compose run --rm databricks-upload
 
       - name: finaliza containers
         if: always()

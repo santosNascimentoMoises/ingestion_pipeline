@@ -35,4 +35,4 @@ RUN python -c "from pyspark.sql import SparkSession; print('PySpark import test:
 # Copia restante do código
 COPY . .
 
-CMD ["python", "main.py"]
+CMD ["python", "spark_script.py"]
