@@ -1,6 +1,42 @@
 # PIPELINE
 
+Pipeline modular para extração, ingestão e processamento de dados utilizando PySpark, Azure Blob Storage e Databricks.
 
+## Visão Geral
+
+[SQL Server] 
+  → (via JDBC) → [PySpark → config.py] 
+  → (parallel) → [Parquet Files] 
+  → (Azure SDK) → [Blob Storage] 
+  → (ABFS) → [Databricks: Delta Conversion] 
+  → [Managed Tables]
+  ↗ (API) → [Job Orchestration]
+
+# Configuração do Ambiente
+
+## Clonando o projeto
+
+Primeiramente, é necessário clonar o repo localmente via SSH utilizando o comando `git clone` no link. 
+* `git clone git@github.com:santosNascimentoMoises/ingestion_pipeline.git`
+
+## Criando um ambiente virtual
+
+É preciso criar um na pasta home do projeto (caso você ainda não o tenha feito).
+
+* `python -m venv venv` ou
+
+Ativar o ambiente virtual
+
+* `source venv/bin/activate` no Linux ou
+* `source venv/Scripts/activate` em bash no Windows, ou ainda
+
+## Instalando as bibliotecas
+
+Necessário instalar as bibliotecas listadas no arquivo **requirements.txt**. 
+
+* `pip install -r requirements.txt` ou
+
+# Ferramentas e Scripts
 
 ## SPARK - Extração de Dados com PySpark via JDBC SQL Server
 

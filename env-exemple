@@ -1,0 +1,15 @@
+MSQL_DB_HOST="sql-server-example.database.windows.net"
+MSQL_DB_PORT="1234"
+MSQL_DB_USER="cloud_admin"
+MSQL_DB_PASSWORD="S3cur3P@ssw0rd!2024"
+MSQL_DB_NAME="AdventureWorksLT"
+
+DATABRICKS_TOKEN="dapi1234567890abcdef1234567890abcdef"
+DATABRICKS_HOST="https://adb-123456789012345.1.azuredatabricks.net"
+DATABRICKS_CLUSTER_ID="1234-567890-cluster123"
+JOB_ID="987654321"
+DATABRICKS_INSTANCE="adb-123456789012345.1.databricks.azure.net"
+
+AZURE_CONTAINER_NAME="landing-zone"
+AZURE_STORAGE_ACCOUNT_NAME="datalakecompany001"
+AZURE_STORAGE_ACCOUNT_KEY="s7VCk9pwH123/dyiJXBeARCcBg+/j/xMyBcya/gLCB+AStSronjw=="
