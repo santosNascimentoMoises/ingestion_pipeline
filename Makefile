@@ -14,10 +14,10 @@ pipeline:
 	# docker compose build spark-db
 	docker compose up spark-db
 
-	docker compose build --no-cache azure-ingestion
-	# docker compose build azure-ingestion
-	docker compose up azure-ingestion
+	# docker compose build --no-cache azure-ingestion
+	# # docker compose build azure-ingestion
+	# docker compose up azure-ingestion
     
-	docker compose build databricks-upload
-	docker compose up --attach databricks-upload
-	docker compose down
+	# docker compose build databricks-upload
+	# docker compose up --attach databricks-upload
+	# docker compose down
