@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "properties": {
+    "SalesOrderID": {
+      "type": "number"
+    },
+    "SalesOrderDetailID": {
+      "type": "number"
+    },
+    "OrderQty": {
+      "type": "number"
+    },
+    "ProductID": {
+      "type": "number"
+    },
+    "SpecialOfferID": {
+      "type": "number"
+    },
+    "UnitPrice": {
+      "type": "number"
+    },
+    "UnitPriceDiscount": {
+      "type": "number"
+    },
+    "LineTotal": {
+      "type": "number"
+    },
+    "rowguid": {
+      "type": "string"
+    },
+    "ModifiedDate": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "CarrierTrackingNumber": {
+      "type": "string"
+    }
+  }
+}
