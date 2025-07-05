@@ -7,7 +7,7 @@ from importlib import resources
 
 from singer_sdk import typing as th  # JSON Schema typing helpers
 
-from tap_adventureworksapi.client import AdventureWorksApiStream, SalesAdventureWorksApiStream
+from tap_adventureworksapi.client import AdventureWorksApiStream#, SalesAdventureWorksApiStream
 
 # TODO: Delete this is if not using json files for schema definition
 SCHEMAS_DIR = resources.files(__package__) / "schemas"
@@ -15,7 +15,7 @@ SCHEMAS_DIR = resources.files(__package__) / "schemas"
 #       - Copy-paste as many times as needed to create multiple stream types.
 
 
-class SalesOrderDetail(SalesAdventureWorksApiStream): # nome da stream = endpoint a ser extraido
+class SalesOrderDetail(AdventureWorksApiStream): # nome da stream = endpoint a ser extraido
     """Define custom stream."""
 
     name = "SalesOrderDetail"  # nome do endpoint

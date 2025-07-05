@@ -20,6 +20,12 @@ plugins:
 
     # TODO: Declare settings and their types here:
     settings:
+    - name: api_url
+      label: API URL
+      description: URL base API
+      required: true
+      default: ENV:API_URL
+      
     - name: username
       label: Username
       description: The username to use for authentication
@@ -48,8 +54,8 @@ plugins:
       start_date: '1900-01-01T00:00:00Z'
     
     select:
-    # - PurchaseOrderDetail.*
-    - SalesOrderDetail.* # inferno!!!
+    - PurchaseOrderDetail.*
+    # - SalesOrderDetail.* # inferno!!!
     # - SalesOrderHeader.*
     # - PurchaseOrderHeader
 

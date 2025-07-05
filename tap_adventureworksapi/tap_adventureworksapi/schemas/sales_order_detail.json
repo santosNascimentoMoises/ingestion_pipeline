@@ -2,38 +2,38 @@
   "type": "object",
   "properties": {
     "SalesOrderID": {
-      "type": "number"
+      "type": ["integer","null"]
     },
     "SalesOrderDetailID": {
-      "type": "number"
+      "type": ["integer","null"]
     },
     "OrderQty": {
-      "type": "number"
+      "type": ["integer","null"]
     },
     "ProductID": {
-      "type": "number"
+      "type": ["integer","null"]
     },
     "SpecialOfferID": {
-      "type": "number"
+      "type": ["integer","null"]
     },
     "UnitPrice": {
-      "type": "number"
+      "type": ["number","null"]
     },
     "UnitPriceDiscount": {
-      "type": "number"
+      "type": ["number","null"]
     },
     "LineTotal": {
-      "type": "number"
+      "type": ["number","null"]
     },
     "rowguid": {
-      "type": "string"
+      "type": ["string","null"]
     },
     "ModifiedDate": {
       "type": "string",
       "format": "date-time"
     },
     "CarrierTrackingNumber": {
-      "type": "string"
+      "type": ["string","null"]
     }
   }
 }
