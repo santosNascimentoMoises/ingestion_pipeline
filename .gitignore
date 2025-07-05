@@ -17,6 +17,9 @@
 *.tar.gz
 *.rar
 teste
+teste-meltano/
+teste_tap
+config.py
 ## Python
 __pycache__/
 *.pyc
@@ -30,7 +33,7 @@ meltano_output/
 # requirements.txt
 
 venv/
-
+.venv
 *.yml
 
 output
