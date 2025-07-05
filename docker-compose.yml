@@ -10,7 +10,9 @@ services:
     #   - API_URL=${API_URL}
     #   - API_TOKEN=${API_TOKEN}
     volumes:
-      - ./output/api:/app/api_output/api
+      # - ./output/api:/app/api_output/api
+      - ./output/api:/app/output
+      - ./tap_adventureworksapi/meltano.yml:/app/meltano.yml:ro
 
   spark-db:
     build:
@@ -41,5 +43,5 @@ services:
     image: databricks_job
     env_file: .env
 
-volumes:
-  output:
+# volumes:
+#   output:

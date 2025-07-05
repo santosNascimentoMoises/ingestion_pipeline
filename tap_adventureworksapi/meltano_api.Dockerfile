@@ -17,7 +17,7 @@ CMD ["meltano", "--version"]
 
 
 # #plugins
-# RUN meltano init . --no-interaction
+RUN meltano init .
 
 # # # Instala Java (opcional, se for necessário para algum plugin)
 # # RUN apt-get update && \
@@ -25,7 +25,7 @@ CMD ["meltano", "--version"]
 # #     rm -rf /var/lib/apt/lists/*
 
 # # Copia o restante do código do tap customizado (SDK local)
-# COPY . .
+COPY . .
 
 # # # Copia apenas o meltano.yml primeiro para o cache funcionar melhor
 # # COPY meltano.yml .
@@ -33,10 +33,10 @@ CMD ["meltano", "--version"]
 # # COPY tap_adventureworksapi .
 
 # # atualizando
-# RUN meltano lock --update --all
+RUN meltano lock --update --all
 
 # # Inicializa projeto (caso seja necessário no CI)
-# RUN meltano install
+RUN meltano install
 
 # # # Registra o extractor no projeto se não estiver via Hub
 # # RUN meltano add extractor tap-adventureworksapi || true
@@ -45,6 +45,7 @@ CMD ["meltano", "--version"]
 # # RUN meltano install
 
 # # Output
-# VOLUME /app/meltano_output/api
+VOLUME ["/app/api_output/api"]
 
 # CMD ["meltano", "run", "tap_adventureworksapi", "target-jsonl"]
+# CMD ["meltano", "run", "tap_adventureworksapi", "target-jsonl", "--select "$API_ENDPOINT""]

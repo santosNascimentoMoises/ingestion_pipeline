@@ -216,6 +216,8 @@ class AdventureWorksApiStream(RESTStream):
 
     def request_records(self, context):
         next_page_token = 0
+        output_dir = self.config.get("destination_path") or "NOT"
+        self.logger.info(f"### DIR. output: {output_dir}")
 
         while True:
             attempt = 0
