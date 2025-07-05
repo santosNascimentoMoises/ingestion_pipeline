@@ -1,16 +1,16 @@
 version: '3.8'
 
 services:
-  # meltano-api:
-  #   build:
-  #     context: ./meltano-api
-  #     dockerfile: meltano.Dockerfile
-#     env_file: .env
-  #   environment:
-  #     - API_URL=${API_URL}
-  #     - API_TOKEN=${API_TOKEN}
-  #   volumes:
-  #     - ./meltano_output/api:/app/meltano_output/api  # Volume dedicado para API
+  meltano-api:
+    build:
+      context: ./tap_adventureworksapi
+      dockerfile: meltano_api.Dockerfile
+    env_file: .env
+    # environment:
+    #   - API_URL=${API_URL}
+    #   - API_TOKEN=${API_TOKEN}
+    volumes:
+      - ./output/api:/app/api_output/api
 
   spark-db:
     build:

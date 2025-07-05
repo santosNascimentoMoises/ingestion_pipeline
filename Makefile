@@ -10,9 +10,13 @@ pipeline:
 
 	docker compose down
 
-	docker compose build --no-cache spark-db
+	docker compose build --no-cache meltano-api
 	# docker compose build spark-db
-	docker compose up spark-db
+	docker compose up meltano-api
+
+	# docker compose build --no-cache spark-db
+	# docker compose build spark-db
+	# docker compose up spark-db
 
 	# docker compose build --no-cache azure-ingestion
 	# # docker compose build azure-ingestion
