@@ -1,14 +1,14 @@
 """REST client handling, including AdventureWorksApiStream base class."""
 from config import API_URL, API_USER, API_PASSWORD
 from __future__ import annotations
-
+import time
 import decimal
 import typing as t
 from importlib import resources
 
 from requests.auth import HTTPBasicAuth
 from singer_sdk.helpers.jsonpath import extract_jsonpath
-from singer_sdk.pagination import BaseAPIPaginator  # noqa: TC002
+from singer_sdk.pagination import BaseOffsetPaginator
 from singer_sdk.streams import RESTStream
 
 if t.TYPE_CHECKING:
@@ -27,13 +27,13 @@ class AdventureWorksApiStream(RESTStream):
     records_jsonpath = "$[*]"
 
     # Update this value if necessary or override `get_new_paginator`.
-    next_page_token_jsonpath = "$.next_page"  # noqa: S105
+    next_page_token_jsonpath = None  # noqa: S105
 
     @property
     def url_base(self) -> str:
         """Return the API URL root, configurable via tap settings."""
         # TODO: hardcode a value here, or retrieve it from self.config
-        return "https://api.mysample.com"
+        return API_URL
 
     @property
     def authenticator(self) -> HTTPBasicAuth:
@@ -43,22 +43,22 @@ class AdventureWorksApiStream(RESTStream):
             An authenticator instance.
         """
         return HTTPBasicAuth(
-            username=self.config.get("username", ""),
-            password=self.config.get("password", ""),
+            username=self.config.get("username", API_USER),
+            password=self.config.get("password", API_PASSWORD),
         )
 
-    @property
-    def http_headers(self) -> dict:
-        """Return the http headers needed.
+    # @property
+    # def http_headers(self) -> dict:
+    #     """Return the http headers needed.
 
-        Returns:
-            A dictionary of HTTP headers.
-        """
-        # If not using an authenticator, you may also provide inline auth headers:
-        # headers["Private-Token"] = self.config.get("auth_token")  # noqa: ERA001
-        return {}
+    #     Returns:
+    #         A dictionary of HTTP headers.
+    #     """
+    #     # If not using an authenticator, you may also provide inline auth headers:
+    #     # headers["Private-Token"] = self.config.get("auth_token")  # noqa: ERA001
+    #     return {}
 
-    def get_new_paginator(self) -> BaseAPIPaginator | None:
+    def get_new_paginator(self) -> BaseOffsetPaginator | None:
         """Create a new pagination helper instance.
 
         If the source API can make use of the `next_page_token_jsonpath`
@@ -72,8 +72,27 @@ class AdventureWorksApiStream(RESTStream):
             A pagination helper instance, or ``None`` to indicate pagination
             is not supported.
         """
-        return super().get_new_paginator()
+        return BaseOffsetPaginator(
+            start_value=0,      # offset inicial
+            page_size=300,      # limite por página (defina conforme a API)            
+        )
+    
+    @property
+    def request_timeout(self) -> int:
+        return 30  # segundos
+    
+    @property
+    def max_retries(self) -> int:
+        return 5  # número máximo de tentativas
 
+    @property
+    def retry_backoff(self) -> float:
+        return 2.0  # multiplicador de tempo entre tentativas (backoff exponencial)
+
+    @property
+    def max_requests_per_minute(self) -> int:
+        return 300  # 1 req/s
+    
     def get_url_params(
         self,
         context: Context | None,  # noqa: ARG002
@@ -88,32 +107,15 @@ class AdventureWorksApiStream(RESTStream):
         Returns:
             A dictionary of URL query parameters.
         """
-        params: dict = {}
-        if next_page_token:
-            params["page"] = next_page_token
+        params: dict = {
+            "limit": 300,
+            "offset": next_page_token or 0,
+            "sort": "asc"
+        }
         if self.replication_key:
-            params["sort"] = "asc"
+            params["sort"] = "asc"                        # VERIFICAR
             params["order_by"] = self.replication_key
         return params
-
-    def prepare_request_payload(
-        self,
-        context: Context | None,  # noqa: ARG002
-        next_page_token: t.Any | None,  # noqa: ARG002, ANN401
-    ) -> dict | None:
-        """Prepare the data payload for the REST API request.
-
-        By default, no payload will be sent (return None).
-
-        Args:
-            context: The stream context.
-            next_page_token: The next page index or value.
-
-        Returns:
-            A dictionary with the JSON body for a POST requests.
-        """
-        # TODO: Delete this method if no payload is required. (Most REST APIs.)
-        return None
 
     def parse_response(self, response: requests.Response) -> t.Iterable[dict]:
         """Parse the response and return an iterator of result records.
@@ -125,27 +127,6 @@ class AdventureWorksApiStream(RESTStream):
             Each record from the source.
         """
         # TODO: Parse response body and return a set of records.
-        yield from extract_jsonpath(
-            self.records_jsonpath,
-            input=response.json(parse_float=decimal.Decimal),
-        )
-
-    def post_process(
-        self,
-        row: dict,
-        context: Context | None = None,  # noqa: ARG002
-    ) -> dict | None:
-        """As needed, append or transform raw data to match expected structure.
-
-        Note: As of SDK v0.47.0, this method is automatically executed for all stream types.
-        You should not need to call this method directly in custom `get_records` implementations.
-
-        Args:
-            row: An individual record from the stream.
-            context: The stream context.
-
-        Returns:
-            The updated record dictionary, or ``None`` to skip the record.
-        """
-        # TODO: Delete this method if not needed.
-        return row
+        json_response = response.json()
+        time.sleep(0.1)  # pausa após cada página
+        yield from json_response.get("data", [])
