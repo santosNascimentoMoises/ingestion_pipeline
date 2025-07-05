@@ -11,6 +11,10 @@ from singer_sdk.helpers.jsonpath import extract_jsonpath
 from singer_sdk.pagination import BaseOffsetPaginator
 from singer_sdk.streams import RESTStream
 
+# customização para a API SalesOrderDetail
+from singer_sdk.exceptions import RetriableAPIError
+from singer_sdk.exceptions import FatalAPIError
+
 if t.TYPE_CHECKING:
     import requests
     from singer_sdk.helpers.types import Context
@@ -231,6 +235,45 @@ class SalesAdventureWorksApiStream(RESTStream):
             params["order_by"] = self.replication_key
         return params
 
+
+    def request_records(self, context):
+        """Custom request with timeout and retry logging."""
+        attempt = 0
+        while attempt < self.max_retries:
+            try:
+                self.logger.info(f"🔁 Tentativa {attempt+1}/{self.max_retries}")
+                url = self.get_url(context)
+                params = self.get_url_params(context, next_page_token=None)
+                headers = self.http_headers
+                auth = self.authenticator
+                timeout = self.request_timeout
+
+                response = requests.get(
+                    url,
+                    params=params,
+                    headers=headers,
+                    auth=auth,
+                    timeout=timeout
+                )
+                response.raise_for_status()
+
+                # Log de sucesso
+                self.logger.info("✅ Requisição bem-sucedida.")
+                return self.parse_response(response)
+
+            except requests.exceptions.Timeout:
+                self.logger.warning("⏱ Timeout detectado! Retentando após backoff...")
+                time.sleep(self.retry_backoff * (2 ** attempt))
+                attempt += 1
+
+            except requests.exceptions.RequestException as ex:
+                self.logger.error(f"🚨 Erro de requisição não recuperável: {ex}")
+                raise ex
+
+        # Após todas as tentativas
+        # raise RetriableAPIError("❌ Número máximo de tentativas excedido por timeout.")
+        raise FatalAPIError("API falhou após número máximo de tentativas. Encerrando processo.")
+    
     def parse_response(self, response: requests.Response) -> t.Iterable[dict]:
         """Parse the response and return an iterator of result records.
 
