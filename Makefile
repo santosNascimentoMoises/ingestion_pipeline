@@ -46,19 +46,31 @@ pipeline:
 	# docker compose up --attach databricks-upload
 	# docker compose down
 
+init:
+	@echo "🔧 Inicializando o banco de dados do Airflow..."
+	docker compose run --rm airflow-init
 
-# caso queira montar e rodar os dockers em separado
+## Sobe os serviços principais
+up:
+	@echo "🚀 Subindo os serviços do Airflow (webserver, scheduler, db)..."
+	docker compose up -d airflow-webserver airflow-scheduler airflow-db
 
-# build:
-# 	docker build -t $(IMAGE_NAME) .
+## Cria o usuário admin (ignora erro se já existir)
+create-user:
+	@echo "👤 Criando usuário admin (se necessário)..."
+	sleep 15  # Aguarda webserver subir
+	-docker exec airflow_webserver airflow users create \
+		--username airflow \
+		--firstname Admin \
+		--lastname User \
+		--role Admin \
+		--email airflow@example.com \
+		--password airflow || echo "⚠️  Usuário já existe. Pulando criação."
 
-# run:
-# 	docker run --rm -v "$(PWD)/output/api:/app/api_output/api" $(IMAGE_NAME)
-
-# compose-run:
-# 	docker-compose run --rm meltano
-
-# clean:
-# 	rm -rf output/api/*
-
-# o comando mudaria: make build (só builda); make compose-run (roda)
+## Executa tudo em sequência
+start: init up create-user
+	@echo "---"
+	@echo "✅ Airflow iniciado com sucesso!"
+	@echo "🌐 Acesse: http://localhost:8080"
+	@echo "🔐 Login: airflow | Senha: airflow"
+	@echo "---"
