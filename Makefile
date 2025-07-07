@@ -19,8 +19,11 @@ clear:
 alpine_print:
 	docker compose build --no-cache alpine
 
-pipeline:
+pdown:
+	docker compose down -v meltano-api-xcon
 
+pipeline:
+	docker volume create shared-api # volume para dados da API
 	# docker compose build --no-cache meltano-api
 	# docker compose build meltano-api
 	# docker compose up meltano-api
@@ -41,6 +44,8 @@ pipeline:
 	# docker compose up --attach databricks-upload
 	# docker compose down
 
+down:
+	docker compose down -v airflow-webserver airflow-scheduler airflow-db redis airflow-worker airflow-init
 init:
 	@echo "🔧 Inicializando o banco de dados do Airflow..."
 	docker compose run --rm airflow-init
@@ -48,5 +53,5 @@ init:
 ## Sobe os serviços principais
 up:
 	@echo "🚀 Subindo os serviços do Airflow (webserver, scheduler, db)..."
-	docker compose up -d airflow-webserver airflow-scheduler airflow-db
+	docker compose up -d airflow-webserver airflow-scheduler airflow-db redis airflow-worker
 	@echo "🌐 Acesse: http://localhost:8080"

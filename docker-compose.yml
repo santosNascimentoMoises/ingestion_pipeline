@@ -8,9 +8,9 @@ services:
     image: meltano-api:latest
     env_file: .env
     volumes:
-      - ./output/api:/app/output
-      - ./tap_adventureworksapi/meltano.yml:/app/meltano.yml:ro
+      # - ./output/api:/app/output
       - /var/run/docker.sock:/var/run/docker.sock
+      - shared-api:/app/output
 
   meltano-api-xcon:
     build:
@@ -21,6 +21,7 @@ services:
     volumes:
       - ./output/api:/app/output
       - /var/run/docker.sock:/var/run/docker.sock
+      - shared-api:/app/output
       # - ./tap_adventureworksapi/meltano.yml:/app/meltano.yml:ro
 
   spark-db:
@@ -79,18 +80,21 @@ services:
     env_file:
       - .env
     environment:
-      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor      # Mesmo executor das demais instâncias
+      # - AIRFLOW__CORE__EXECUTOR=SequentialExecutor      # Mesmo executor das demais instâncias
       - AIRFLOW__CORE__DAGS_FOLDER=/opt/airflow/dags    # Caminho das DAGs dentro do contêiner
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow  # Conexão com o PostgreSQL
       - AIRFLOW__LOGGING__REMOTE_LOGGING=False          # Desabilita o logging remoto
+      - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
       # - API_URL=${API_URL}
       # - API_USER=${API_USER}
       # - API_PASSWORD=${API_PASSWORD}
+      - AIRFLOW__WEBSERVER__SECRET_KEY=${AIRFLOW__WEBSERVER__SECRET_KEY}
     volumes:
       - ./dags:/opt/airflow/dags                       # Mapeia as DAGs do host para o contêiner
-      - ./output/api:/opt/airflow/output/api
-      - ./output/db:/opt/airflow/output/db
+      # - ./output/api:/opt/airflow/output/api
+      # - ./output/db:/opt/airflow/output/db
       - /var/run/docker.sock:/var/run/docker.sock
+      - shared-api:/opt/airflow/output/api
     entrypoint: airflow db migrate # Comando que será executado ao rodar este serviço
     networks:
       - airflow_net
@@ -108,13 +112,14 @@ services:
     env_file:
       - .env
     environment:
-      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      # - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
       - AIRFLOW__CORE__DAGS_FOLDER=/opt/airflow/dags
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
       - AIRFLOW__WEBSERVER__WEB_SERVER_PORT=8080
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow  # Conexão com o PostgreSQL
       - AIRFLOW__LOGGING__REMOTE_LOGGING=False           # Desabilita o logging remoto     
-      
+      - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+
       - _AIRFLOW_WWW_USER_CREATE=True
       - _AIRFLOW_WWW_USER_USERNAME=airflow
       - _AIRFLOW_WWW_USER_PASSWORD=airflow
@@ -122,14 +127,16 @@ services:
       - _AIRFLOW_WWW_USER_LASTNAME=User
       - _AIRFLOW_WWW_USER_EMAIL=airflow@example.com
       - _AIRFLOW_WWW_USER_ROLE=Admin
+      - AIRFLOW__WEBSERVER__SECRET_KEY=${AIRFLOW__WEBSERVER__SECRET_KEY}
     ports:
       - "8080:8080"                                      # Porta mapeada para acesso à UI
     volumes:
       - ./dags:/opt/airflow/dags
-      - ./output/api:/opt/airflow/output/api
-      - ./output/db:/opt/airflow/output/db
+      # - ./output/api:/opt/airflow/output/api
+      # - ./output/db:/opt/airflow/output/db
       - ./logs:/opt/airflow/logs                        # Adiciona esse volume para persistência de logs
       - /var/run/docker.sock:/var/run/docker.sock        # Adiciona esse volume expor o socket do Docker
+      - shared-api:/opt/airflow/output/api
     command: webserver
     networks:
       - airflow_net
@@ -146,19 +153,58 @@ services:
     env_file:
       - .env
     environment:
-      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      # - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
       - AIRFLOW__CORE__DAGS_FOLDER=/opt/airflow/dags
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow  # Conexão com o PostgreSQL
       - AIRFLOW__LOGGING__REMOTE_LOGGING=False          # Desabilita o logging remoto
+      - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+      - AIRFLOW__WEBSERVER__SECRET_KEY=${AIRFLOW__WEBSERVER__SECRET_KEY}
     volumes:
       - ./dags:/opt/airflow/dags
       - ./output/api:/opt/airflow/output/api
       - ./output/db:/opt/airflow/output/db
       - ./logs:/opt/airflow/logs                       # Adiciona esse volume para persistência de logs
       - /var/run/docker.sock:/var/run/docker.sock       # Adiciona esse volume expor o socket do Docker
+      - shared-api:/opt/airflow/output/api
     command: scheduler
     networks:
       - airflow_net
+
+  airflow-worker:
+    image: apache/airflow:2.10.4-python3.11
+    user: root
+    restart: always
+    depends_on:
+      - airflow-init
+      - redis
+    env_file:
+      - .env
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./output/api:/opt/airflow/output/api
+      - ./output/db:/opt/airflow/output/bd
+      - /var/run/docker.sock:/var/run/docker.sock
+      - shared-api:/opt/airflow/output/api
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+      - AIRFLOW__CELERY__BROKER_URL=redis://redis:6379/0
+      - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://airflow:airflow@airflow-db/airflow
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow
+      - AIRFLOW__WEBSERVER__SECRET_KEY=${AIRFLOW__WEBSERVER__SECRET_KEY}
+    command: celery worker
+    networks:
+      - airflow_net
+
+  redis:
+    image: redis:latest
+    env_file:
+      - .env
+    volumes:
+      - redis_data:/data  # Usa o volume nomeado
+    ports:
+      - "6379:6379"
+    networks:
+    - airflow_net
 
   # Serviço: Banco de dados PostgreSQL usado pelo Airflow
   airflow-db:
@@ -177,6 +223,9 @@ services:
 # Volume nomeado para persistência dos dados do PostgreSQL
 volumes:
   pgdata:
+  redis_data:  # Novo volume para Redis
+  shared-api:
+      driver: local
 
 # Rede interna para comunicação entre os contêineres
 networks:

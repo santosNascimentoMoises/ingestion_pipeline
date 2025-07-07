@@ -64,4 +64,4 @@ plugins:
   - name: target-jsonl
     variant: andyh1203
     pip_url: target-jsonl
-    # destination_path: ./app/api_output/api
+    destination_path: /app/output

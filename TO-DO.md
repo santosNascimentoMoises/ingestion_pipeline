@@ -17,3 +17,12 @@
 
 # se der
 - [ ] quem sabe plotar alguns gráficos no notebook databricks
+
+
+testar
+
+services:
+  airflow-worker:
+    volumes:
+      - ./output/api:/opt/airflow/output/api
+
