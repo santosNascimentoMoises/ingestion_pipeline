@@ -16,24 +16,19 @@ clear:
 	sudo bash -c 'echo 3 > /proc/sys/vm/drop_caches'
 	sudo sysctl -w vm.drop_caches=3
 
+alpine_print:
+	docker compose build --no-cache alpine
+
 pipeline:
 
 	# docker compose build --no-cache meltano-api
 	# docker compose build meltano-api
-	# @export API_ENDPOINT=$(SalesOrderHeader)
 	# docker compose up meltano-api
 
-	# docker compose run --rm meltano-api meltano --environment=test select tap_adventureworksapi PurchaseOrderDetail
-	# docker compose run --rm meltano-api -v $(pwd)/meltano.yml:/project/meltano.yml ...
-	docker compose run --rm meltano-api meltano run tap_adventureworksapi target-jsonl # testar e descomentar aqui
-
-    # meltano select tap-adventureworksapi PurchaseOrderDetail --exclude
-
-	# docker compose run --rm meltano-api meltano --environment=test select tap_adventureworksapi SalesOrderHeader '*' && \
-	# docker compose run --rm meltano-api meltano run tap_adventureworksapi target-jsonl
-
-
-	
+	docker compose build --no-cache meltano-api-xcon
+	# docker compose build meltano-api-xcon
+	# docker compose up meltano-api-xcon
+		
 	# docker compose build --no-cache spark-db
 	# docker compose build spark-db
 	# docker compose up spark-db
@@ -54,23 +49,4 @@ init:
 up:
 	@echo "🚀 Subindo os serviços do Airflow (webserver, scheduler, db)..."
 	docker compose up -d airflow-webserver airflow-scheduler airflow-db
-
-## Cria o usuário admin (ignora erro se já existir)
-create-user:
-	@echo "👤 Criando usuário admin (se necessário)..."
-	sleep 15  # Aguarda webserver subir
-	-docker exec airflow_webserver airflow users create \
-		--username airflow \
-		--firstname Admin \
-		--lastname User \
-		--role Admin \
-		--email airflow@example.com \
-		--password airflow || echo "⚠️  Usuário já existe. Pulando criação."
-
-## Executa tudo em sequência
-start: init up create-user
-	@echo "---"
-	@echo "✅ Airflow iniciado com sucesso!"
 	@echo "🌐 Acesse: http://localhost:8080"
-	@echo "🔐 Login: airflow | Senha: airflow"
-	@echo "---"

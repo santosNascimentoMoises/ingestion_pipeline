@@ -57,10 +57,9 @@ plugins:
     select:
     # - PurchaseOrderDetail.*
     # - SalesOrderDetail.* # inferno!!!
-    - SalesOrderHeader.*
+    # - SalesOrderHeader.*
     # - PurchaseOrderHeader.*
-    # - ENV:API_ENDPOINT
-
+ 
   loaders:
   - name: target-jsonl
     variant: andyh1203

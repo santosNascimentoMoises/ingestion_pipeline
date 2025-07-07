@@ -5,99 +5,131 @@ services:
     build:
       context: ./tap_adventureworksapi
       dockerfile: meltano_api.Dockerfile
+    image: meltano-api:latest
     env_file: .env
     volumes:
       - ./output/api:/app/output
       - ./tap_adventureworksapi/meltano.yml:/app/meltano.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  meltano-api-xcon:
+    build:
+      context: ./tap_adventureworksapi_teste_xcon
+      dockerfile: meltano_api.Dockerfile
+    image: meltano-api-xcon:latest
+    env_file: .env
+    volumes:
+      - ./output/api:/app/output
+      - /var/run/docker.sock:/var/run/docker.sock
+      # - ./tap_adventureworksapi/meltano.yml:/app/meltano.yml:ro
 
   spark-db:
     build:
       context: ./spark-db
       dockerfile: spark.Dockerfile
+    image: spark-db:latest
     env_file: .env
     volumes:
       - ./output/db:/app/spark_output/db    # Volume dedicado para DB
+      - /var/run/docker.sock:/var/run/docker.sock
 
   azure-ingestion:
     build:
       context: ./azure-ingestion
       dockerfile: azure-ingestion.Dockerfile
+    image: azure-ingestion:latest
     env_file: .env
     volumes:
       - ./output/db:/app/output/bd
       - ./output/api:/app/output/api
+      - /var/run/docker.sock:/var/run/docker.sock
 
   databricks-upload:
     build: 
       context: ./databricks-upload
       dockerfile: databricks-upload.Dockerfile
-    image: databricks_job
+    image: databricks-upload:latest
     env_file: .env
+    volumes:
+      - ./output/db:/app/output/bd
+      - ./output/api:/app/output/api
+      - /var/run/docker.sock:/var/run/docker.sock
 
-  # airflow:
-  #   image: apache/airflow:2.9.1
-  #   container_name: airflow
-  #   restart: always
-  #   environment:
-  #     AIRFLOW__CORE__EXECUTOR: LocalExecutor
-  #     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: sqlite:////opt/airflow/airflow.db
-  #     AIRFLOW__CORE__FERNET_KEY: ''
-  #     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'false'
-  #     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
-  #   volumes:
-  #     - ./dags:/opt/airflow/dags
-  #     - /var/run/docker.sock:/var/run/docker.sock  # <== Permite controlar containers externos
-  #   ports:
-  #     - "8080:8080"
-  #   command: >
-  #     bash -c "
-  #       airflow db init &&
-  #       airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com &&
-  #       airflow scheduler & airflow webserver"
-  
+  alpine:
+    build:
+      context: ./alpine
+      dockerfile: alpine.Dockerfile
+    container_name: alpine
+    image: alpine
+    env_file:
+      - .env
+    # environment:
+    #   - API_URL=${API_URL}
+    #   - API_USER=${API_USER}
+    #   - API_PASSWORD=${API_PASSWORD}
+    restart: "no"
+
   # Serviço responsável por inicializar o banco de dados do Airflow automaticamente
   airflow-init:
-    image: apache/airflow:2.10.4-python3.11             # Usa a mesma imagem do Airflow
+    image: apache/airflow:2.10.4-python3.11
+    # image: apache/airflow:3.0.1-python3.11
     container_name: airflow_init                        # Nome do contêiner de inicialização
     depends_on:
       - airflow-db                                      # Espera o banco estar pronto antes de executar
+    env_file:
+      - .env
     environment:
       - AIRFLOW__CORE__EXECUTOR=SequentialExecutor      # Mesmo executor das demais instâncias
       - AIRFLOW__CORE__DAGS_FOLDER=/opt/airflow/dags    # Caminho das DAGs dentro do contêiner
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow  # Conexão com o PostgreSQL
       - AIRFLOW__LOGGING__REMOTE_LOGGING=False          # Desabilita o logging remoto
+      # - API_URL=${API_URL}
+      # - API_USER=${API_USER}
+      # - API_PASSWORD=${API_PASSWORD}
     volumes:
       - ./dags:/opt/airflow/dags                       # Mapeia as DAGs do host para o contêiner
-      - ./tap_adventureworksapi/meltano.yml:/opt/airflow/meltano.yml:ro
-      # - ./output:/opt/airflow/output                   # Mapeia a pasta de saída (CSV) do host para o contêiner
-    entrypoint: airflow db init                         # Comando que será executado ao rodar este serviço
+      - ./output/api:/opt/airflow/output/api
+      - ./output/db:/opt/airflow/output/db
+      - /var/run/docker.sock:/var/run/docker.sock
+    entrypoint: airflow db migrate # Comando que será executado ao rodar este serviço
     networks:
       - airflow_net
 
   # Serviço: Webserver do Airflow (interface web)
   airflow-webserver:
     image: apache/airflow:2.10.4-python3.11
+    # image: apache/airflow:3.0.1-python3.11
     container_name: airflow_webserver
     user: root                                   # Executa como root para evitar problemas de permissão
     restart: always
     depends_on:
       - airflow-scheduler
       - airflow-db
+    env_file:
+      - .env
     environment:
       - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
       - AIRFLOW__CORE__DAGS_FOLDER=/opt/airflow/dags
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
       - AIRFLOW__WEBSERVER__WEB_SERVER_PORT=8080
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow  # Conexão com o PostgreSQL
-      - AIRFLOW__LOGGING__REMOTE_LOGGING=False           # Desabilita o logging remoto
+      - AIRFLOW__LOGGING__REMOTE_LOGGING=False           # Desabilita o logging remoto     
+      
+      - _AIRFLOW_WWW_USER_CREATE=True
+      - _AIRFLOW_WWW_USER_USERNAME=airflow
+      - _AIRFLOW_WWW_USER_PASSWORD=airflow
+      - _AIRFLOW_WWW_USER_FIRSTNAME=Admin
+      - _AIRFLOW_WWW_USER_LASTNAME=User
+      - _AIRFLOW_WWW_USER_EMAIL=airflow@example.com
+      - _AIRFLOW_WWW_USER_ROLE=Admin
     ports:
       - "8080:8080"                                      # Porta mapeada para acesso à UI
     volumes:
       - ./dags:/opt/airflow/dags
-      # - ./output:/opt/airflow/output
+      - ./output/api:/opt/airflow/output/api
+      - ./output/db:/opt/airflow/output/db
       - ./logs:/opt/airflow/logs                        # Adiciona esse volume para persistência de logs
       - /var/run/docker.sock:/var/run/docker.sock        # Adiciona esse volume expor o socket do Docker
-      - ./tap_adventureworksapi/meltano.yml:/opt/airflow/meltano.yml:ro
     command: webserver
     networks:
       - airflow_net
@@ -105,11 +137,14 @@ services:
   # Serviço: Scheduler do Airflow (responsável por agendar e iniciar tasks)
   airflow-scheduler:
     image: apache/airflow:2.10.4-python3.11
+    # image: apache/airflow:3.0.1-python3.11
     container_name: airflow_scheduler
     user: root                                   # Executa como root para evitar problemas de permissão
     restart: always
     depends_on:
       - airflow-db
+    env_file:
+      - .env
     environment:
       - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
       - AIRFLOW__CORE__DAGS_FOLDER=/opt/airflow/dags
@@ -117,10 +152,10 @@ services:
       - AIRFLOW__LOGGING__REMOTE_LOGGING=False          # Desabilita o logging remoto
     volumes:
       - ./dags:/opt/airflow/dags
-      # - ../output:/opt/airflow/output
+      - ./output/api:/opt/airflow/output/api
+      - ./output/db:/opt/airflow/output/db
       - ./logs:/opt/airflow/logs                       # Adiciona esse volume para persistência de logs
       - /var/run/docker.sock:/var/run/docker.sock       # Adiciona esse volume expor o socket do Docker
-      - ./tap_adventureworksapi/meltano.yml:/opt/airflow/meltano.yml:ro
     command: scheduler
     networks:
       - airflow_net
