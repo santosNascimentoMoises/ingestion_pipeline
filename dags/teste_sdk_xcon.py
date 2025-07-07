@@ -53,35 +53,35 @@ with DAG(
 
     stream_info = get_stream_metadata()
     
-    docker_task = DockerOperator(
-        task_id=f"executar_stream",
-        image="meltano-api-xcon",  # imagem já buildada com a stream
-        api_version="auto",
-        auto_remove=True,
-        command=f"meltano run tap_adventureworksapi target-jsonl",  # adapte se necessário
-        environment={
-            **os.environ,  # Passa todas as variáveis do ambiente atual
-            'VAR_EXTRA': 'valor_extra',  # Variáveis adicionais se necessário
-            "STREAM_NAME": "{{ ti.xcom_pull(task_ids='get_stream_metadata')['name'] }}",
-            "STREAM_PATH": "{{ ti.xcom_pull(task_ids='get_stream_metadata')['path'] }}",
-            "STREAM_PK": "{{ ','.join(ti.xcom_pull(task_ids='get_stream_metadata')['primary_keys']) }}",
-            "REPLICATION_KEY": "{{ ti.xcom_pull(task_ids='get_stream_metadata')['replication_key'] }}",
-            "SCHEMA_FILEPATH": "{{ ti.xcom_pull(task_ids='get_stream_metadata')['schema_filepath'] }}"
-        },
+    # docker_task = DockerOperator(
+    #     task_id=f"executar_stream",
+    #     image="meltano-api-xcon",  # imagem já buildada com a stream
+    #     api_version="auto",
+    #     auto_remove=True,
+    #     command=f"meltano run tap_adventureworksapi target-jsonl",  # adapte se necessário
+    #     environment={
+    #         **os.environ,  # Passa todas as variáveis do ambiente atual
+    #         'VAR_EXTRA': 'valor_extra',  # Variáveis adicionais se necessário
+    #         "STREAM_NAME": "{{ ti.xcom_pull(task_ids='get_stream_metadata')['name'] }}",
+    #         "STREAM_PATH": "{{ ti.xcom_pull(task_ids='get_stream_metadata')['path'] }}",
+    #         "STREAM_PK": "{{ ','.join(ti.xcom_pull(task_ids='get_stream_metadata')['primary_keys']) }}",
+    #         "REPLICATION_KEY": "{{ ti.xcom_pull(task_ids='get_stream_metadata')['replication_key'] }}",
+    #         "SCHEMA_FILEPATH": "{{ ti.xcom_pull(task_ids='get_stream_metadata')['schema_filepath'] }}"
+    #     },
 
-        mount_tmp_dir=False,
-        mounts=[
-            Mount(
-                source='shared-api',
-                target="/app/output",
-                type="volume",
-                ),
+    #     mount_tmp_dir=False,
+    #     mounts=[
+    #         Mount(
+    #             source='shared-api',
+    #             target="/app/output",
+    #             type="volume",
+    #             ),
 
-            ],
-        working_dir='/app',
-        docker_url="unix://var/run/docker.sock",
-        network_mode="bridge"
-    )
+    #         ],
+    #     working_dir='/app',
+    #     docker_url="unix://var/run/docker.sock",
+    #     network_mode="bridge"
+    # )
 
     alpine = DockerOperator(
         task_id=f"executar_alpine",
@@ -99,16 +99,20 @@ with DAG(
             "SCHEMA_FILEPATH": "{{ ti.xcom_pull(task_ids='get_stream_metadata')['schema_filepath'] }}"
         },
         mount_tmp_dir=False,
-        # mounts=[
-        #     Mount(source="/home/airflow/scripts", target="/opt/airflow/scripts", type="bind"),
-        #     Mount(source="/home/airflow/data", target="/opt/airflow/data", type="bind"),
-        # ],
+        mounts=[
+            Mount(
+                source='shared-api',
+                target="/app/output",
+                type="volume",
+                ),
+
+            ],
         working_dir='/app',
         docker_url="unix://var/run/docker.sock",
         network_mode="bridge"
     )
 
-    stream_info>>alpine>>docker_task
+    stream_info>>alpine#>>docker_task
 
 
 #  docker exec -it -u root ab0b70066dc0 /bin/bash

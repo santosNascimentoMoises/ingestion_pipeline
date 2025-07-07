@@ -18,3 +18,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# testar se o alpine acessa o diretório montado
+os.chdir("/app/output")
+print(os.listdir())
