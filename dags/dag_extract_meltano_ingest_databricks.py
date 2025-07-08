@@ -9,6 +9,7 @@ import pendulum
 from docker.types import Mount
 import os
 from airflow.utils.task_group import TaskGroup
+from airflow.sensors.external_task import ExternalTaskSensor
 
 # Define os parâmetros padrão para a DAG (retries, delay, etc.)
 default_args = {
@@ -34,47 +35,62 @@ STREAMS_METADATA = {
 }
 
 with DAG(
-    dag_id="extract_meltano",
+    dag_id="dag_extract_meltano_ingest_databricks",
     start_date=datetime(2024, 1, 1),
     schedule_interval=None,
     catchup=False,
     tags=["meltano", "sdk"]
 ) as dag:
 
-    with TaskGroup(group_id="grupo_meltano_extract_endpoint") as tg:
+    with TaskGroup(group_id="grupo_meltano_extract_endpoint") as extract_group:
+        extract_tasks = {}
 
         for name, metadata in STREAMS_METADATA.items():
 
-            docker_task = DockerOperator(
-            task_id=f"extract_{name}",
-            image="meltano-api-xcon",  # imagem já buildada com a stream
-            api_version="auto",
-            auto_remove=True,
-            command=f"meltano run tap_adventureworksapi target-jsonl",  # adapte se necessário
-            environment={
+            task_ = docker_task = DockerOperator(
+                task_id=f"extract_{name}",
+                image="meltano-api-xcon",
+                api_version="auto",
+                auto_remove=True,
+                command=f"meltano run tap_adventureworksapi target-jsonl",  # adapte se necessário
+                environment={
 
-                **os.environ,
-                "STREAM_NAME": name,
-                "STREAM_PATH": metadata["path"],
-                "STREAM_PK": ",".join(metadata["primary_keys"]),
-                "REPLICATION_KEY": metadata["replication_key"],
-                "SCHEMA_FILEPATH": metadata["schema_filepath"]
+                    **os.environ,
+                    "STREAM_NAME": name,
+                    "STREAM_PATH": metadata["path"],
+                    "STREAM_PK": ",".join(metadata["primary_keys"]),
+                    "REPLICATION_KEY": metadata["replication_key"],
+                    "SCHEMA_FILEPATH": metadata["schema_filepath"]
 
-            },
+                },
 
-            mount_tmp_dir=False,
-            mounts=[
-                Mount(
-                    source='shared-api',
-                    target="/app/output",
-                    type="volume",
-                    ),
+                mount_tmp_dir=False,
+                mounts=[
+                    Mount(
+                        source='shared-api',
+                        target="/app/output",
+                        type="volume",
+                        ),
 
-                ],
-            working_dir='/app',
-            docker_url="unix://var/run/docker.sock",
-            network_mode="bridge"
-        )
+                    ],
+                working_dir='/app',
+                docker_url="unix://var/run/docker.sock",
+                network_mode="bridge"
+            )
+            extract_tasks[name] = task_
+    
+    with TaskGroup(group_id="grupo_databricks_ingest_endpoint") as ingest_group:
+
+        for name, metadata in STREAMS_METADATA.items():
+
+            @task(task_id=f"databricks_ingest_{name}")
+            def ingest_stream(name=name):
+                print(f"Iniciando ingestão para o endpoint: {name}")
+                # Simulação da ingestão no Databricks
+                return f"Ingestão do stream {name} concluída."
+
+            # Conecta extração ao ingestion (apenas se extração tiver sucesso)
+            extract_tasks[name] >> ingest_stream()
 
     # alpine = DockerOperator(
     #     task_id=f"alpine",
