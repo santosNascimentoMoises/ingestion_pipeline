@@ -45,6 +45,7 @@ services:
       - ./output/api:/app/output/api
       - /var/run/docker.sock:/var/run/docker.sock
 
+
   databricks-upload:
     build: 
       context: ./databricks-upload
@@ -56,17 +57,17 @@ services:
       - ./output/api:/app/output/api
       - /var/run/docker.sock:/var/run/docker.sock
 
-  databricks:
+  databricks-ingest:
     build:
       context: ./databricks-ingest
       dockerfile: databricks-ingest.Dockerfile
-    container_name: databricks_cli
+    container_name: databricks_ingest
     env_file:
       - .env
     volumes:
-      - shared-api:/output/api
-      - shared-db:/output/db
-    command: tail -f /dev/null
+      - shared-api:/app/output/api
+      # - shared-db:/output/db
+    # command: tail -f /dev/null
 
   alpine:
     build:

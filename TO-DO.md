@@ -20,5 +20,12 @@
 
 
 ## comandos de teste databricks_cli via docker compose
-docker compose up --build databricks
+docker volume create shared-api # volume para dados da API
+
+docker compose up --build databricks-ingest
+
+docker compose build --no-cache databricks-ingest
+
+docker compose up databricks-ingest
+
 docker exec -it databricks_cli python /app/upload_json.py
