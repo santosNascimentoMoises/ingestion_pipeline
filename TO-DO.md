@@ -17,3 +17,8 @@
 
 # se der
 - [ ] quem sabe plotar alguns gráficos no notebook databricks
+
+
+## comandos de teste databricks_cli via docker compose
+docker compose up --build databricks
+docker exec -it databricks_cli python /app/upload_json.py
