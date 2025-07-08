@@ -8,7 +8,6 @@ services:
     image: meltano-api:latest
     env_file: .env
     volumes:
-      # - ./output/api:/app/output
       - /var/run/docker.sock:/var/run/docker.sock
       - shared-api:/app/output
 
@@ -22,7 +21,6 @@ services:
       - ./output/api:/app/output
       - /var/run/docker.sock:/var/run/docker.sock
       - shared-api:/app/output
-      # - ./tap_adventureworksapi/meltano.yml:/app/meltano.yml:ro
 
   spark-db:
     build:
@@ -33,18 +31,6 @@ services:
     volumes:
       - ./output/db:/app/spark_output/db    # Volume dedicado para DB
       - /var/run/docker.sock:/var/run/docker.sock
-
-  azure-ingestion:
-    build:
-      context: ./azure-ingestion
-      dockerfile: azure-ingestion.Dockerfile
-    image: azure-ingestion:latest
-    env_file: .env
-    volumes:
-      - ./output/db:/app/output/bd
-      - ./output/api:/app/output/api
-      - /var/run/docker.sock:/var/run/docker.sock
-
 
   databricks-upload:
     build: 
@@ -67,7 +53,6 @@ services:
     volumes:
       - shared-api:/app/output/api
       # - shared-db:/output/db
-    # command: tail -f /dev/null
 
   alpine:
     build:
@@ -77,37 +62,28 @@ services:
     image: alpine
     env_file:
       - .env
-    # environment:
-    #   - API_URL=${API_URL}
-    #   - API_USER=${API_USER}
-    #   - API_PASSWORD=${API_PASSWORD}
     restart: "no"
 
   # Serviço responsável por inicializar o banco de dados do Airflow automaticamente
   airflow-init:
     image: apache/airflow:2.10.4-python3.11
-    # image: apache/airflow:3.0.1-python3.11
     container_name: airflow_init                        # Nome do contêiner de inicialização
     depends_on:
       - airflow-db                                      # Espera o banco estar pronto antes de executar
     env_file:
       - .env
     environment:
-      # - AIRFLOW__CORE__EXECUTOR=SequentialExecutor      # Mesmo executor das demais instâncias
       - AIRFLOW__CORE__DAGS_FOLDER=/opt/airflow/dags    # Caminho das DAGs dentro do contêiner
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow  # Conexão com o PostgreSQL
       - AIRFLOW__LOGGING__REMOTE_LOGGING=False          # Desabilita o logging remoto
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
-      # - API_URL=${API_URL}
-      # - API_USER=${API_USER}
-      # - API_PASSWORD=${API_PASSWORD}
       - AIRFLOW__WEBSERVER__SECRET_KEY=${AIRFLOW__WEBSERVER__SECRET_KEY}
+      - PYTHONPATH=/opt/airflow
     volumes:
-      - ./dags:/opt/airflow/dags                       # Mapeia as DAGs do host para o contêiner
-      # - ./output/api:/opt/airflow/output/api
-      # - ./output/db:/opt/airflow/output/db
+      - ./dags:/opt/airflow/dags                       # Mapeia as DAGs do host para o contêine
       - /var/run/docker.sock:/var/run/docker.sock
       - shared-api:/opt/airflow/output/api
+      - ./config:/opt/airflow/config:ro
     entrypoint: airflow db migrate # Comando que será executado ao rodar este serviço
     networks:
       - airflow_net
@@ -115,7 +91,6 @@ services:
   # Serviço: Webserver do Airflow (interface web)
   airflow-webserver:
     image: apache/airflow:2.10.4-python3.11
-    # image: apache/airflow:3.0.1-python3.11
     container_name: airflow_webserver
     user: root                                   # Executa como root para evitar problemas de permissão
     restart: always
@@ -125,7 +100,6 @@ services:
     env_file:
       - .env
     environment:
-      # - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
       - AIRFLOW__CORE__DAGS_FOLDER=/opt/airflow/dags
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
       - AIRFLOW__WEBSERVER__WEB_SERVER_PORT=8080
@@ -141,14 +115,14 @@ services:
       - _AIRFLOW_WWW_USER_EMAIL=airflow@example.com
       - _AIRFLOW_WWW_USER_ROLE=Admin
       - AIRFLOW__WEBSERVER__SECRET_KEY=${AIRFLOW__WEBSERVER__SECRET_KEY}
+      - PYTHONPATH=/opt/airflow
     ports:
       - "8080:8080"                                      # Porta mapeada para acesso à UI
     volumes:
       - ./dags:/opt/airflow/dags
-      # - ./output/api:/opt/airflow/output/api
-      # - ./output/db:/opt/airflow/output/db
       - ./logs:/opt/airflow/logs                        # Adiciona esse volume para persistência de logs
       - /var/run/docker.sock:/var/run/docker.sock        # Adiciona esse volume expor o socket do Docker
+      - ./config:/opt/airflow/config:ro
       - shared-api:/opt/airflow/output/api
     command: webserver
     networks:
@@ -166,18 +140,19 @@ services:
     env_file:
       - .env
     environment:
-      # - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
       - AIRFLOW__CORE__DAGS_FOLDER=/opt/airflow/dags
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow  # Conexão com o PostgreSQL
       - AIRFLOW__LOGGING__REMOTE_LOGGING=False          # Desabilita o logging remoto
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
       - AIRFLOW__WEBSERVER__SECRET_KEY=${AIRFLOW__WEBSERVER__SECRET_KEY}
+      - PYTHONPATH=/opt/airflow
     volumes:
       - ./dags:/opt/airflow/dags
       - ./output/api:/opt/airflow/output/api
       - ./output/db:/opt/airflow/output/db
       - ./logs:/opt/airflow/logs                       # Adiciona esse volume para persistência de logs
       - /var/run/docker.sock:/var/run/docker.sock       # Adiciona esse volume expor o socket do Docker
+      - ./config:/opt/airflow/config:ro
       - shared-api:/opt/airflow/output/api
     command: scheduler
     networks:
@@ -198,12 +173,14 @@ services:
       - ./output/db:/opt/airflow/output/bd
       - /var/run/docker.sock:/var/run/docker.sock
       - shared-api:/opt/airflow/output/api
+      - ./config:/opt/airflow/config:ro
     environment:
       - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
       - AIRFLOW__CELERY__BROKER_URL=redis://redis:6379/0
       - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://airflow:airflow@airflow-db/airflow
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow
       - AIRFLOW__WEBSERVER__SECRET_KEY=${AIRFLOW__WEBSERVER__SECRET_KEY}
+      - PYTHONPATH=/opt/airflow
     command: celery worker
     networks:
       - airflow_net

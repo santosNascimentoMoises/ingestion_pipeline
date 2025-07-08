@@ -10,44 +10,50 @@ from docker.types import Mount
 import os
 from airflow.utils.task_group import TaskGroup
 from airflow.sensors.external_task import ExternalTaskSensor
+from config.config_streams_meltano_api import get_streams_select
 
 # Define os parâmetros padrão para a DAG (retries, delay, etc.)
 default_args = {
-    "retries": 1,
+    "retries": 5,
     "retry_delay": timedelta(seconds=10),
+    "owner": "airflow"
 }
 
-default_args = {"owner": "airflow"}
+# default_args = {"owner": "airflow"}
 
-STREAMS_METADATA = {
-    "SalesOrderHeader": {
-        "path": "/SalesOrderHeader",
-        "primary_keys": ["SalesOrderID"],
-        "replication_key": "ModifiedDate",
-        "schema_filepath": "sales_order_header.json"
-    },
-    "SalesOrderDetail": {
-        "path": "/SalesOrderDetail",
-        "primary_keys": ["SalesOrderID", "SalesOrderDetailID"],
-        "replication_key": "SalesOrderDetailID",
-        "schema_filepath": "sales_order_detail.json"
-    },
-}
+STREAMS_METADATA = get_streams_select()
+
+# STREAMS_METADATA = {
+#     "SalesOrderHeader": {
+#         "path": "/SalesOrderHeader",
+#         "primary_keys": ["SalesOrderID"],
+#         "replication_key": "ModifiedDate",
+#         "schema_filepath": "sales_order_header.json"
+#     },
+#     "SalesOrderDetail": {
+#         "path": "/SalesOrderDetail",
+#         "primary_keys": ["SalesOrderID", "SalesOrderDetailID"],
+#         "replication_key": "SalesOrderDetailID",
+#         "schema_filepath": "sales_order_detail.json"
+#     },
+# }
 
 with DAG(
     dag_id="dag_extract_meltano_ingest_databricks",
     start_date=datetime(2024, 1, 1),
     schedule_interval=None,
     catchup=False,
-    tags=["meltano", "sdk"]
+    tags=["meltano", "sdk", "databricks"],
+    default_args=default_args
 ) as dag:
 
     with TaskGroup(group_id="grupo_meltano_extract_endpoint") as extract_group:
+        
         extract_tasks = {}
 
         for name, metadata in STREAMS_METADATA.items():
 
-            task_ = docker_task = DockerOperator(
+            docker_task_extract = DockerOperator(
                 task_id=f"extract_{name}",
                 image="meltano-api-xcon",
                 api_version="auto",
@@ -73,16 +79,21 @@ with DAG(
                         ),
 
                     ],
+                
                 working_dir='/app',
                 docker_url="unix://var/run/docker.sock",
-                network_mode="bridge"
+                network_mode="bridge",
+
+                retries=5,  # sobrescreve os 2 definidos no default_args
+                retry_delay=timedelta(minutes=1),  # também sobrescreve
+
             )
-            extract_tasks[name] = task_
+            extract_tasks[name] = docker_task_extract
     
     with TaskGroup(group_id="grupo_databricks_ingest_endpoint") as ingest_group:
 
         for name, metadata in STREAMS_METADATA.items():
-
+            
             @task(task_id=f"databricks_ingest_{name}")
             def ingest_stream(name=name):
                 print(f"Iniciando ingestão para o endpoint: {name}")

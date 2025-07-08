@@ -10,8 +10,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+os.chdir('/app/output')
+
 # nome do arquivo
-FILE_NAME = 'exemplo.json'
+# FILE_NAME = 'exemplo.json'
+
+FILE_NAME = os.getenv("FILE_NAME")
+DBFS_PATH = os.getenv("DBFS_PATH")
 
 # diretório RAW no databricks
 dbfs_path = "dbfs:/Volumes/adventure_works/raw/raw_api/"+FILE_NAME
