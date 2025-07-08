@@ -8,6 +8,7 @@ from datetime import timedelta
 import pendulum
 from docker.types import Mount
 import os
+import logging
 
 # Obtém o caminho absoluto a partir de um relativo
 # 1. Defina o caminho ABSOLUTO no seu PC local
@@ -23,7 +24,7 @@ default_args = {
 default_args = {"owner": "airflow"}
 
 with DAG(
-    dag_id="stream_sdk_imput",
+    dag_id="ingest_databricks",
     start_date=datetime(2024, 1, 1),
     schedule_interval=None,
     catchup=False,
@@ -39,10 +40,25 @@ with DAG(
     #         "replication_key": "SalesOrderDetailID",
     #         "schema_filepath": "sales_order_detail.json"
     #     }
-    
+    name = 'SalesOrderHeader'
+
+    from airflow.models import Variable
+
+    @task(task_id="status_extrac_meltano")
+    def get_status_extract_meltano():
+        name_endpoint = name
+        flag = Variable.get(f"flag_{name_endpoint}")
+
+        if flag:
+            print(f"ENDPOINT {name_endpoint} EXTRAIDO COM SUCESSO")
+        else:
+            print(f"ENDPOINT {name_endpoint} NÃO EXTRAIDO")
+
+    status_extract_meltano = get_status_extract_meltano()
+
     @task(task_id="get_stream_metadata")
     def get_stream_metadata():
-        print(HOST_OUTPUT_PATH)
+
         return {
             "name": "SalesOrderHeader",
             "path": "/SalesOrderHeader",
@@ -52,7 +68,7 @@ with DAG(
         }
 
     stream_info = get_stream_metadata()
-    
+
     # docker_task = DockerOperator(
     #     task_id=f"executar_stream",
     #     image="meltano-api-xcon",  # imagem já buildada com a stream
@@ -84,7 +100,7 @@ with DAG(
     # )
 
     alpine = DockerOperator(
-        task_id=f"executar_alpine",
+        task_id=f"alpine",
         image="alpine",
         api_version="auto",
         auto_remove=True,
@@ -112,7 +128,9 @@ with DAG(
         network_mode="bridge"
     )
 
-    stream_info>>alpine#>>docker_task
+    status_extract_meltano>>stream_info>>alpine#>>docker_task
 
+# with open("/tmp/extract_status.flag", "w") as f:
+#     f.write("success")
 
 #  docker exec -it -u root ab0b70066dc0 /bin/bash
