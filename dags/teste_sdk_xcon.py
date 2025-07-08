@@ -88,7 +88,7 @@ with DAG(
         image="alpine",
         api_version="auto",
         auto_remove=True,
-        command=f"python print.py",  # adapte se necessário
+        command=f"python print.py",
         environment={
             **os.environ,  # Passa todas as variáveis do ambiente atual
             'VAR_EXTRA': 'valor_extra',  # Variáveis adicionais se necessário
