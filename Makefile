@@ -29,6 +29,7 @@ build_pipeline:
 	docker volume create shared-api
 	docker compose build meltano-api-xcon
 	docker compose build alpine
+	docker compose build databricks-ingest
 
 	@echo "🔧 Inicializando o banco de dados do Airflow..."
 	docker compose run --rm airflow-init

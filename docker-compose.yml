@@ -47,11 +47,13 @@ services:
     build:
       context: ./databricks-ingest
       dockerfile: databricks-ingest.Dockerfile
+    image: databricks-ingest:latest
     container_name: databricks_ingest
     env_file:
       - .env
     volumes:
       - shared-api:/app/output/api
+      - /var/run/docker.sock:/var/run/docker.sock
       # - shared-db:/output/db
 
   alpine:

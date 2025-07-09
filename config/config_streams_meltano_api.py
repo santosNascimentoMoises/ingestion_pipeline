@@ -1,4 +1,14 @@
+import os
 
+# CONFIG DATABRICKS PATHS
+
+RAW_API_VOLUME_PATH = 'dbfs:/Volumes/adventure_works/raw/raw_api/'
+RAW_DB_VOLUME_PATH = 'dbfs:/Volumes/adventure_works/raw/raw_db'
+
+# CONFIGS FROM API EXTRACT
+
+# type of the data ouput - ex: .json, .parquet WITH POINT
+DATA_TYPE_EXTRACT_API = ".jsonl"
 
 EXTRACT_STREAM_INDICATOR = {
     'SalesOrderHeader':True,
@@ -12,38 +22,52 @@ STREAMS_METADATA = {
         "path": "/SalesOrderHeader",
         "primary_keys": ["SalesOrderID"],
         "replication_key": "ModifiedDate",
-        "schema_filepath": "sales_order_header.json"
+        "schema_filepath": "sales_order_header.json",
+
+        # raw data volume on databricks
+        "volume_path": RAW_API_VOLUME_PATH,
+
+        # type of the data ouput - ex: .json, .parquet
+        "data_type": DATA_TYPE_EXTRACT_API
+
     },
     "SalesOrderDetail": {
         "path": "/SalesOrderDetail",
         "primary_keys": ["SalesOrderID", "SalesOrderDetailID"],
         "replication_key": "SalesOrderDetailID",
-        "schema_filepath": "sales_order_detail.json"
+        "schema_filepath": "sales_order_detail.json",
+
+        # raw data volume on databricks
+        "volume_path": RAW_API_VOLUME_PATH,
+
+        # type of the data ouput - ex: .json
+        "data_type": DATA_TYPE_EXTRACT_API
     },
     "PurchaseOrderDetail": {
         "path": "/PurchaseOrderDetail",
         "primary_keys": ["PurchaseOrderID"],
         "replication_key": "ModifiedDate",
-        "schema_filepath": "purchase_order_detail.json"
+        "schema_filepath": "purchase_order_detail.json",
+
+        # raw data volume on databricks
+        "volume_path": RAW_API_VOLUME_PATH,
+
+        # type of the data ouput - ex: .json
+        "data_type": DATA_TYPE_EXTRACT_API
     },
     "PurchaseOrderHeader": {
         "path": "/PurchaseOrderHeader",
         "primary_keys": ["PurchaseOrderID"],
         "replication_key": "ModifiedDate",
-        "schema_filepath": "purchase_order_header.json"
+        "schema_filepath": "purchase_order_header.json",
+
+        # raw data volume on databricks
+        "volume_path": RAW_API_VOLUME_PATH,
+
+        # type of the data ouput - ex: .json
+        "data_type": DATA_TYPE_EXTRACT_API
     },
 }
-
-# def get_streams_select():
-#     STREAMS_TO_EXTRACT = {}
-#     for name, metadata in STREAMS_METADATA.items():
-#         if EXTRACT_STREAM_INDICATOR[name]:
-#             STREAMS_TO_EXTRACT[name] = metadata
-
-#     return(STREAMS_TO_EXTRACT)
-
-# if __name__ == "__main__":
-#     get_streams_select()
 
 def get_streams_select():
     return {

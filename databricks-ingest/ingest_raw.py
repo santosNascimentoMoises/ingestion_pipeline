@@ -8,6 +8,7 @@ logging.basicConfig(
     format='[%(asctime)s] [%(levelname)s] %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )
+
 logger = logging.getLogger(__name__)
 
 os.chdir('/app/output')
@@ -16,10 +17,12 @@ os.chdir('/app/output')
 # FILE_NAME = 'exemplo.json'
 
 FILE_NAME = os.getenv("FILE_NAME")
-DBFS_PATH = os.getenv("DBFS_PATH")
+FILE_TYPE = os.getenv("FILE_TYPE")
+VOLUME_PATH = os.getenv("VOLUME_PATH")
 
 # diretório RAW no databricks
-dbfs_path = "dbfs:/Volumes/adventure_works/raw/raw_api/"+FILE_NAME
+# dbfs_path = "dbfs:/Volumes/adventure_works/raw/raw_api/"+FILE_NAME
+dbfs_path = VOLUME_PATH+FILE_NAME+FILE_TYPE
 
 host = f"https://{os.getenv('DATABRICKS_INSTANCE')}.cloud.databricks.com"
 token = os.getenv('DATABRICKS_ACCESS_TOKEN')
@@ -30,7 +33,7 @@ w = WorkspaceClient(
 )
 
 try:
-    with open(FILE_NAME, 'rb') as f:
+    with open(FILE_NAME+FILE_TYPE, 'rb') as f:
         w.dbfs.upload(dbfs_path, f, overwrite=True)
 
     logger.info(f"[DATABRIX INGEST] SUCCESS FILE UPLOADED: {FILE_NAME}")
