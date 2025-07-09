@@ -1,10 +1,20 @@
 from pyspark.sql import SparkSession
 import os
 from config import DATA_BASE_DIR, schema_list_extract
+import logging
+
+# configurando mensagens de log
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s] [%(levelname)s] %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+
+logger = logging.getLogger(__name__)
 
 # cria uma SparkSession usando o builder
 def spark_builder():
-    print('SPARK BUILDER')
+    logger.info(f"[SPARK] SPARK BUILDER")
     return SparkSession.builder \
         .appName("SPARK") \
         .config("spark.jars", "./mssql-jdbc-12.10.0.jre8.jar") \

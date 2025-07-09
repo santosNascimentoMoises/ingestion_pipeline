@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   meltano-api:
@@ -24,24 +23,26 @@ services:
 
   spark-db:
     build:
-      context: ./spark-db
+      context: ./spark-db-copy
       dockerfile: spark.Dockerfile
     image: spark-db:latest
     env_file: .env
     volumes:
-      - ./output/db:/app/spark_output/db    # Volume dedicado para DB
+      # - ./output/db:/app/spark_output/db    # Volume dedicado para DB
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./output/teste_db:/app/output/db
+      # - shared-db:/output/db
 
-  databricks-upload:
-    build: 
-      context: ./databricks-upload
-      dockerfile: databricks-upload.Dockerfile
-    image: databricks-upload:latest
-    env_file: .env
-    volumes:
-      - ./output/db:/app/output/bd
-      - ./output/api:/app/output/api
-      - /var/run/docker.sock:/var/run/docker.sock
+  # databricks-upload:
+  #   build: 
+  #     context: ./databricks-upload
+  #     dockerfile: databricks-upload.Dockerfile
+  #   image: databricks-upload:latest
+  #   env_file: .env
+  #   volumes:
+  #     - ./output/db:/app/output/bd
+  #     - ./output/api:/app/output/api
+  #     - /var/run/docker.sock:/var/run/docker.sock
 
   databricks-ingest:
     build:
@@ -54,17 +55,17 @@ services:
     volumes:
       - shared-api:/app/output/api
       - /var/run/docker.sock:/var/run/docker.sock
-      # - shared-db:/output/db
+      - shared-db:/output/db
 
-  alpine:
-    build:
-      context: ./alpine
-      dockerfile: alpine.Dockerfile
-    container_name: alpine
-    image: alpine
-    env_file:
-      - .env
-    restart: "no"
+  # alpine:
+  #   build:
+  #     context: ./alpine
+  #     dockerfile: alpine.Dockerfile
+  #   container_name: alpine
+  #   image: alpine
+  #   env_file:
+  #     - .env
+  #   restart: "no"
 
   # Serviço responsável por inicializar o banco de dados do Airflow automaticamente
   airflow-init:
@@ -217,6 +218,8 @@ volumes:
   pgdata:
   redis_data:  # Novo volume para Redis
   shared-api:
+      driver: local
+  shared-db:
       driver: local
 
 # Rede interna para comunicação entre os contêineres

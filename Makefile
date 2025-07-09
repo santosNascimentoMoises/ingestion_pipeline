@@ -37,3 +37,10 @@ build_pipeline:
 	@echo "🚀 Subindo os serviços do Airflow (webserver, scheduler, db)..."
 	docker compose up -d airflow-webserver airflow-scheduler airflow-db redis airflow-worker
 	@echo "🌐 Acesse: http://localhost:8080"
+
+spark:
+	docker compose build --no-cache spark-db
+	docker compose run spark-db
+teste-spark:
+	docker compose build spark-db
+	docker compose run spark-db
