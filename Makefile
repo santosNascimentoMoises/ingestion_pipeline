@@ -20,16 +20,20 @@ clear:
 down:
 	docker compose down
 
+up:
+	docker compose up
+
 start_pipeline:
 	docker volume create shared-api # volume para dados da API
 	docker compose build --no-cache meltano-api-xcon
-	docker compose build --no-cache alpine
+	# docker compose build --no-cache alpine
 
 build_pipeline:
 	docker volume create shared-api
 	docker compose build meltano-api-xcon
-	docker compose build alpine
+	# docker compose build alpine
 	docker compose build databricks-ingest
+	docker compose build spark-db
 
 	@echo "🔧 Inicializando o banco de dados do Airflow..."
 	docker compose run --rm airflow-init

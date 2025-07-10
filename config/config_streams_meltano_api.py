@@ -1,12 +1,8 @@
-import os
 
-# CONFIG DATABRICKS PATHS
-
+# CONFIG DATABRICKS PATHS: VOLUME DE DESTIDO DOS DADOS BRUTOS
 RAW_API_VOLUME_PATH = 'dbfs:/Volumes/adventure_works/raw/raw_api/'
-RAW_DB_VOLUME_PATH = 'dbfs:/Volumes/adventure_works/raw/raw_db'
 
-# CONFIGS FROM API EXTRACT
-
+# CONFIGS FROM API MELTANO EXTRACT
 # type of the data ouput - ex: .json, .parquet WITH POINT
 DATA_TYPE_EXTRACT_API = ".jsonl"
 
@@ -75,3 +71,6 @@ def get_streams_select():
         for name, metadata in STREAMS_METADATA.items()
         if EXTRACT_STREAM_INDICATOR.get(name, False)
     }
+
+teste = get_streams_select()
+print(teste)

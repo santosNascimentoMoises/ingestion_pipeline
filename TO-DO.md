@@ -17,6 +17,7 @@ lembrar do docker-compose também
     - descrever... fct, dim, etc...
 - [ ] lembrar da dim_dates
 - [ ] estudo dos indicadores e possíveis visualizações dos dados
+- [ ] https://docs.getdbt.com/docs/core/docker-install
 - [ ] x
 - [ ] x
 - [ ] x
@@ -25,7 +26,13 @@ lembrar do docker-compose também
 - [ ] x
 - [ ] x
 - [ ] x
-- [ ] x
+
+OBS antes de dormir eu deixei em aberto:
+- configurar o schema table da extração com spark
+- configurar função de retorno dos streams. ja tem uma mas precisa acertar a parte do return. eu quero só [schema,table] - falta testar
+- declarar "volume_path" no schema table
+
+
 
 # AL DAY COMANDS
 source .venv/bin/activate

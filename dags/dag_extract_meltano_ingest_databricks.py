@@ -72,7 +72,7 @@ with DAG(
             )
             extract_tasks[name] = docker_task_extract
     
-    with TaskGroup(group_id="teste_grupo_databricks_ingest") as ingest_group:
+    with TaskGroup(group_id="grupo_databricks_ingest") as ingest_group:
         
         ingest_tasks = {}
 

@@ -1,14 +1,14 @@
 
 services:
-  meltano-api:
-    build:
-      context: ./tap_adventureworksapi
-      dockerfile: meltano_api.Dockerfile
-    image: meltano-api:latest
-    env_file: .env
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - shared-api:/app/output
+  # meltano-api:
+  #   build:
+  #     context: ./tap_adventureworksapi
+  #     dockerfile: meltano_api.Dockerfile
+  #   image: meltano-api:latest
+  #   env_file: .env
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - shared-api:/app/output
 
   meltano-api-xcon:
     build:
