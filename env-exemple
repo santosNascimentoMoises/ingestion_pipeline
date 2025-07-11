@@ -1,15 +1,26 @@
-MSQL_DB_HOST="sql-server-example.database.windows.net"
-MSQL_DB_PORT="1234"
-MSQL_DB_USER="cloud_admin"
-MSQL_DB_PASSWORD="S3cur3P@ssw0rd!2024"
-MSQL_DB_NAME="AdventureWorksLT"
+# SQL Credentials
+export MSQL_DB_HOST=
+export MSQL_DB_PORT=
+export MSQL_DB_USER=
+export MSQL_DB_PASSWORD=
+export MSQL_DB_NAME=
 
-DATABRICKS_TOKEN="dapi1234567890abcdef1234567890abcdef"
-DATABRICKS_HOST="https://adb-123456789012345.1.azuredatabricks.net"
-DATABRICKS_CLUSTER_ID="1234-567890-cluster123"
-JOB_ID="987654321"
-DATABRICKS_INSTANCE="adb-123456789012345.1.databricks.azure.net"
+# API Credentials
+export API_URL=
+export API_USER=
+export API_PASSWORD=
 
-AZURE_CONTAINER_NAME="landing-zone"
-AZURE_STORAGE_ACCOUNT_NAME="datalakecompany001"
-AZURE_STORAGE_ACCOUNT_KEY="s7VCk9pwH123/dyiJXBeARCcBg+/j/xMyBcya/gLCB+AStSronjw=="
+# DATABRICKS Credentials
+export JOB_ID=
+export DATABRICKS_ACCESS_TOKEN=
+export DATABRICKS_INSTANCE=
+export DATABRICKS_USER=
+
+# AZURE Credentials
+export AZURE_CONTAINER_NAME=
+export AZURE_STORAGE_ACCOUNT_NAME=
+export AZURE_STORAGE_ACCOUNT_KEY=
+
+export AIRFLOW__WEBSERVER__SECRET_KEY=
+
+export TESTE='TESTE_OK'
