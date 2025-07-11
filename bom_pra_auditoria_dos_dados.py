@@ -13,6 +13,3 @@ with open(input_path, "r", encoding="utf-8") as infile, \
         obj["sdc_extracted_at"] = timestamp
         outfile.write(json.dumps(obj, ensure_ascii=False) + "\n")
 
-# em pandas seria algo do tipo:
-
-# df["sdc_extracted_at"] = datetime.utcnow().isoformat()

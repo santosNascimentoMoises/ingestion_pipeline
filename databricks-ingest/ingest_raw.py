@@ -13,15 +13,12 @@ logger = logging.getLogger(__name__)
 
 os.chdir('/app/output')
 
-# nome do arquivo
-# FILE_NAME = 'exemplo.json'
-
 FILE_NAME = os.getenv("FILE_NAME")
 FILE_TYPE = os.getenv("FILE_TYPE")
 VOLUME_PATH = os.getenv("VOLUME_PATH")
 
 # diretório RAW no databricks
-# dbfs_path = "dbfs:/Volumes/adventure_works/raw/raw_api/"+FILE_NAME
+# ex: "dbfs:/Volumes/adventure_works/raw/raw_api/file.parquet"
 dbfs_path = VOLUME_PATH+FILE_NAME+FILE_TYPE
 
 host = f"https://{os.getenv('DATABRICKS_INSTANCE')}.cloud.databricks.com"
@@ -40,6 +37,12 @@ try:
 
 except Exception as e:
     print(f"[FALHA] Erro durante upload: {str(e)}")
+    # "debug"
+    # logger.info(f"[DATABRIX INGEST] URL: {dbfs_path}")
+    # logger.info(f"[DATABRIX INGEST] FILE: {FILE_NAME}")
+    # logger.info(f"[DATABRIX INGEST] FILE TYPE: {FILE_TYPE}")
+    # logger.info(f"[DATABRIX INGEST] FILE HOST: {host}")
+
 
 # "debug" de diretórios dentro do docker
 # print('diretório atual app tem:')

@@ -213,6 +213,32 @@ services:
     networks:
       - airflow_net
 
+  airflow-triggerer:
+    image: apache/airflow:2.10.4-python3.11
+    user: root
+    restart: always
+    depends_on:
+      - airflow-scheduler
+    env_file:
+      - .env
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./output/api:/opt/airflow/output/api
+      - ./output/db:/opt/airflow/output/bd
+      - /var/run/docker.sock:/var/run/docker.sock
+      - shared-api:/opt/airflow/output/api
+      - ./config:/opt/airflow/config:ro
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+      - AIRFLOW__CELERY__BROKER_URL=redis://redis:6379/0
+      - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://airflow:airflow@airflow-db/airflow
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow
+      - AIRFLOW__WEBSERVER__SECRET_KEY=${AIRFLOW__WEBSERVER__SECRET_KEY}
+      - PYTHONPATH=/opt/airflow
+    command: triggerer
+    networks:
+      - airflow_net
+
 # Volume nomeado para persistência dos dados do PostgreSQL
 volumes:
   pgdata:

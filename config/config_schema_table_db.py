@@ -1,10 +1,22 @@
 
 # CONFIG DATABRICKS PATHS: VOLUME DE DESTIDO DOS DADOS BRUTOS
-RAW_DB_VOLUME_PATH = 'dbfs:/Volumes/adventure_works/raw/raw_db'
+RAW_DB_VOLUME_PATH = 'dbfs:/Volumes/adventure_works/raw/raw_db/'
 
 # CONFIGS FROM DB SPARK EXTRACT
 # type of the data ouput - ex: .json, .parquet WITH POINT
-DATA_TYPE_EXTRACT_DB = ".parquet"
+DATA_TYPE_EXTRACT_DB = ".jsonl"
+
+# TESTES:
+# EXTRACT_SCHEMA_TABLE_INDICATOR = {
+
+#         "Purchasing": {
+#             "ProductVendor": True,
+#             "PurchaseOrderDetail": True,
+#             "PurchaseOrderHeader": True,
+#             "ShipMethod": True,
+#             "Vendor": True
+#         }
+#     }
 
 EXTRACT_SCHEMA_TABLE_INDICATOR = {
 
@@ -59,7 +71,7 @@ EXTRACT_SCHEMA_TABLE_INDICATOR = {
             "ScrapReason": True,
             "TransactionHistory": True,
             "TransactionHistoryArchive": True,
-            "UnitMeasure": True,
+            "UnitMeasure": False,
             "WorkOrder": True,
             "WorkOrderRouting": True
         },
@@ -101,11 +113,13 @@ def get_schema_table_select():
             if flag is True:
 
                 metadata = {
+                    "name":table,
                     "schema":schema,
                     "data_type":DATA_TYPE_EXTRACT_DB,
                     "volume_path":RAW_DB_VOLUME_PATH,
-                    }
-                
+                }
                 output[table] = metadata.copy()
-                
+
     return output
+
+# # print(get_schema_table_select())

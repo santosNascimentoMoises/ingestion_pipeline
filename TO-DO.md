@@ -71,5 +71,14 @@ docker compose build --no-cache spark-db
 docker compose up --build spark-db
 docker compose run spark-db
 
+docker compose up spark-db
+
 docker compose down spark-db
+
 docker compose run --rm spark-db
+
+
+captura string no job databrics
+dbutils.widgets.text("input_string", "")
+input_string = dbutils.widgets.get("input_string")
+print(f"String recebida: {input_string}")

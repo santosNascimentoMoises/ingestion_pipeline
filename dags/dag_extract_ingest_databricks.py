@@ -1,16 +1,18 @@
 
 from airflow import DAG
-from airflow.decorators import task
+# from airflow.decorators import task
 from airflow.providers.docker.operators.docker import DockerOperator  # Operador que roda containers
 from datetime import datetime
 from datetime import timedelta
+from airflow.operators.python import PythonOperator
 # import pendulum
 from docker.types import Mount
 import os
 from airflow.utils.task_group import TaskGroup
-from airflow.sensors.external_task import ExternalTaskSensor
+# from airflow.sensors.external_task import ExternalTaskSensor
 from config.config_streams_meltano_api import get_streams_select
 from config.config_schema_table_db import get_schema_table_select
+
 
 # Define os parâmetros padrão para a DAG (retries, delay, etc.)
 default_args = {
@@ -33,7 +35,6 @@ target_databricks_data_path = '/app/output'
 docker_meltano_extract = {
     "image": "meltano-api-xcon",
     "api_version": "auto",
-    "docker_url": "unix://var/run/docker.sock",
     "network_mode": "bridge",
     "auto_remove": True,
     "mount_tmp_dir": False,
@@ -51,13 +52,11 @@ docker_databricks_ingest = {
     "mount_tmp_dir": False,
     "command": f"python ingest_raw.py",
     "working_dir": "/app",
-    "docker_url":"unix://var/run/docker.sock",
 }
 
 docker_spark_extract = {
     "image": "spark-db",
     "api_version": "auto",
-    "docker_url": "unix://var/run/docker.sock",
     "network_mode": "bridge",
     "auto_remove": True,
     "mount_tmp_dir": False,
@@ -84,14 +83,15 @@ def ingest_databricks_task(
             "FILE_TYPE": metadata["data_type"]
             },
 
-            mounts=[
-                Mount(
-                    source=source_path,
-                    target=target_path,
-                    type="volume",
-                    ),
-                ],
-        )
+        mounts=[
+            Mount(
+                source=source_path,
+                target=target_path,
+                type="volume",
+            ),
+        ],
+        
+    )
 
 def extract_meltano_task(
     name: str,
@@ -112,14 +112,14 @@ def extract_meltano_task(
             "SCHEMA_FILEPATH": metadata["schema_filepath"]
             },
 
-            mounts=[
-                Mount(
-                    source=source_path,
-                    target=target_path,
-                    type="volume",
-                    ),
-                ],
-        )
+        mounts=[
+            Mount(
+                source=source_path,
+                target=target_path,
+                type="volume",
+            ),
+        ],
+    )
 
 def extract_spark_task(
     name: str,
@@ -129,7 +129,7 @@ def extract_spark_task(
     ):
 
     return DockerOperator(
-        task_id=f"extract_{name}_db",
+        task_id=f"extract_{name}",
         **docker_spark_extract,
         environment={
             **os.environ,
@@ -137,21 +137,22 @@ def extract_spark_task(
             "SCHEMA_NAME": metadata["schema"],
             },
 
-            mounts=[
-                Mount(
-                    source=source_path,
-                    target=target_path,
-                    type="volume",
-                    ),
-                ],
-        )
+        mounts=[
+            Mount(
+                source=source_path,
+                target=target_path,
+                type="volume",
+            ),
+        ],
+        task_concurrency=4,  # no máximo 4 instâncias desta task 
+    )
 
 #------------------------ DEFINIÇÃO DOS STREAMS (EDNPOINTS E SCHEMA.TABLE)
 STREAMS_METADATA_API = get_streams_select()
 STREAMS_METADATA_DB = get_schema_table_select()
 
 with DAG(
-    dag_id="TESTE_dag_extract_meltano_ingest_databricks",
+    dag_id="el_extract_ingest_databricks",
     start_date=datetime(2024, 1, 1),
     schedule_interval=None,
     catchup=False,
@@ -181,7 +182,7 @@ with DAG(
         for name, metadata in STREAMS_METADATA_DB.items():
 
             task_extract = extract_spark_task(
-                metadata['schema']+'.'+name,
+                name,
                 metadata,
                 source_db_data_path,
                 target_spark_data_path
@@ -189,9 +190,9 @@ with DAG(
 
             extract_spark_tasks[name] = task_extract
 
-    with TaskGroup(group_id="databricks_ingest_raw_meltano") as ingest_group:
+    with TaskGroup(group_id="databricks_ingest_raw_api") as ingest_group:
         
-        ingest_tasks = {}
+        ingest_api_tasks = {}
 
         for name, metadata in STREAMS_METADATA_API.items():
 
@@ -202,21 +203,24 @@ with DAG(
                 target_databricks_data_path
             )
 
-            ingest_tasks[name] = docker_task_ingest_api
+            ingest_api_tasks[name] = docker_task_ingest_api
 
-            extract_meltano_tasks[name] >> ingest_tasks[name]
+            extract_meltano_tasks[name] >> ingest_api_tasks[name]
 
-    with TaskGroup(group_id="db_databricks_ingest_raw_db") as ingest_group:
+    with TaskGroup(group_id="databricks_ingest_raw_db") as ingest_group:
+
+        ingest_db_tasks = {}
 
         for name, metadata in STREAMS_METADATA_DB .items():
 
             docker_task_ingest_db = ingest_databricks_task(
-                metadata['schema']+'.'+name,
+                name,
                 metadata,
-                source_api_data_path,
+                source_db_data_path,
                 target_databricks_data_path
             )
 
-            ingest_tasks[name] = docker_task_ingest_db
+            ingest_db_tasks[name] = docker_task_ingest_db
 
-            extract_spark_tasks[name] >> ingest_tasks[name]
+            extract_spark_tasks[name] >> ingest_db_tasks[name]
+
