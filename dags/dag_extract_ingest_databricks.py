@@ -1,17 +1,16 @@
 
 from airflow import DAG
-# from airflow.decorators import task
-from airflow.providers.docker.operators.docker import DockerOperator  # Operador que roda containers
+from airflow.providers.docker.operators.docker import DockerOperator
 from datetime import datetime
 from datetime import timedelta
-from airflow.operators.python import PythonOperator
-# import pendulum
 from docker.types import Mount
 import os
 from airflow.utils.task_group import TaskGroup
-# from airflow.sensors.external_task import ExternalTaskSensor
 from config.config_streams_meltano_api import get_streams_select
 from config.config_schema_table_db import get_schema_table_select
+from airflow.operators.python import PythonOperator
+from airflow.operators.empty import EmptyOperator
+from scripts.job_databricks import trigger_databricks_job
 
 
 # Define os parâmetros padrão para a DAG (retries, delay, etc.)
@@ -153,8 +152,8 @@ STREAMS_METADATA_DB = get_schema_table_select()
 
 with DAG(
     dag_id="el_extract_ingest_databricks",
-    start_date=datetime(2024, 1, 1),
-    schedule_interval=None,
+    start_date=datetime(1990, 1, 1),
+    schedule_interval="@daily",
     catchup=False,
     tags=["meltano", "sdk", "databricks"],
     default_args=default_args
@@ -192,6 +191,8 @@ with DAG(
 
     with TaskGroup(group_id="databricks_ingest_raw_api") as ingest_group:
         
+        end_pipeline_api = EmptyOperator(task_id="end_pipeline_api")
+
         ingest_api_tasks = {}
 
         for name, metadata in STREAMS_METADATA_API.items():
@@ -205,9 +206,11 @@ with DAG(
 
             ingest_api_tasks[name] = docker_task_ingest_api
 
-            extract_meltano_tasks[name] >> ingest_api_tasks[name]
+            extract_meltano_tasks[name] >> ingest_api_tasks[name] >> end_pipeline_api
 
     with TaskGroup(group_id="databricks_ingest_raw_db") as ingest_group:
+
+        end_pipeline_db = EmptyOperator(task_id="end_pipeline_db")
 
         ingest_db_tasks = {}
 
@@ -222,5 +225,17 @@ with DAG(
 
             ingest_db_tasks[name] = docker_task_ingest_db
 
-            extract_spark_tasks[name] >> ingest_db_tasks[name]
+            extract_spark_tasks[name] >> ingest_db_tasks[name] >> end_pipeline_db
 
+    def executar_job_databricks():
+        resultado = trigger_databricks_job()
+        if resultado is None:
+            raise Exception("Erro ao disparar job Databricks.")
+        
+    # Job databricks para gerar Bronze no formato delta
+    run_databricks_job = PythonOperator(
+        task_id='run_databricks_job_raw_to_bronze',
+        python_callable=executar_job_databricks,
+    )
+
+    [end_pipeline_db,end_pipeline_api] >> run_databricks_job
