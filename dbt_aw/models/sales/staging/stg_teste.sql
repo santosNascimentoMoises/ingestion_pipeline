@@ -1,9 +1,9 @@
-{{ config(materialized='ephemeral') }}
+-- {{ config(materialized='ephemeral') }}
 
-with src as (
+with address_table as (
     select *
-    from {{ source('bronze_sales', 'address') }}
+    from {{ source('raw', 'address') }}
 )
 
 select *
-from src
+from address_table

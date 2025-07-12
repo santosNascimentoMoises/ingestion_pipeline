@@ -1,7 +1,7 @@
 version: 2
 
 sources:
-  - name: bronze_sales
+  - name: raw
     database: adventure_works
     schema: bronze
     description: ""
