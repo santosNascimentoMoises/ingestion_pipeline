@@ -36,40 +36,86 @@ clean-targets:         # directories to be removed by `dbt clean`
 #     example:
 #       +materialized: view
 
+
 models:
-  adventure_works:
+ adventure_works:
+  sales:
+    +database: sales
+    staging:
+      +schema: stg
+      +materialized: ephemeral
+      +tags: ['sales', 'staging']
+    silver:
+      +schema: silver
+      +materialized: table
+      +tags: ['sales', 'silver']
 
-    sales:
-      +catalog: adventure_works
-      +docs: { node_color: "#2F4F4F" }
-      staging:
-        +schema: stg
-        +materialized: ephemeral
-        +tags: ['finance', 'staging']
-      silver:
-        +schema: silver
-        +materialized: table
-        +tags: ['finance', 'silver']
-      gold:
-        +schema: gold
-        +materialized: table
-        +incremental_strategy: merge
-        +tags: ['finance', 'gold']
 
-    # Domínio: Finance
-    finance:
-      +catalog: adventure_works
-      +docs: { node_color: "#2F4F4F" }
-      staging:
-        +schema: stg
-        +materialized: ephemeral
-        +tags: ['finance', 'staging']
-      silver:
-        +schema: silver
-        +materialized: table
-        +tags: ['finance', 'silver']
-      gold:
-        +schema: gold
-        +materialized: table
-        +incremental_strategy: merge
-        +tags: ['finance', 'gold']
+# models:
+#   adventure_works:
+
+#     sales:
+#       +catalog: adventure_works
+#       +docs:
+#         node_color: "#2F4F4F"
+
+#       # ──────────────── STAGING ────────────────
+#       staging:
+#         +schema: stg
+#         +materialized: ephemeral
+#         +tags: ['sales', 'staging']
+
+#       # ──────────────── SILVER ────────────────
+#       silver:
+#         +schema: silver
+#         +materialized: table
+#         +tags: ['sales', 'silver']
+
+#       # ──────────────── GOLD ──────────────────
+#       gold:
+#         +schema: gold
+#         +materialized: incremental        # melhor p/ cargas delta
+#         +incremental_strategy: merge
+#         +unique_key: id_registro          # ajuste conforme sua grain
+#         +on_schema_change: sync_all_columns
+#         +tags: ['sales', 'gold']
+
+
+
+# models:
+#   adventure_works:
+
+#     sales:
+#       +catalog: adventure_works
+#       +docs: { node_color: "#2F4F4F" }
+#       staging:
+#         +schema: stg
+#         +materialized: ephemeral
+#         +tags: ['finance', 'staging']
+#       silver:
+#         +schema: silver
+#         +materialized: table
+#         +tags: ['finance', 'silver']
+#       gold:
+#         +schema: gold
+#         +materialized: table
+#         +incremental_strategy: merge
+#         +tags: ['finance', 'gold']
+
+#     # Domínio: Finance
+#     finance:
+#       +catalog: adventure_works
+#       +docs: { node_color: "#2F4F4F" }
+#       staging:
+#         +schema: stg
+#         +materialized: ephemeral
+#         +tags: ['finance', 'staging']
+#       silver:
+#         +schema: silver
+#         +materialized: table
+#         +tags: ['finance', 'silver']
+#       gold:
+#         +schema: gold
+#         +materialized: table
+#         +incremental_strategy: merge
+#         +tags: ['finance', 'gold']
