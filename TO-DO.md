@@ -12,23 +12,47 @@ lembrar do docker-compose também
 - [X] :+1: testar a ingestão do databricks
 - [X] :+1: criado notebook para transformar de raw pra delta
 - [X] :+1: criado job databricks para geração da bronze
-- [ ] instalar dbt core e configurar projeto
-- [ ] modelar uma stg e uma dim bem simples pra testar o dbt e tadabricks
+- [X] :+1: instalar dbt core e configurar projeto
+- [X] :+1: modelar uma stg e uma dim bem simples pra testar o dbt e tadabricks
 - [ ] modelar o restante
     - descrever... fct, dim, etc...
 - [ ] lembrar da dim_dates
 - [ ] estudo dos indicadores e possíveis visualizações dos dados
-- [ ] https://docs.getdbt.com/docs/core/docker-install
-- [ ] x
-- [ ] x
-- [ ] x
-- [ ] x
-- [ ] x
-- [ ] x
-- [ ] x
-- [ ] x
 
 
+- [ ] citar que existe incremental, mas que no contexto atual não faz sentido por ter dados estáticos.
+- [ ] criar os domínios no shcema table
+- [ ] VOLTAR PARA A LÒGICA DE FAZER AS ÀREAS JUNTAS E SÒ CITAR QUE È POSSÌVEL separar por área. ou seja, tenho que fazer "Layer‑first"
+
+models/staging/finance/…
+models/staging/marketing/…
+models/silver/finance/…
+
+models/
+├── staging/
+│   ├── finance/
+│   │   ├── stg_fin_transacoes.sql
+│   │   └── stg_fin_clientes.sql
+│   └── marketing/
+│       ├── stg_mkt_campanhas.sql
+│       └── stg_mkt_leads.sql
+├── silver/
+│   ├── finance/
+│   │   └── fin_transacoes.sql
+│   └── marketing/
+│       └── mkt_leads.sql
+└── gold/
+    ├── finance/
+    │   └── mart_fin_kpis.sql
+    └── marketing/
+        └── mart_mkt_funnel.sql
+
+- [ ] x
+- [ ] x
+- [ ] x
+- [ ] x
+- [ ] x
+- [ ] x
 
 
 # AL DAY COMANDS
