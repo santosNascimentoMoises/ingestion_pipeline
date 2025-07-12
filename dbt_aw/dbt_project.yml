@@ -5,6 +5,9 @@
 name: 'dbt_aw'
 version: '1.0.0'
 
+flags:
+  use_materialization_v2: true    # ← ativa o novo caminho
+
 # This setting configures which "profile" dbt uses for this project.
 profile: 'dbt_aw'
 
@@ -31,37 +34,18 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 
 models:
-  adventure_works:
-
-    # ----------------------------
-    # STAGING (ephemeral)
-    # ----------------------------
+  dbt_aw:
+    # ---------- STAGING ----------
     staging:
       +schema: stg
       +materialized: ephemeral
-      sales:
-        +tags: ['staging', 'sales']
-        +docs: { node_color: "#9ACEEB" }
 
-
-    # ----------------------------
-    # SILVER (table/view)
-    # ----------------------------
+    # ---------- SILVER -----------
     silver:
       +schema: silver
       +materialized: table
-      sales:
-        +tags: ['silver', 'sales']
 
-
-    # ----------------------------
-    # GOLD (incremental)
-    # ----------------------------
+    # ---------- GOLD -------------
     gold:
       +schema: gold
-      +materialized: incremental
-      +incremental_strategy: merge
-      finance:
-        +tags: ['gold', 'finance']
-      marketing:
-        +tags: ['gold', 'marketing']
+      +materialized: table

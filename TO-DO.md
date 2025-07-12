@@ -60,8 +60,11 @@ source .venv/bin/activate
 source .env
 echo $TESTE
 
+source ../.env
+echo $TESTE
+
 # se der
-- [ ] quem sabe plotar alguns gráficos no notebook databricks
+- [ ] quem sabe plotar alguns gráficos no notebook databricks ("consolidação da modelagem")
 - [ ] estudar sobre o funcionamento do parquet no databricks
 - [ ] cron?
 - [ ] como disparar as dags "usando tempo"?
