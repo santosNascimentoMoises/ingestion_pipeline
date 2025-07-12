@@ -135,7 +135,7 @@ from {{ source('', '') }}
 
 ___________________
 
-tabela: customer
+tabela: customer x
 select
     AccountNumber
     , CustomerID
@@ -430,7 +430,7 @@ from {{ source('', '') }}
 
 ___________________
 
-tabela: sales_order_detail
+tabela: sales_order_detail x
 select
     CarrierTrackingNumber
     , LineTotal
@@ -448,7 +448,7 @@ from {{ source('', '') }}
 
 ___________________
 
-tabela: sales_order_header
+tabela: sales_order_header x
 select
     AccountNumber
     , BillToAddressID
@@ -491,7 +491,7 @@ from {{ source('', '') }}
 
 ___________________
 
-tabela: sales_person
+tabela: sales_person x
 select
     Bonus
     , BusinessEntityID
@@ -507,7 +507,7 @@ from {{ source('', '') }}
 
 ___________________
 
-tabela: sales_person_quota_history
+tabela: sales_person_quota_history x
 select
     BusinessEntityID
     , ModifiedDate
@@ -519,7 +519,7 @@ from {{ source('', '') }}
 
 ___________________
 
-tabela: sales_reason
+tabela: sales_reason x
 select
     ModifiedDate
     , Name
@@ -544,7 +544,7 @@ from {{ source('', '') }}
 
 ___________________
 
-tabela: sales_territory
+tabela: sales_territory x
 select
     CostLastYear
     , CostYTD
@@ -561,7 +561,7 @@ from {{ source('', '') }}
 
 ___________________
 
-tabela: sales_territory_history
+tabela: sales_territory_history x
 select
     BusinessEntityID
     , EndDate
