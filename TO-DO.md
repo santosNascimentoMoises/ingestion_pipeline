@@ -51,4 +51,21 @@ Oracle Cloud	VM.Standard.A1.Flex
 ::number as 
 ::timestamp as 
 
+
+::int
+::string
+::float
+::number
+::timestamp
+
 ::timestamp as load_at
+
+
+
+
+sales_reason tem os motivos da compra:
+promoção, marketing, demo event, etc...
+"tipos que mais converteram vendas"
+
+colunas demographics tem xml com informações "importantes"
+tem em person e store

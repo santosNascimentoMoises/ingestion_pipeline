@@ -1,5 +1,5 @@
 
-with 
+with
     product as (
         select
             Class

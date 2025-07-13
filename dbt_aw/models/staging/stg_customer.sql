@@ -1,4 +1,4 @@
-with 
+with
     customer as (
         select
             AccountNumber
@@ -25,4 +25,4 @@ with
     )
 
 select *
-from 
+from renamed

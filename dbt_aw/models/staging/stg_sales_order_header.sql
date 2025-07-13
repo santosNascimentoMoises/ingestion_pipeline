@@ -1,5 +1,4 @@
-
-with 
+with
     sales_order_header as (
         select
             AccountNumber
@@ -58,7 +57,7 @@ with
             , SubTotal::number as sub_total
             , TaxAmt::number as tax_amt
             , TerritoryID::int as territory_id
-            , TotalDuenumber as total_duenumer
+            , TotalDue::float as total_duenumer
             , load_at::timestamp as load_at
         from sales_order_header
     )

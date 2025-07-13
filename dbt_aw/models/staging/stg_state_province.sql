@@ -28,4 +28,4 @@ with
     )
 
 select *
-from state_province
+from renamed

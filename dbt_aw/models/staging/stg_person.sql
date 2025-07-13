@@ -23,6 +23,7 @@ with
         select
             , BusinessEntityID::int as business_entity_id
             , EmailPromotion::int as email_promotion
+            , Demographics::string as demographics
             , FirstName::string as first_name
             , LastName::string as last_name
             , MiddleName::string as middle_name

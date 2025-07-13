@@ -1,14 +1,10 @@
-with 
+with
     sales_person_quota_history as (
         select
-            Bonus
-            , BusinessEntityID
-            , CommissionPct
+            BusinessEntityID
             , ModifiedDate
-            , SalesLastYear
+            , QuotaDate
             , SalesQuota
-            , SalesYTD
-            , TerritoryID
             , rowguid
             , load_at
         from {{ source('raw', 'sales_person_quota_history') }}
@@ -16,14 +12,11 @@ with
 
     , renamed as (
         select
-            Bonus as bonus
-            , BusinessEntityID as business_entity_id
-            , CommissionPct as commission_pct
-            , ModifiedDate as modified_date
-            , SalesLastYear as sales_last_year
-            , SalesQuota as sales_quota
-            , SalesYTD as sales_ytd
-            , TerritoryID as territory_id
+            BusinessEntityID::int as business_entity_id
+            , ModifiedDate::timestamp as modified_date
+            , QuotaDate::timestamp as quota_date
+            , SalesQuota::float as sales_quota
+            , load_at::timestamp as load_at
         from sales_person_quota_history
     )
 
