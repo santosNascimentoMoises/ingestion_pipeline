@@ -1,12 +1,22 @@
 
-with sales_order_header_sales_reason as (
-    select
-        ModifiedDate
-        , SalesOrderID
-        , SalesReasonID
-        , load_at
-    from {{ source('raw', 'sales_order_header_sales_reason') }}
+with 
+    sales_order_header_sales_reason as (
+        select
+            ModifiedDate
+            , SalesOrderID
+            , SalesReasonID
+            , load_at
+        from {{ source('raw', 'sales_order_header_sales_reason') }}
+    )
+
+    , renamed as (
+        select
+            ModifiedDate::timestamp as modified_date
+            , SalesOrderID::int as sales_order_id
+            , SalesReasonID::int as sales_reason_id
+            , load_at::timestamp as load_at
+        from sales_order_header_sales_reason
     )
 
 select *
-from sales_order_header_sales_reason
+from renamed

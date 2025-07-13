@@ -4,9 +4,9 @@
 - [X] :+1: consegui fazer o airflow rodar o meltano pra extrair de API
 - [X] :+1: configurar o dockeroperator pra rodar o databricks ingest
 - [X] :+1: paralelizar a extração do banco de dados (por schema inicialmente)
-- [X] :+1: após isso, configurar dockeroperator pra rodar os demais dockers (spark-db)
+- [X] :+1: após isso, configurar dockeroperator pra rodar os demais dockers
 - [X] :+1: configurar env e diretórios corretamente (spark-db)
-- [X] :+1: riar config de {schema.tabela} (spark-db)
+- [X] :+1: criar config de {schema.tabela} (spark-db)
 lembrar do docker-compose também
 - [X] :+1: extração de {schema.tabela} via spark configurado
 - [X] :+1: testar a ingestão do databricks
@@ -22,38 +22,6 @@ lembrar do docker-compose também
 
 - [ ] citar que existe incremental, mas que no contexto atual não faz sentido por ter dados estáticos.
 - [ ] criar os domínios no shcema table
-- [ ] VOLTAR PARA A LÒGICA DE FAZER AS ÀREAS JUNTAS E SÒ CITAR QUE È POSSÌVEL separar por área. ou seja, tenho que fazer "Layer‑first"
-
-models/staging/finance/…
-models/staging/marketing/…
-models/silver/finance/…
-
-models/
-├── staging/
-│   ├── finance/
-│   │   ├── stg_fin_transacoes.sql
-│   │   └── stg_fin_clientes.sql
-│   └── marketing/
-│       ├── stg_mkt_campanhas.sql
-│       └── stg_mkt_leads.sql
-├── silver/
-│   ├── finance/
-│   │   └── fin_transacoes.sql
-│   └── marketing/
-│       └── mkt_leads.sql
-└── gold/
-    ├── finance/
-    │   └── mart_fin_kpis.sql
-    └── marketing/
-        └── mart_mkt_funnel.sql
-
-- [ ] x
-- [ ] x
-- [ ] x
-- [ ] x
-- [ ] x
-- [ ] x
-
 
 # AL DAY COMANDS
 source .venv/bin/activate
@@ -75,55 +43,12 @@ AWS EC2	t3.micro, t3.small
 Azure	B1s
 Oracle Cloud	VM.Standard.A1.Flex
 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
+# tipos de cast:
 
-lista de stagging pra fazer:
-sales
-- [ ] sales order header
-- [ ] sales order detail
-- [ ] special offer product
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
+::int as 
+::string as 
+::float as 
+::number as 
+::timestamp as 
+
+::timestamp as load_at

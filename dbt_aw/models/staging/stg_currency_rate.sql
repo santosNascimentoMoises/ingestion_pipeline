@@ -1,16 +1,29 @@
+with
+    currency_rate as (
+        select
+            AverageRate
+            , CurrencyRateDate
+            , CurrencyRateID
+            , EndOfDayRate
+            , FromCurrencyCode
+            , ModifiedDate
+            , ToCurrencyCode
+            , load_at
+        from {{ source('raw', 'currency_rate') }}
+    )
 
-with currency_rate as (
-    select
-        AverageRate
-        , CurrencyRateDate
-        , CurrencyRateID
-        , EndOfDayRate
-        , FromCurrencyCode
-        , ModifiedDate
-        , ToCurrencyCode
-        , load_at
-    from {{ source('raw', 'currency_rate') }}
+    , renamed as (
+        select
+            AverageRate::float as average_rate
+            , CurrencyRateDate::timestamp as currency_rate_date
+            , CurrencyRateID::int as currency_rate_id
+            , EndOfDayRate::float as end_of_day_rate
+            , FromCurrencyCode::string as from_currency_code
+            , ModifiedDate::timestamp as modified_date
+            , ToCurrencyCode::string as to_currency_code
+            , load_at::timestamp as load_at
+        from currency_rate
     )
 
 select *
-from currency_rate
+from renamed
