@@ -13,8 +13,8 @@ with
     , renamed as (
         select
             BusinessEntityID::int as business_entity_id
-            , ModifiedDate::timestamp as modified_date
-            , QuotaDate::timestamp as quota_date
+            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
+            , from_unixtime(cast(QuotaDate as bigint) / 1000)::timestamp as quota_date
             , SalesQuota::float as sales_quota
             , load_at::timestamp as load_at
         from sales_person_quota_history

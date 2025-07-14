@@ -18,7 +18,7 @@ with
         select
             CountryRegionCode::string as country_region_code
             , IsOnlyStateProvinceFlag::int as is_only_state_province_flag
-            , ModifiedDate::timestamp as modified_date
+            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , Name::string as country_region_name
             , StateProvinceCode::string as state_province_code
             , StateProvinceID::int as state_province_id

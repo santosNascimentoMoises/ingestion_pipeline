@@ -21,7 +21,7 @@ with
             , CostYTD::float as cost_ytd
             , CountryRegionCode::string as country_region_code
             , Group::string as group
-            , ModifiedDate::timestamp as modified_date
+            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , Name::string as sales_territory_name
             , SalesLastYear::float as sales_last_year
             , SalesYTD::float as sales_ytd

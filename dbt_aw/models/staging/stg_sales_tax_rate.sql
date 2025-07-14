@@ -14,7 +14,7 @@ with
 
     , renamed as (
         select
-            ModifiedDate::timestamp as modified_date
+            from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , Name::string as tax_rate_name
             , SalesTaxRateID::int as sales_tax_rate_id
             , StateProvinceID::int as state_province_id

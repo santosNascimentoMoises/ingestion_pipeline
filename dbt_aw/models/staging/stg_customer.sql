@@ -16,7 +16,7 @@ with
         select
             AccountNumber::string as account_number
             , CustomerID::int as customer_id
-            , ModifiedDate::timestamp as modified_date
+            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , PersonID::int as person_id
             , StoreID::int as store_id
             , TerritoryID::int as territory_id

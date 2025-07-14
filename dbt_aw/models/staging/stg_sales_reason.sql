@@ -11,7 +11,7 @@ with
 
     , renamed as (
         select
-            ModifiedDate::timestamp as modified_date
+            from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , Name::string as reason_name
             , ReasonType::string as reason_type
             , SalesReasonID::int as sales_reason_id

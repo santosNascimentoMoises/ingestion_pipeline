@@ -17,7 +17,7 @@ with
         select
             Bin::int as bin
             , LocationID::int as location_id
-            , ModifiedDate::timestamp as modified_date
+            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , ProductID::int as producto_id
             , Quantity::int as quantity
             , Shelf::string as shelf

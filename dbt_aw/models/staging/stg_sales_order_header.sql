@@ -40,17 +40,17 @@ with
             , CreditCardID::int as credit_card_id
             , CurrencyRateID::int as currency_rate_id
             , CustomerID::int as customer_id
-            , DueDate::timestamp as due_date
+            , from_unixtime(cast(DueDate as bigint) / 1000)::timestamp as due_date
             , Freight::float as freight
-            , ModifiedDate::timestamp as modified_date
+            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , OnlineOrderFlag::string as online_order_flag
-            , OrderDate::timestamp as order_date
+            , from_unixtime(cast(OrderDate as bigint) / 1000)::timestamp as order_date
             , PurchaseOrderNumber::string as purchase_order_number
             , RevisionNumber::int as revision_number
             , SalesOrderID::int as sales_order_id
             , SalesOrderNumber::string as sales_order_number
             , SalesPersonID::int as sales_person_id
-            , ShipDate::timestamp as ship_date
+            , from_unixtime(cast(ShipDate as bigint) / 1000)::timestamp as ship_date
             , ShipMethodID::int as ship_method_id
             , ShipToAddressID::int as ship_to_address_id
             , Status::int as sales_status

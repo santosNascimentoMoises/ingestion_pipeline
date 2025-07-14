@@ -1,0 +1,67 @@
+version: 2
+models:
+- name: dim_product
+  description: ''
+  columns:
+  - name: '[''product_id'''
+    description: ''
+  - name: '''product_category_id'''
+    description: ''
+  - name: '''product_subcategory_id'''
+    description: ''
+  - name: product_sk
+    description: ''
+  - name: product_id
+    description: ''
+  - name: product_category_id
+    description: ''
+  - name: product_subcategory_id
+    description: ''
+  - name: product_model_id
+    description: ''
+  - name: product_name
+    description: ''
+  - name: product_category_name
+    description: ''
+  - name: product_subcategory_name
+    description: ''
+  - name: product_size
+    description: ''
+  - name: style
+    description: ''
+  - name: class
+    description: ''
+  - name: color
+    description: ''
+  - name: days_to_manufacture
+    description: ''
+  - name: discontinued_date
+    description: ''
+  - name: finished_goods_flag
+    description: ''
+  - name: list_price
+    description: ''
+  - name: make_flag
+    description: ''
+  - name: modified_date
+    description: ''
+  - name: product_line
+    description: ''
+  - name: product_number
+    description: ''
+  - name: reorder_point
+    description: ''
+  - name: safety_stock_level
+    description: ''
+  - name: sell_end_date
+    description: ''
+  - name: sell_start_date
+    description: ''
+  - name: size_unit_measure_code
+    description: ''
+  - name: standard_cost
+    description: ''
+  - name: product_weight
+    description: ''
+  - name: weight_unit_measure_code
+    description: ''

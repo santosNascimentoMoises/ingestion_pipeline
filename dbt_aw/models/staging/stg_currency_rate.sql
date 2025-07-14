@@ -15,11 +15,11 @@ with
     , renamed as (
         select
             AverageRate::float as average_rate
-            , CurrencyRateDate::timestamp as currency_rate_date
+            , from_unixtime(cast(CurrencyRateDate as bigint) / 1000)::timestamp as currency_rate_date
             , CurrencyRateID::int as currency_rate_id
             , EndOfDayRate::float as end_of_day_rate
             , FromCurrencyCode::string as from_currency_code
-            , ModifiedDate::timestamp as modified_date
+            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , ToCurrencyCode::string as to_currency_code
             , load_at::timestamp as load_at
         from currency_rate

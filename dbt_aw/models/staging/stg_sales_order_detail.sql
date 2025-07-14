@@ -21,7 +21,7 @@ with
         select
             CarrierTrackingNumber::string as carrier_tracking_number
             , LineTotal::number as line_total
-            , ModifiedDate::timestamp as modified_date
+            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , OrderQty::int as order_qty
             , ProductID::int as product_id
             , SalesOrderDetailID::int as sales_order_detail_id

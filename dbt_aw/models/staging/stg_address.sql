@@ -19,7 +19,7 @@ with
             , AddressLine1::string as address_line1
             , AddressLine2::string as address_line2
             , City::string as city
-            , ModifiedDate::timestamp as modified_date
+            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , PostalCode::string as postal_code
             , StateProvinceID::int as state_province_id
             , load_at::timestamp as load_at

@@ -19,7 +19,7 @@ with
             Bonus::float as bonus
             , BusinessEntityID::int as business_entity_id
             , CommissionPct::float as commission_pct
-            , ModifiedDate::timestamp as modified_date
+            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , SalesLastYear::float as sales_last_year
             , SalesQuota::float as sales_quota
             , SalesYTD::float as sales_ytd

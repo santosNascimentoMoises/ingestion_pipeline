@@ -12,7 +12,7 @@ with
         select
             CountryRegionCode::string as country_region_code
             , CurrencyCode::string as currency_code
-            , ModifiedDate::timestamp as modified_date
+            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , load_at::timestamp as load_at
         from country_region_currency
     )

@@ -6,7 +6,7 @@ name: 'dbt_aw'
 version: '1.0.0'
 
 flags:
-  use_materialization_v2: true    # ← ativa o novo caminho
+  use_materialization_v2: true
 
 # This setting configures which "profile" dbt uses for this project.
 profile: 'dbt_aw'

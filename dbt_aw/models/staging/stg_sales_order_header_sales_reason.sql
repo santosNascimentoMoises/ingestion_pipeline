@@ -10,7 +10,7 @@ with
 
     , renamed as (
         select
-            ModifiedDate::timestamp as modified_date
+            from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , SalesOrderID::int as sales_order_id
             , SalesReasonID::int as sales_reason_id
             , load_at::timestamp as load_at
