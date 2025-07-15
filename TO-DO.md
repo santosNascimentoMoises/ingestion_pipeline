@@ -16,6 +16,22 @@ lembrar do docker-compose também
 - [X] :+1: modelar uma stg e uma dim bem simples pra testar o dbt e tadabricks
 - [ ] modelar o restante
     - descrever... fct, dim, etc...
+- [X] :+1: dim_products
+- [X] :+1: dim_address
+- [X] :+1: dim_customer
+- [ ] dim_sales_person (vendedor)
+- [ ] dim_store
+- [ ] fct_sales
+- [ ] fct_sales_status (+final_status)
+Order current status. 1 = In process; 2 = Approved; 3 = Backordered; 4 = Rejected; 5 = Shipped; 6 = Cancelled
+i id da venda vai recebendo novas linhas conforme o status muda.
+a mesma venda teria a row de "data da venda" e outra row de "data de envio".
+- [ ] fct_offer
+- [ ] fct_production
+- [ ] fct_stok
+- [ ] dim_dates
+- [ ] 
+
 - [ ] lembrar da dim_dates
 - [ ] estudo dos indicadores e possíveis visualizações dos dados
 
@@ -33,6 +49,8 @@ echo $TESTE
 
 # se der
 - [ ] quem sabe plotar alguns gráficos no notebook databricks ("consolidação da modelagem")
+- [ ] apresentar do maior "grao" pro menor "grao"
+bignumber > série temporal, divisão por "lojas", produto mais vendido, etc...
 - [ ] estudar sobre o funcionamento do parquet no databricks
 - [ ] cron?
 - [ ] como disparar as dags "usando tempo"?
@@ -45,23 +63,15 @@ Oracle Cloud	VM.Standard.A1.Flex
 
 # tipos de cast:
 
-::int as 
-::string as 
-::float as 
-::number as 
-::timestamp as 
-
-
 ::int
 ::string
 ::float
 ::number
 ::timestamp
 
-::timestamp as load_at
+substring_index(, '.', 1)
 
-
-
+# OBS>
 
 sales_reason tem os motivos da compra:
 promoção, marketing, demo event, etc...
@@ -69,3 +79,7 @@ promoção, marketing, demo event, etc...
 
 colunas demographics tem xml com informações "importantes"
 tem em person e store
+
+produtos sem descrição correta da subcategoria:
+ProductSubcategoryID
+NULL >> 283

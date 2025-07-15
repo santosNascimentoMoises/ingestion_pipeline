@@ -42,11 +42,11 @@ with
             , MakeFlag as make_flag
             , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , Name::string as product_name
-            , ProductID as product_id
+            , substring_index(ProductID, '.', 1) as product_id
             , ProductLine::string as product_line
-            , ProductModelID as product_model_id
+            , substring_index(ProductModelID, '.', 1) as product_model_id
             , ProductNumber::string as product_number
-            , ProductSubcategoryID as product_subcategory_id
+            , substring_index(ProductSubcategoryID, '.', 1) as product_subcategory_id
             , ReorderPoint as reorder_point
             , SafetyStockLevel as safety_stock_level
             , from_unixtime(cast(SellEndDate as bigint) / 1000)::timestamp as sell_end_date

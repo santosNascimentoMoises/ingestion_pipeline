@@ -10,8 +10,7 @@ with
 
     , renamed as (
         select
-            CountryRegionCode::string as country_region_code
-            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
+            CountryRegionCode as country_region_code
             , Name::string as country_name
             , load_at::timestamp as load_at
         from country_region

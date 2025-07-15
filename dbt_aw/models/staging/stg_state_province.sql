@@ -14,15 +14,14 @@ with
         from {{ source('raw', 'state_province') }}
     )
 
-    renamed as (
+    , renamed as (
         select
             CountryRegionCode::string as country_region_code
-            , IsOnlyStateProvinceFlag::int as is_only_state_province_flag
-            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
+            , IsOnlyStateProvinceFlag as is_only_state_province_flag
             , Name::string as country_region_name
             , StateProvinceCode::string as state_province_code
-            , StateProvinceID::int as state_province_id
-            , TerritoryID::int as territory_id
+            , StateProvinceID as state_province_id
+            , TerritoryID as territory_id
             , load_at::timestamp as load_at
         from state_province
     )

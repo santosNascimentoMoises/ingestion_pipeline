@@ -15,13 +15,12 @@ with
 
     , renamed as (
         select
-            AddressID::int as address_id
+            AddressID as address_id
             , AddressLine1::string as address_line1
             , AddressLine2::string as address_line2
             , City::string as city
-            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , PostalCode::string as postal_code
-            , StateProvinceID::int as state_province_id
+            , StateProvinceID as state_province_id
             , load_at::timestamp as load_at
         from address_table
     )

@@ -14,12 +14,12 @@ with
 
     , renamed as (
         select
-            AccountNumber::string as account_number
-            , CustomerID::int as customer_id
-            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
-            , PersonID::int as person_id
-            , StoreID::int as store_id
-            , TerritoryID::int as territory_id
+            AccountNumber as account_number
+            , CustomerID as customer_id
+
+            , substring_index(PersonID, '.', 1) as person_id
+            , StoreID as store_id
+            , TerritoryID as territory_id
             , load_at::timestamp as load_at
         from customer
     )

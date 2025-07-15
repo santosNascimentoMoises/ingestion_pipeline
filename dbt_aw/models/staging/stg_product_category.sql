@@ -1,4 +1,3 @@
-
 with 
     product_category as (
         select
@@ -14,7 +13,7 @@ with
         select
             from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , Name::string as product_category_name
-            , ProductCategoryID as product_category_id
+            , substring_index(ProductCategoryID, '.', 1) as product_category_id
             , load_at::timestamp as load_at
         from product_category
     )
