@@ -132,7 +132,6 @@ with
             
             /*dim_dates*/
             , date_sk as date_fk
-
         from sales
         left join dim_product
             on sales.product_id = dim_product.product_id
@@ -155,7 +154,11 @@ with
     /*generating surrogate key*/
     , fct_sales as (
         select
-            sales_order_id
+            {{ dbt_utils.generate_surrogate_key(
+                ['sales_order_id'
+                , 'sales_order_detail_id']
+            ) }} as sales_sk
+            , sales_order_id
             , sales_order_detail_id
             , customer_id
             , sales_person_id
