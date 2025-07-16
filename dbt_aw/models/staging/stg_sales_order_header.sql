@@ -34,29 +34,28 @@ with
     , renamed as (
         select
             AccountNumber::string as account_number
-            , BillToAddressID::int as bill_to_address_id
+            , substring_index(BillToAddressID, '.', 1) as bill_to_address_id
             , Comment::string as comment
             , CreditCardApprovalCode::string as credit_card_approval_code
-            , CreditCardID::int as credit_card_id
-            , CurrencyRateID::int as currency_rate_id
-            , CustomerID::int as customer_id
-            , from_unixtime(cast(DueDate as bigint) / 1000)::timestamp as due_date
+            , substring_index(CreditCardID, '.', 1) as credit_card_id
+            , substring_index(CurrencyRateID, '.', 1) as currency_rate_id
+            , substring_index(CustomerID, '.', 1) as customer_id
+            , DueDate as due_date
             , Freight::float as freight
-            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , OnlineOrderFlag::string as online_order_flag
-            , from_unixtime(cast(OrderDate as bigint) / 1000)::timestamp as order_date
+            , OrderDate as order_date
             , PurchaseOrderNumber::string as purchase_order_number
-            , RevisionNumber::int as revision_number
-            , SalesOrderID::int as sales_order_id
+            , substring_index(RevisionNumber, '.', 1) as revision_number
+            , substring_index(SalesOrderID, '.', 1) as sales_order_id
             , SalesOrderNumber::string as sales_order_number
-            , SalesPersonID::int as sales_person_id
-            , from_unixtime(cast(ShipDate as bigint) / 1000)::timestamp as ship_date
-            , ShipMethodID::int as ship_method_id
-            , ShipToAddressID::int as ship_to_address_id
-            , Status::int as sales_status
-            , SubTotal::number as sub_total
-            , TaxAmt::number as tax_amt
-            , TerritoryID::int as territory_id
+            , substring_index(SalesPersonID, '.', 1) as sales_person_id
+            , ShipDate as ship_date
+            , substring_index(ShipMethodID, '.', 1) as ship_method_id
+            , substring_index(ShipToAddressID, '.', 1) as ship_to_address_id
+            , substring_index(Status, '.', 1) as sales_status
+            , SubTotal::float as sub_total
+            , TaxAmt::float as tax_amt
+            , substring_index(TerritoryID, '.', 1) as territory_id
             , TotalDue::float as total_duenumer
             , load_at::timestamp as load_at
         from sales_order_header

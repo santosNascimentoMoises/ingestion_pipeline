@@ -23,6 +23,7 @@ lembrar do docker-compose também
 - [X] :+1: dim_store
 - [ ] fct_sales
 - [ ] fct_sales_status (+final_status)
+- [ ] dim_ship_method
 Order current status. 1 = In process; 2 = Approved; 3 = Backordered; 4 = Rejected; 5 = Shipped; 6 = Cancelled
 i id da venda vai recebendo novas linhas conforme o status muda.
 a mesma venda teria a row de "data da venda" e outra row de "data de envio".
@@ -32,7 +33,7 @@ a mesma venda teria a row de "data da venda" e outra row de "data de envio".
 - [X] :+1: dim_dates
 - [ ] 
 
-- [ ] lembrar da dim_dates
+
 - [ ] estudo dos indicadores e possíveis visualizações dos dados
 
 
