@@ -1,0 +1,21 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: bronze
+  tables:
+  - name: person_credit_card
+    description: ''
+    columns:
+    - name: businessentityid
+      data_type: string
+      description: ''
+    - name: creditcardid
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

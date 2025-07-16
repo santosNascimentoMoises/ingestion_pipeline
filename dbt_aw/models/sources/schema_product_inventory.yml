@@ -1,0 +1,33 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: bronze
+  tables:
+  - name: product_inventory
+    description: ''
+    columns:
+    - name: bin
+      data_type: string
+      description: ''
+    - name: locationid
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: productid
+      data_type: string
+      description: ''
+    - name: quantity
+      data_type: string
+      description: ''
+    - name: shelf
+      data_type: string
+      description: ''
+    - name: rowguid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

@@ -67,7 +67,6 @@ with
         from stg_person
         left join stg_customer
             on stg_customer.person_id = stg_person.business_entity_id
-
     )
 
     , intermediate_address as (
@@ -119,6 +118,13 @@ with
         from customer_person_joined
         left join intermediate_address
             on customer_person_joined.business_entity_id = intermediate_address.business_entity_id
+        qualify row_number() over (
+            partition by
+                customer_person_joined.business_entity_id
+                , intermediate_address.state_province_id
+                , customer_person_joined.person_id
+            order by customer_person_joined.business_entity_id
+        ) = 1
     )
 
 select *

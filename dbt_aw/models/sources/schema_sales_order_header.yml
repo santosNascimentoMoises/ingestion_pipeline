@@ -1,0 +1,90 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: bronze
+  tables:
+  - name: sales_order_header
+    description: ''
+    columns:
+    - name: accountnumber
+      data_type: string
+      description: ''
+    - name: billtoaddressid
+      data_type: string
+      description: ''
+    - name: comment
+      data_type: string
+      description: ''
+    - name: creditcardapprovalcode
+      data_type: string
+      description: ''
+    - name: creditcardid
+      data_type: string
+      description: ''
+    - name: currencyrateid
+      data_type: string
+      description: ''
+    - name: customerid
+      data_type: string
+      description: ''
+    - name: duedate
+      data_type: string
+      description: ''
+    - name: freight
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: onlineorderflag
+      data_type: string
+      description: ''
+    - name: orderdate
+      data_type: string
+      description: ''
+    - name: purchaseordernumber
+      data_type: string
+      description: ''
+    - name: revisionnumber
+      data_type: string
+      description: ''
+    - name: salesorderid
+      data_type: string
+      description: ''
+    - name: salesordernumber
+      data_type: string
+      description: ''
+    - name: salespersonid
+      data_type: string
+      description: ''
+    - name: shipdate
+      data_type: string
+      description: ''
+    - name: shipmethodid
+      data_type: string
+      description: ''
+    - name: shiptoaddressid
+      data_type: string
+      description: ''
+    - name: status
+      data_type: string
+      description: ''
+    - name: subtotal
+      data_type: string
+      description: ''
+    - name: taxamt
+      data_type: string
+      description: ''
+    - name: territoryid
+      data_type: string
+      description: ''
+    - name: totaldue
+      data_type: string
+      description: ''
+    - name: rowguid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

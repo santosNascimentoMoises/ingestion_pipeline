@@ -2,7 +2,10 @@ packages:
   - name: codegen
     package: dbt-labs/codegen
     version: 0.13.1
+  - name: dbt_date
+    package: godatadriven/dbt_date
+    version: 0.14.2
   - name: dbt_utils
     package: dbt-labs/dbt_utils
     version: 1.3.0
-sha1_hash: 194913cb519d306853c3d4af5313eefa8bc94080
+sha1_hash: 5c41cd3571e60723fe0715152690d788569443c9

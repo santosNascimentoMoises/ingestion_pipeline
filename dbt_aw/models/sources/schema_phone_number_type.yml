@@ -1,0 +1,21 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: bronze
+  tables:
+  - name: phone_number_type
+    description: ''
+    columns:
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: name
+      data_type: string
+      description: ''
+    - name: phonenumbertypeid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

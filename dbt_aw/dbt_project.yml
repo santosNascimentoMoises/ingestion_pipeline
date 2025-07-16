@@ -38,7 +38,7 @@ models:
     # ---------- STAGING ----------
     staging:
       +schema: stg
-      +materialized: table
+      +materialized: ephemeral
 
     # ---------- SILVER -----------
     silver:

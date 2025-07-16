@@ -1,0 +1,21 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: bronze
+  tables:
+  - name: country_region
+    description: ''
+    columns:
+    - name: countryregioncode
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: name
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

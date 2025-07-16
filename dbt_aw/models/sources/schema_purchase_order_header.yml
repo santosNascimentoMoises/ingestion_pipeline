@@ -1,0 +1,51 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: bronze
+  tables:
+  - name: purchase_order_header
+    description: ''
+    columns:
+    - name: employeeid
+      data_type: string
+      description: ''
+    - name: freight
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: orderdate
+      data_type: string
+      description: ''
+    - name: purchaseorderid
+      data_type: string
+      description: ''
+    - name: revisionnumber
+      data_type: string
+      description: ''
+    - name: shipdate
+      data_type: string
+      description: ''
+    - name: shipmethodid
+      data_type: string
+      description: ''
+    - name: status
+      data_type: string
+      description: ''
+    - name: subtotal
+      data_type: string
+      description: ''
+    - name: taxamt
+      data_type: string
+      description: ''
+    - name: totaldue
+      data_type: string
+      description: ''
+    - name: vendorid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

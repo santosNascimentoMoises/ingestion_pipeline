@@ -1,0 +1,33 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: bronze
+  tables:
+  - name: currency_rate
+    description: ''
+    columns:
+    - name: averagerate
+      data_type: string
+      description: ''
+    - name: currencyratedate
+      data_type: string
+      description: ''
+    - name: currencyrateid
+      data_type: string
+      description: ''
+    - name: endofdayrate
+      data_type: string
+      description: ''
+    - name: fromcurrencycode
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: tocurrencycode
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

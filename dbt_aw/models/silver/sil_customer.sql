@@ -22,12 +22,6 @@ with
         from {{ ref('stg_person') }}
     )
 
-    , stg_business_entity as (
-        select
-            business_entity_id
-        from {{ ref('stg_business_entity') }}
-    )
-
     , customer_person_joined as (
         select
             stg_customer.account_number

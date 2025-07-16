@@ -13,11 +13,10 @@ with
 
     , renamed as (
         select
-            BusinessEntityID as business_entity_id
+            substring_index(BusinessEntityID, '.', 1) as business_entity_id
             , Demographics::string as demographics
-            , ModifiedDate::timestamp as modified_date
             , Name::string as store_name
-            , SalesPersonID::int as sales_person_id
+            , substring_index(SalesPersonID, '.', 1) as sales_person_id
             , load_at::timestamp as load_at
         from store
     )

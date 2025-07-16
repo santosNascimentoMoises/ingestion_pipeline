@@ -1,0 +1,21 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: bronze
+  tables:
+  - name: sales_order_header_sales_reason
+    description: ''
+    columns:
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: salesorderid
+      data_type: string
+      description: ''
+    - name: salesreasonid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

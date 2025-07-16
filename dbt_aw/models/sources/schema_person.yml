@@ -1,0 +1,51 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: bronze
+  tables:
+  - name: person
+    description: ''
+    columns:
+    - name: additionalcontactinfo
+      data_type: string
+      description: ''
+    - name: businessentityid
+      data_type: string
+      description: ''
+    - name: demographics
+      data_type: string
+      description: ''
+    - name: emailpromotion
+      data_type: string
+      description: ''
+    - name: firstname
+      data_type: string
+      description: ''
+    - name: lastname
+      data_type: string
+      description: ''
+    - name: middlename
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: namestyle
+      data_type: string
+      description: ''
+    - name: persontype
+      data_type: string
+      description: ''
+    - name: suffix
+      data_type: string
+      description: ''
+    - name: title
+      data_type: string
+      description: ''
+    - name: rowguid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

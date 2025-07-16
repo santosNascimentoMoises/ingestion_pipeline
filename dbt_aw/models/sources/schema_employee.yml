@@ -1,0 +1,57 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: bronze
+  tables:
+  - name: employee
+    description: ''
+    columns:
+    - name: birthdate
+      data_type: string
+      description: ''
+    - name: businessentityid
+      data_type: string
+      description: ''
+    - name: currentflag
+      data_type: string
+      description: ''
+    - name: gender
+      data_type: string
+      description: ''
+    - name: hiredate
+      data_type: string
+      description: ''
+    - name: jobtitle
+      data_type: string
+      description: ''
+    - name: loginid
+      data_type: string
+      description: ''
+    - name: maritalstatus
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: nationalidnumber
+      data_type: string
+      description: ''
+    - name: organizationlevel
+      data_type: string
+      description: ''
+    - name: salariedflag
+      data_type: string
+      description: ''
+    - name: sickleavehours
+      data_type: string
+      description: ''
+    - name: vacationhours
+      data_type: string
+      description: ''
+    - name: rowguid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

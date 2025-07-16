@@ -1,0 +1,27 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: bronze
+  tables:
+  - name: sales_person_quota_history
+    description: ''
+    columns:
+    - name: businessentityid
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: quotadate
+      data_type: string
+      description: ''
+    - name: salesquota
+      data_type: string
+      description: ''
+    - name: rowguid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

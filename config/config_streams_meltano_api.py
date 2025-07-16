@@ -8,9 +8,9 @@ DATA_TYPE_EXTRACT_API = ".jsonl"
 
 EXTRACT_STREAM_INDICATOR = {
     'SalesOrderHeader':True,
-    'SalesOrderDetail':True,
-    'PurchaseOrderDetail':True,
-    'PurchaseOrderHeader':True
+    'SalesOrderDetail':False,
+    'PurchaseOrderDetail':False,
+    'PurchaseOrderHeader':False
 }
 
 STREAMS_METADATA = {

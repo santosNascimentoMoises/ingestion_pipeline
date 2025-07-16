@@ -1,0 +1,48 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: bronze
+  tables:
+  - name: work_order_routing
+    description: ''
+    columns:
+    - name: actualcost
+      data_type: string
+      description: ''
+    - name: actualenddate
+      data_type: string
+      description: ''
+    - name: actualresourcehrs
+      data_type: string
+      description: ''
+    - name: actualstartdate
+      data_type: string
+      description: ''
+    - name: locationid
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: operationsequence
+      data_type: string
+      description: ''
+    - name: plannedcost
+      data_type: string
+      description: ''
+    - name: productid
+      data_type: string
+      description: ''
+    - name: scheduledenddate
+      data_type: string
+      description: ''
+    - name: scheduledstartdate
+      data_type: string
+      description: ''
+    - name: workorderid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

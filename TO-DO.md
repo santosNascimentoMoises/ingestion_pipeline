@@ -19,17 +19,17 @@ lembrar do docker-compose também
 - [X] :+1: dim_products
 - [X] :+1: dim_address
 - [X] :+1: dim_customer
-- [ ] dim_sales_person (vendedor)
-- [ ] dim_store
+- [X] :+1: dim_sales_person (vendedor)
+- [X] :+1: dim_store
 - [ ] fct_sales
 - [ ] fct_sales_status (+final_status)
 Order current status. 1 = In process; 2 = Approved; 3 = Backordered; 4 = Rejected; 5 = Shipped; 6 = Cancelled
 i id da venda vai recebendo novas linhas conforme o status muda.
 a mesma venda teria a row de "data da venda" e outra row de "data de envio".
-- [ ] fct_offer
+- [ ] dim_offer
 - [ ] fct_production
-- [ ] fct_stok
-- [ ] dim_dates
+- [ ] fct_stok (incremental?) - estudar sobre
+- [X] :+1: dim_dates
 - [ ] 
 
 - [ ] lembrar da dim_dates
@@ -83,3 +83,12 @@ tem em person e store
 produtos sem descrição correta da subcategoria:
 ProductSubcategoryID
 NULL >> 283
+
+
+qualify row_number() over (
+    partition by
+        customer_person_joined.business_entity_id
+        , intermediate_address.state_province_id
+        , customer_person_joined.person_id
+    order by customer_person_joined.business_entity_id
+) = 1
