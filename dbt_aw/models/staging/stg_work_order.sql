@@ -17,16 +17,16 @@ with
 
     , renamed as (
         select
-            DueDate::timestamp as due_date
-            , EndDate::timestamp as end_date
-            , ModifiedDate::timestamp as modified_date
+            from_unixtime(cast(DueDate:as bigint) / 1000)::timestamp as work_due_date
+            , from_unixtime(cast(EndDate::timestamp) / 1000)::timestamp as work_end_date
+            , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
             , OrderQty::int as order_qty
-            , ProductID::int as product_id
-            , ScrapReasonID::int as scrap_reason_id
+            , substring_index(ProductID, '.', 1) as product_id
+            , substring_index(ScrapReasonID, '.', 1) as scrap_reason_id
             , ScrappedQty::int as scrapped_qty
-            , StartDate::timestamp as start_date
+            , StartDate::timestamp as work_start_date
             , StockedQty::int as stocked_qty
-            , WorkOrderID::int as work_order_id
+            , substring_index(WorkOrderID, '.', 1) as work_order_id
             , load_at::timestamp as load_at
         from work_order
     )

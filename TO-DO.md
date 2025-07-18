@@ -22,7 +22,6 @@ lembrar do docker-compose também
 - [X] :+1: dim_sales_person (vendedor)
 - [X] :+1: dim_store
 - [X] :+1: fct_sales
-- [ ] fct_sales_status (+final_status)
 - [ ] dim_ship_method
 Order current status. 1 = In process; 2 = Approved; 3 = Backordered; 4 = Rejected; 5 = Shipped; 6 = Cancelled
 i id da venda vai recebendo novas linhas conforme o status muda.
@@ -31,7 +30,8 @@ a mesma venda teria a row de "data da venda" e outra row de "data de envio".
 - [ ] fct_production
 - [ ] fct_stok (incremental?) - estudar sobre
 - [X] :+1: dim_dates
-- [ ] 
+- [ ] analisar os uniq/distinct das dim e revisar as chaves_sk
+se distinct(id) == n rows, vale a pena deixar só o id como chave na dim
 
 
 - [ ] estudo dos indicadores e possíveis visualizações dos dados
