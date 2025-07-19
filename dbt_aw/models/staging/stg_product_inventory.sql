@@ -13,12 +13,12 @@ with
         from {{ source('raw', 'product_inventory') }}
     )
 
-    renamed as (
+    , renamed as (
         select
             Bin::int as bin
-            , LocationID::int as location_id
+            , substring_index(LocationID, '.', 1) as location_id
             , from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
-            , ProductID::int as producto_id
+            , substring_index(ProductID, '.', 1) as product_id
             , Quantity::int as quantity
             , Shelf::string as shelf
             , load_at::timestamp as load_at

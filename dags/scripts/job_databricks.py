@@ -2,6 +2,7 @@ import requests
 import json
 import os
 import logging
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -48,3 +49,40 @@ def trigger_databricks_job(job_id=None, token=None, instance=None):
     except requests.exceptions.RequestException as e:
         logger.error(f"[JOB DATABRICKS] Falha ao iniciar job: {e}")
         return None
+
+def databricks_job_completion(run_id):
+
+    logger.error(f"[JOB DATABRICKS] Aguardando fim do JOB")
+    # job_id = os.getenv('JOB_ID')
+    token = os.getenv('DATABRICKS_ACCESS_TOKEN')
+    instance = os.getenv('DATABRICKS_INSTANCE')
+    DATABRICKS_INSTANCE = f'https://{instance}.cloud.databricks.com'
+
+    # Cabeçalho de autenticação
+    headers = {
+        'Authorization': f'Bearer {token}'
+    }
+
+    while True:
+        logger.info(f"[JOB DATABRICKS] Consultado - Job em andamento")
+        response = requests.get(
+            f'{DATABRICKS_INSTANCE}/api/2.1/jobs/runs/get',
+            params={'run_id': run_id},
+            headers=headers
+        )
+
+        if response.status_code != 200:
+            raise Exception(f"Erro ao consultar status do job. HTTP {response.status_code}: {response.text}")
+
+        dados_execucao = response.json()
+        estado = dados_execucao['state']['life_cycle_state']
+        resultado = dados_execucao['state'].get('result_state', None)
+
+        if estado in ['TERMINATED', 'SKIPPED', 'INTERNAL_ERROR']:
+            if resultado == 'SUCCESS':
+                logger.info(f"[JOB DATABRICKS] Job Finalizado com sucesso. Run ID: {run_id}")
+            else:
+                logger.info(f"[JOB DATABRICKS] Job não Finalizado. Run ID: {run_id}")
+            return dados_execucao
+
+        time.sleep(5)

@@ -25,6 +25,7 @@ build_pipeline:
 	docker compose build meltano-api-xcon
 	docker compose build databricks-ingest
 	docker compose build spark-db
+	docker compose build dbt-aw
 
 	@echo "🔧 Inicializando o banco de dados do Airflow..."
 	docker compose run --rm airflow-init

@@ -22,25 +22,27 @@ lembrar do docker-compose também
 - [X] :+1: dim_sales_person (vendedor)
 - [X] :+1: dim_store
 - [X] :+1: fct_sales # TRATAR AS CHAVES DE DATAS: final do arquivo
-- [ ] dim_ship_method
-Order current status. 1 = In process; 2 = Approved; 3 = Backordered; 4 = Rejected; 5 = Shipped; 6 = Cancelled
-i id da venda vai recebendo novas linhas conforme o status muda.
-a mesma venda teria a row de "data da venda" e outra row de "data de envio".
-- [ ] dim_offer
+- [X] :+1: fct_aggregadas
+- [X] :+1: snp_customer
 - [X] :+1: fct_production
-- [ ] fct_stok (incremental?) - snapshot!
+- [X] :+1: fct_inventory (incremental!)
 - [X] :+1: dim_dates
+- [ ] ymls
+- [ ] testes
 - [ ] analisar os uniq/distinct das dim e revisar as chaves_sk
 se distinct(id) == n rows, vale a pena deixar só o id como chave na dim
 - [ ] diagrama de relacionamento das tabelas
 - [ ] estudo dos indicadores e possíveis visualizações dos dados
-- [ ] testes
 - [ ] orquestrar dbt - comand? bash?
+- [ ] criar um job (sql e python) pra "acordar" o databricks
 
 # AL DAY COMANDS
 source .venv/bin/activate
 source .env
 echo $TESTE
+cd dbt_aw
+dbt deps
+dbt debug
 
 source ../.env
 echo $TESTE
@@ -74,3 +76,5 @@ a extração pode ser "antes", as 10h por exemplo. considerar o tempo que ela le
 
 vai depender do execution delta.
 1h pra trás, a extra deu certo a transformacao vai continuar.
+
+dbt snapshot --select snp_iventory

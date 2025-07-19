@@ -10,7 +10,7 @@ from config.config_streams_meltano_api import get_streams_select
 from config.config_schema_table_db import get_schema_table_select
 from airflow.operators.python import PythonOperator
 from airflow.operators.empty import EmptyOperator
-from scripts.job_databricks import trigger_databricks_job
+from scripts.job_databricks import trigger_databricks_job, databricks_job_completion
 
 
 # Define os parâmetros padrão para a DAG (retries, delay, etc.)
@@ -64,7 +64,32 @@ docker_spark_extract = {
     "docker_url":"unix://var/run/docker.sock",
 }
 
+docker_dbt = {
+    "image": "dbt-aw",
+    "api_version": "auto",
+    "network_mode": "bridge",
+    "auto_remove": True,
+    "mount_tmp_dir": False,
+    "command": [
+        "/bin/sh", "-c",
+        "dbt deps && "
+        "dbt run --project-dir /dbt && "
+        "dbt snapshot --project-dir /dbt"
+    ],
+    "working_dir": "/dbt",
+    "docker_url":"unix://var/run/docker.sock",
+}
+
 #------------------------ DEFINIÇÃO DA FUNÇÃO DE TASKS
+def dbt_task():
+    return DockerOperator(
+        task_id=f"dbt_docker_run",
+        **docker_dbt,
+        environment={
+            **os.environ,
+            },
+    )
+
 def ingest_databricks_task(
     name: str,
     metadata: dict,
@@ -231,11 +256,18 @@ with DAG(
         resultado = trigger_databricks_job()
         if resultado is None:
             raise Exception("Erro ao disparar job Databricks.")
-        
+        databricks_job_completion(resultado.get("run_id"))
+
     # Job databricks para gerar Bronze no formato delta
     run_databricks_job = PythonOperator(
         task_id='run_databricks_job_raw_to_bronze',
         python_callable=executar_job_databricks,
     )
 
-    [end_pipeline_db,end_pipeline_api] >> run_databricks_job
+    task_dbt_run = dbt_task()
+
+    [end_pipeline_db,end_pipeline_api] >> run_databricks_job >> task_dbt_run
+
+
+
+

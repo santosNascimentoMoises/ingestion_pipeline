@@ -67,6 +67,23 @@ services:
   #     - .env
   #   restart: "no"
 
+  dbt-aw:
+    build:
+      context: ./dbt_aw
+      dockerfile: dbt-aw.Dockerfile
+    image: dbt-aw:latest
+    container_name: dbt_aw
+    env_file:
+      - .env
+    volumes:
+      - ./dbt-aw:/dbt
+      - ./dbt-aw/profiles.yml:/root/.dbt/profiles.yml
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      DBT_PROFILES_DIR: /root/.dbt
+    working_dir: /dbt
+    entrypoint: ["tail", "-f", "/dev/null"]     # Para execuções manuais via exec
+
   # Serviço responsável por inicializar o banco de dados do Airflow automaticamente
   airflow-init:
     image: apache/airflow:2.10.4-python3.11

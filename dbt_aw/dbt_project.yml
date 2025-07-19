@@ -50,11 +50,5 @@ models:
       +schema: gold
       +materialized: table
 
-    # ---------- SNAPSHOT -------------
-    snapshot:
-      +schema: snapshot
-      +materialized: incremental
-      +strategy: check
-
 snapshots:
   +target_schema: "snapshots"
