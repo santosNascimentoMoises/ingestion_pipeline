@@ -11,7 +11,7 @@ with
             , sales_person_id
             , address_id
             , demographics
-        from {{ ref('sil_store') }}
+        from {{ ref('int_store') }}
     )
 
 select *

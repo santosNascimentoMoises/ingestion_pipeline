@@ -34,7 +34,7 @@ with
             , standard_cost
             , product_weight
             , weight_unit_measure_code
-        from {{ ref('sil_product') }}
+        from {{ ref('int_product') }}
     )
 
 select *

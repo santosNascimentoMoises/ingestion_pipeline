@@ -44,7 +44,7 @@ with
             , unit_price
             , unit_price_discount
             , load_at
-        from {{ ref('sil_sales') }}
+        from {{ ref('int_sales') }}
     )
 
     , dim_product as (
@@ -120,13 +120,10 @@ with
             , sales.time_due_date
             , sales.epoch_sec_due_date
             , sales.load_at
-
             /*dim_product*/
             , product_sk as product_fk
-
             /*dim_sales_person*/
             , sales_person_sk as sales_person_fk
-            
             /*dim_customer*/
             , customer_sk as customer_fk
         from sales

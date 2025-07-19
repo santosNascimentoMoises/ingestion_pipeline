@@ -35,19 +35,16 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 models:
   dbt_aw:
-    # ---------- STAGING ----------
     staging:
       +schema: stg
       +materialized: ephemeral
 
-    # ---------- SILVER -----------
-    silver:
-      +schema: silver
+    intermediate:
+      +schema: intermediate
       +materialized: table
 
-    # ---------- GOLD -------------
-    gold:
-      +schema: gold
+    marts:
+      +schema: marts
       +materialized: table
 
 snapshots:

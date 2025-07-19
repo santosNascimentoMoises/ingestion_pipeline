@@ -114,7 +114,6 @@ def ingest_databricks_task(
                 type="volume",
             ),
         ],
-        
     )
 
 def extract_meltano_task(

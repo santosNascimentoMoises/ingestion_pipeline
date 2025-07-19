@@ -23,7 +23,7 @@ with
             , title
             , email_promotion
             , territory_id
-        from {{ ref('sil_sales_person') }}
+        from {{ ref('int_sales_person') }}
     )
 
 select *

@@ -19,7 +19,7 @@ with
             , postal_code
             , address_type_id
             , is_only_state_province_flag
-        from {{ ref('sil_address') }}
+        from {{ ref('int_address') }}
     )
 
 select *

@@ -2,7 +2,7 @@ version: 2
 sources:
 - name: raw
   database: adventure_works
-  schema: bronze
+  schema: raw
   tables:
   - name: store
     description: ''

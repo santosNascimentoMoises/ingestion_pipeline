@@ -19,7 +19,7 @@ with
             , suffix
             , title
             , demographics
-        from {{ ref('sil_customer') }}
+        from {{ ref('int_customer') }}
     )
 
 select *

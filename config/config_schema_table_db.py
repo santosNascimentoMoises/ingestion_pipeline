@@ -1,6 +1,6 @@
 
 # CONFIG DATABRICKS PATHS: VOLUME DE DESTIDO DOS DADOS BRUTOS
-RAW_DB_VOLUME_PATH = 'dbfs:/Volumes/adventure_works/raw/raw_db/'
+RAW_DB_VOLUME_PATH = 'dbfs:/Volumes/adventure_works/raw_extract/raw_db/'
 
 # CONFIGS FROM DB SPARK EXTRACT
 # type of the data ouput - ex: .json, .parquet WITH POINT
