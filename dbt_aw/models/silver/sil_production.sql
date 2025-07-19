@@ -12,7 +12,6 @@ with
             , scheduled_end_date
             , scheduled_start_date
             , work_order_id
-
         from {{ ref('stg_work_order_routing') }}
     )
 
@@ -37,53 +36,46 @@ with
             , location_id
             , modified_date
             , location_name
-
         from {{ ref('stg_location') }}
     )
 
     , routing_joined_order as (
         select
-            stg_work_order_routing.actual_cost
+            stg_work_order.work_order_id
+            , stg_work_order.work_due_date
+            , stg_work_order.work_end_date
+            , stg_work_order.order_qty
+            , stg_work_order.scrap_reason_id
+            , stg_work_order.scrapped_qty
+            , stg_work_order.work_start_date
+            , stg_work_order.stocked_qty
+            /**/
+            , stg_work_order_routing.actual_cost
             , stg_work_order_routing.actual_resource_hrs
             , stg_work_order_routing.location_id
             , stg_work_order_routing.operation_sequence
             , stg_work_order_routing.planned_cost
             , stg_work_order_routing.product_id
-            , stg_work_order_routing.work_order_id
-
             , stg_work_order_routing.scheduled_start_date
             , stg_work_order_routing.scheduled_end_date
             , stg_work_order_routing.actual_end_date
             , stg_work_order_routing.actual_start_date
-            , stg_work_order.work_due_date
-            , stg_work_order.work_end_date
-
-            , stg_work_order.order_qty
-            , stg_work_order.product_id
-            , stg_work_order.scrap_reason_id
-            , stg_work_order.scrapped_qty
-            , stg_work_order.work_start_date
-            , stg_work_order.stocked_qty
-
+            /**/
             , stg_location.location_availability
             , stg_location.cost_rate
-            , stg_location.modified_date
             , stg_location.location_name
-            , stg_location.load_at
-
-        from stg_work_order_routing
-        left join stg_work_order
+        from stg_work_order
+        left join stg_work_order_routing
             on stg_work_order_routing.work_order_id = stg_work_order.work_order_id
         left join stg_location
             on stg_work_order_routing.location_id = stg_location.location_id
-    
-    )
-
-    , base as (
-        select
-            
-        from {{ ref('stg_') }}
+        qualify row_number() over (
+            partition by
+                stg_work_order.work_order_id
+                , stg_location.location_id
+            order by stg_location.location_id
+        ) = 1
     )
 
 select *
-from 
+from routing_joined_order

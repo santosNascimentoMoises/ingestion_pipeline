@@ -129,9 +129,6 @@ with
             
             /*dim_customer*/
             , customer_sk as customer_fk
-            
-            /*dim_dates*/
-            , date_sk as date_fk
         from sales
         left join dim_product
             on sales.product_id = dim_product.product_id
@@ -139,8 +136,6 @@ with
             on sales.sales_person_id = dim_sales_person.sales_person_id
         left join dim_customer
             on sales.customer_id = dim_customer.customer_id
-        left join dim_dates
-            on sales.date_order_date = dim_dates.date_day
         qualify row_number() over (
             partition by
                 sales.sales_order_id
@@ -176,7 +171,6 @@ with
             , product_fk
             , sales_person_fk
             , customer_fk
-            , date_fk
             , currency_rate_id
             , bill_to_address_id
             , ship_to_address_id

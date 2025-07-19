@@ -214,7 +214,7 @@ with DAG(
 
         ingest_db_tasks = {}
 
-        for name, metadata in STREAMS_METADATA_DB .items():
+        for name, metadata in STREAMS_METADATA_DB.items():
 
             docker_task_ingest_db = ingest_databricks_task(
                 name,
