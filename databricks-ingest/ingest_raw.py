@@ -43,6 +43,7 @@ except Exception as e:
     # logger.info(f"[DATABRIX INGEST] FILE TYPE: {FILE_TYPE}")
     # logger.info(f"[DATABRIX INGEST] FILE HOST: {host}")
 
+os.remove(FILE_NAME+FILE_TYPE)
 
 # "debug" de diretórios dentro do docker
 # print('diretório atual app tem:')

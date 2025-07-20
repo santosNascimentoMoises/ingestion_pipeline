@@ -15,7 +15,7 @@ from scripts.job_databricks import trigger_databricks_job, databricks_job_comple
 
 # Define os parâmetros padrão para a DAG (retries, delay, etc.)
 default_args = {
-    # "retries": 1,
+    "retries": 3,
     "retry_delay": timedelta(seconds=10),
     "owner": "airflow"
 }
@@ -68,23 +68,45 @@ docker_dbt = {
     "image": "dbt-aw",
     "api_version": "auto",
     "network_mode": "bridge",
-    "auto_remove": True,
+    "auto_remove": False,
     "mount_tmp_dir": False,
-    "command": [
-        "/bin/sh", "-c",
-        "dbt deps && "
-        "dbt run --project-dir /dbt && "
-        "dbt snapshot --project-dir /dbt"
-    ],
+    # "command": [
+    #     "/bin/sh", "-c",
+    #     "dbt deps && "
+    #     "dbt run --project-dir /dbt && "
+    #     "dbt snapshot --project-dir /dbt"
+    #     "dbt test --project-dir /dbt"
+    # ],
     "working_dir": "/dbt",
     "docker_url":"unix://var/run/docker.sock",
 }
 
 #------------------------ DEFINIÇÃO DA FUNÇÃO DE TASKS
-def dbt_task():
+command_run = [
+    "/bin/sh", "-c",
+    "dbt deps && "
+    "dbt run --project-dir /dbt && "
+    "dbt snapshot --project-dir /dbt"
+]
+
+command_test = [
+    "/bin/sh", "-c",
+    "dbt deps && "
+    "dbt test --project-dir /dbt"
+]
+
+command_docs = [
+    "/bin/sh", "-c",
+    "dbt deps && "
+    "dbt docs generate &&"
+    "dbt docs serve --port 8099 --project-dir /dbt"
+]
+
+def dbt_task(command,type):
     return DockerOperator(
-        task_id=f"dbt_docker_run",
+        task_id=f"dbt_docker_run_{type}",
         **docker_dbt,
+        command = command,
         environment={
             **os.environ,
             },
@@ -177,9 +199,9 @@ STREAMS_METADATA_DB = get_schema_table_select()
 with DAG(
     dag_id="el_extract_ingest_databricks",
     start_date=datetime(1990, 1, 1),
-    schedule_interval="@daily",
+    schedule_interval="@once",
     catchup=False,
-    tags=["meltano", "sdk", "databricks"],
+    tags=["meltano", "sdk", "databricks", "dbt"],
     default_args=default_args
 ) as dag:
 
@@ -263,10 +285,18 @@ with DAG(
         python_callable=executar_job_databricks,
     )
 
-    task_dbt_run = dbt_task()
+    # command_run = [
+        
+    # ]
+    # command_test = [
 
-    [end_pipeline_db,end_pipeline_api] >> run_databricks_job >> task_dbt_run
+    # ]
+    # command_docs = [
 
+    # ]
 
+    task_dbt_run = dbt_task(command_run,'run')
+    task_dbt_test = dbt_task(command_test,'test')
+    task_dbt_docs = dbt_task(command_docs,'docs')
 
-
+    [end_pipeline_db,end_pipeline_api] >> run_databricks_job >> task_dbt_run >> task_dbt_test >> task_dbt_docs

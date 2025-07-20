@@ -62,9 +62,11 @@ def databricks_job_completion(run_id):
     headers = {
         'Authorization': f'Bearer {token}'
     }
-
+    logger.info(f"[JOB DATABRICKS] Consultado - Job em andamento")
+    logger.info(f"[JOB DATABRICKS] Aguardando 5 min ")
+    time.sleep(300)
     while True:
-        logger.info(f"[JOB DATABRICKS] Consultado - Job em andamento")
+
         response = requests.get(
             f'{DATABRICKS_INSTANCE}/api/2.1/jobs/runs/get',
             params={'run_id': run_id},

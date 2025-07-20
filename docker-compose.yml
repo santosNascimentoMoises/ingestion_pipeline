@@ -72,6 +72,8 @@ services:
       context: ./dbt_aw
       dockerfile: dbt-aw.Dockerfile
     image: dbt-aw:latest
+    ports:
+      - "8099:8099"
     container_name: dbt_aw
     env_file:
       - .env

@@ -30,10 +30,11 @@ lembrar do docker-compose também
 - [X] :+1: testes
 - [X] :+1: analisar os uniq/distinct das dim e revisar as chaves_sk
 se distinct(id) == n rows, vale a pena deixar só o id como chave na dim
-- [ ] diagrama de relacionamento das tabelas
-- [ ] estudo dos indicadores e possíveis visualizações dos dados
+- [X] :+1: diagrama de relacionamento das tabelas
 - [X] :+1: orquestrar dbt - comand? bash?
-- [ ] criar um job (sql e python) pra "acordar" o databricks
+
+boas práticas trabalhando com VMs - email de alerta caso o tempo seja excedido
+retry em caso de falha
 
 # AL DAY COMANDS
 source .venv/bin/activate
@@ -68,35 +69,6 @@ Oracle Cloud	VM.Standard.A1.Flex
 ::timestamp
 
 # OBS>
-
-11h da manhã na dag empty sensor
-
-a extração pode ser "antes", as 10h por exemplo. considerar o tempo que ela leva, a dag ext 10:50, transofrm as 11.
-
-vai depender do execution delta.
-1h pra trás, a extra deu certo a transformacao vai continuar.
-
-dbt snapshot --select snp_iventory
-
-dbt ls
-
-auxílio para gerar arquivos yml, com descrição em inglês.
-
-use o padrão:
-version: 2
-models:
-- name: int_store
-  description: ''
-  columns:
-
-para esse modelo .sql do dbt:
-
-
-
-forneça as descrições (em inglês) das colunas nesse arquivo yml
-
-
-
 
 dbt docs generate
 dbt docs serve

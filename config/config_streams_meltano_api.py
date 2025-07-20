@@ -1,7 +1,9 @@
 
+import os
 # CONFIG DATABRICKS PATHS: VOLUME DE DESTIDO DOS DADOS BRUTOS
-RAW_API_VOLUME_PATH = 'dbfs:/Volumes/adventure_works/raw_extract/raw_api/'
+# RAW_API_VOLUME_PATH = 'dbfs:/Volumes/adventure_works/raw_extract/raw_api/'
 
+RAW_API_VOLUME_PATH = os.getenv('RAW_API_VOLUME_PATH')
 # CONFIGS FROM API MELTANO EXTRACT
 # type of the data ouput - ex: .json, .parquet WITH POINT
 DATA_TYPE_EXTRACT_API = ".jsonl"
