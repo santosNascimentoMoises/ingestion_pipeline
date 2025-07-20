@@ -1,0 +1,30 @@
+
+    
+  create or replace table `adventure_works`.`silver`.`sil_store`
+  
+  (
+    
+      business_entity_id string,
+    
+      demographics string,
+    
+      store_name string,
+    
+      sales_person_id string,
+    
+      address_id string
+    
+    
+  )
+
+  
+  using delta
+  
+  
+  
+  
+  
+  
+  
+
+  

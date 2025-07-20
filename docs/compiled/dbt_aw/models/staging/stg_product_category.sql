@@ -1,0 +1,22 @@
+with 
+    product_category as (
+        select
+            ModifiedDate
+            , Name
+            , ProductCategoryID
+            , rowguid
+            , load_at
+        from `adventure_works`.`raw`.`product_category`
+    )
+
+    , renamed as (
+        select
+            from_unixtime(cast(ModifiedDate as bigint) / 1000)::timestamp as modified_date
+            , Name::string as product_category_name
+            , substring_index(ProductCategoryID, '.', 1) as product_category_id
+            , load_at::timestamp as load_at
+        from product_category
+    )
+
+select *
+from renamed
