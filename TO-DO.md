@@ -14,8 +14,7 @@ lembrar do docker-compose também
 - [X] :+1: criado job databricks para geração da bronze
 - [X] :+1: instalar dbt core e configurar projeto
 - [X] :+1: modelar uma stg e uma dim bem simples pra testar o dbt e tadabricks
-- [ ] modelar o restante
-    - descrever... fct, dim, etc...
+- [X] :+1: modelar o restante
 - [X] :+1: dim_products
 - [X] :+1: dim_address
 - [X] :+1: dim_customer
@@ -27,13 +26,13 @@ lembrar do docker-compose também
 - [X] :+1: fct_production
 - [X] :+1: fct_inventory (incremental!)
 - [X] :+1: dim_dates
-- [ ] ymls
-- [ ] testes
-- [ ] analisar os uniq/distinct das dim e revisar as chaves_sk
+- [X] :+1: ymls
+- [X] :+1: testes
+- [X] :+1: analisar os uniq/distinct das dim e revisar as chaves_sk
 se distinct(id) == n rows, vale a pena deixar só o id como chave na dim
 - [ ] diagrama de relacionamento das tabelas
 - [ ] estudo dos indicadores e possíveis visualizações dos dados
-- [ ] orquestrar dbt - comand? bash?
+- [X] :+1: orquestrar dbt - comand? bash?
 - [ ] criar um job (sql e python) pra "acordar" o databricks
 
 # AL DAY COMANDS

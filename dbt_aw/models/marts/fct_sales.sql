@@ -44,6 +44,7 @@ with
             , unit_price
             , unit_price_discount
             , load_at
+            , sales_reason_id
         from {{ ref('int_sales') }}
     )
 
@@ -73,6 +74,13 @@ with
             date_sk
             , date_day
         from {{ ref('dim_dates') }}
+    )
+
+    , dim_sales_reason as (
+        select
+            reason_sk
+            , sales_reason_id
+        from {{ ref('dim_sales_reason') }}
     )
 
     , sales_joined as (
@@ -120,12 +128,15 @@ with
             , sales.time_due_date
             , sales.epoch_sec_due_date
             , sales.load_at
+            , sales.sales_reason_id
             /*dim_product*/
-            , product_sk as product_fk
+            , dim_product.product_sk as product_fk
             /*dim_sales_person*/
-            , sales_person_sk as sales_person_fk
+            , dim_sales_person.sales_person_sk as sales_person_fk
             /*dim_customer*/
-            , customer_sk as customer_fk
+            , dim_customer.customer_sk as customer_fk
+            /*dim_sales_reason*/
+            , dim_sales_reason.reason_sk as reason_fk
         from sales
         left join dim_product
             on sales.product_id = dim_product.product_id
@@ -133,12 +144,15 @@ with
             on sales.sales_person_id = dim_sales_person.sales_person_id
         left join dim_customer
             on sales.customer_id = dim_customer.customer_id
+        left join dim_sales_reason
+            on sales.sales_reason_id = dim_sales_reason.sales_reason_id
         qualify row_number() over (
             partition by
                 sales.sales_order_id
-                , sales.sales_order_detail_id
-                , sales.customer_id
+                , sales.product_id
                 , sales.sales_person_id
+                , sales.customer_id
+                , dim_sales_reason.sales_reason_id
             order by sales.sales_order_id
         ) = 1
     )
@@ -196,6 +210,8 @@ with
             , time_due_date
             , epoch_sec_due_date
             , load_at
+            , sales_reason_id
+            , reason_fk
         from sales_joined
     )
 

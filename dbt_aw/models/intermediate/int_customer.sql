@@ -43,9 +43,8 @@ with
         qualify row_number() over (
             partition by
                 stg_customer.person_id
-                , stg_store.sales_person_id
-                , stg_business_entity_address.address_id
-            order by stg_sales_person.business_entity_id
+                , stg_person.business_entity_id
+            order by stg_person.business_entity_id
         ) = 1
     )
 

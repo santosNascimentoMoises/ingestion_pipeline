@@ -82,6 +82,13 @@ with
         from {{ ref('stg_sales_order_detail') }}
     )
 
+    , stg_header_sales_reason as (
+        select
+            sales_order_id
+            , sales_reason_id
+        from {{ ref('stg_sales_order_header_sales_reason') }}
+    )
+
     , header_detail_joined as (
         select
             stg_sales_order_header.account_number
@@ -127,13 +134,17 @@ with
             , stg_sales_order_detail.unit_price
             , stg_sales_order_detail.unit_price_discount
             , stg_sales_order_detail.load_at
+            , stg_header_sales_reason.sales_reason_id
         from stg_sales_order_header
         left join stg_sales_order_detail
             on stg_sales_order_header.sales_order_id = stg_sales_order_detail.sales_order_id
+        left join stg_header_sales_reason
+            on stg_sales_order_header.sales_order_id = stg_header_sales_reason.sales_order_id
         qualify row_number() over (
             partition by
                 stg_sales_order_header.sales_order_id
                 , stg_sales_order_detail.sales_order_detail_id
+                , stg_header_sales_reason.sales_order_id
             order by stg_sales_order_header.sales_order_id
         ) = 1
     )

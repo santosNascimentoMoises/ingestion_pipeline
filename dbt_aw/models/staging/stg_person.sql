@@ -1,4 +1,3 @@
-
 with
     person as (
         select
@@ -21,7 +20,7 @@ with
 
     , renamed as (
         select
-            BusinessEntityID as business_entity_id
+            substring_index(BusinessEntityID, '.', 1) as business_entity_id
             , EmailPromotion as email_promotion
             , Demographics::string as demographics
             , FirstName::string as first_name

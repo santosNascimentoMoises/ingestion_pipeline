@@ -8,7 +8,7 @@ models:
         tests:
           - not_null
         data_type: string
-        description: "Foreign key (chave estrangeira) referencing the product dimension (dim_product)."
+        description: "Foreign key referencing the product dimension (dim_product)."
 
       - name: quantity
         data_type: int
