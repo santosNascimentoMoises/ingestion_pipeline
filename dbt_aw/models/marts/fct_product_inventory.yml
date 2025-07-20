@@ -5,6 +5,8 @@ models:
     description: "Fact table containing a snapshot of product inventory levels at specific warehouse locations. Each record represents the quantity of a specific product in a given location."
     columns:
       - name: product_fk
+        tests:
+          - not_null
         data_type: string
         description: "Foreign key (chave estrangeira) referencing the product dimension (dim_product)."
 

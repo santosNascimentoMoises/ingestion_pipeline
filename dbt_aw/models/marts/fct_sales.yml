@@ -6,10 +6,15 @@ models:
     columns:
       #-- Primary & Foreign Keys --#
       - name: sales_sk
+        tests:
+          - not_null
+          - unique
         data_type: string
         description: "The surrogate key for the sales fact table, uniquely identifying each sales order line item record."
 
       - name: product_fk
+        tests:
+          - not_null
         data_type: string
         description: "Foreign key referencing the product dimension (dim_product)."
 
@@ -24,6 +29,9 @@ models:
       - name: date_order_date
         data_type: date
         description: "Foreign key referencing the date dimension for the order date."
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "> '2010-01-01'"
 
       - name: date_ship_date
         data_type: date
@@ -39,13 +47,18 @@ models:
         description: "The total revenue for the line item, calculated as (UnitPrice * (1 - UnitPriceDiscount) * OrderQty)."
 
       - name: order_qty
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
         data_type: string
         description: "The quantity of the product ordered in this line item."
 
       - name: sub_total
         data_type: float
         description: "The order subtotal, before tax and freight."
-
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
       - name: tax_amt
         data_type: float
         description: "The tax amount for the order."

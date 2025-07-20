@@ -5,6 +5,9 @@ models:
     description: "Dimension table containing attributes for each store."
     columns:
       - name: sales_sk
+        tests:
+          - not_null
+          - unique
         data_type: string
         description: ""
 
