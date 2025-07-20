@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: dim_store
+    description: "Dimension table containing attributes for each store."
+    columns:
+      - name: sales_sk
+        data_type: string
+        description: ""
+
+      - name: business_entity_id
+        data_type: string
+        description: "Foreign key to the business entity (e.g., a customer, a store)."
+
+      - name: store_name
+        data_type: string
+        description: "The name of the store."
+
+      - name: sales_person_id
+        data_type: string
+        description: "Foreign key to the salesperson assigned to the store."
+
+      - name: address_id
+        data_type: string
+        description: "Foreign key to the address."
+
+      - name: demographics
+        data_type: string
+        description: "XML column containing store demographic information like annual sales and number of employees."
+

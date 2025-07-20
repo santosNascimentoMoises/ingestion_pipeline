@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: stg_business_entity
+    description: "Staging model for business entity data."
+    columns:
+      - name: business_entity_id
+        data_type: string
+        description: "Primary key for the business entity."
+
+      - name: load_at
+        data_type: timestamp
+        description: "Timestamp of when the record was loaded into the staging table."

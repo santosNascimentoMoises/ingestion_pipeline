@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: stg_special_offer
+    description: "Staging model for special offer data, detailing promotions and discounts."
+    columns:
+      - name: category
+        description: "The category of the special offer (e.g., Reseller, Customer)."
+
+      - name: description
+        description: "A text description of the special offer."
+
+      - name: discount_pct
+        description: "The discount percentage offered, represented as a decimal (e.g., 0.10 for 10%)."
+
+      - name: end_date_offer
+        description: "The date and time the special offer ends."
+
+      - name: max_qty
+        description: "The maximum product quantity for which the special offer can be applied."
+
+      - name: min_qty
+        description: "The minimum product quantity required to be eligible for the special offer."
+
+      - name: modified_date
+        description: "Date and time the record was last modified in the source system."
+
+      - name: special_offer_id
+        description: "Primary key for the special offer."
+
+      - name: start_date_offer
+        description: "The date and time the special offer starts."
+
+      - name: special_offer_type
+        description: "The type of special offer (e.g., No Discount, Volume Discount)."
+
+      - name: load_at
+        description: "Timestamp of when the record was loaded into the staging table."

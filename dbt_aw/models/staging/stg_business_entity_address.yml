@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: stg_business_entity_address
+    description: "Staging model that associates addresses with business entities."
+    columns:
+      - name: address_id
+        data_type: string
+        description: "Foreign key to the address."
+
+      - name: address_type_id
+        data_type: string
+        description: "Foreign key for the type of address (e.g., Billing, Shipping)."
+
+      - name: business_entity_id
+        data_type: string
+        description: "Foreign key to the business entity (e.g., a customer, a store)."
+
+      - name: load_at
+        data_type: timestamp
+        description: "Timestamp of when the record was loaded into the staging table."

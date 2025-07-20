@@ -36,5 +36,5 @@ build_pipeline:
 
 
 
-dbt deps && dbt run --project-dir /dbt --profiles-dir /root/.dbt && dbt snapshot --project-dir /dbt --profiles-dir /root/.dbt
+# dbt deps && dbt run --project-dir /dbt --profiles-dir /root/.dbt && dbt snapshot --project-dir /dbt --profiles-dir /root/.dbt
 

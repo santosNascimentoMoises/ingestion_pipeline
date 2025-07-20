@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: fct_sales_day_products_agg
+    description: "Aggregated fact table that summarizes sales metrics for each product on a daily basis. It provides total quantity sold, subtotal revenue, and total discounts."
+    columns:
+      - name: date_order_date
+        data_type: date
+        description: "Foreign key referencing the date dimension (dim_dates), representing the day of the sales."
+
+      - name: product_fk
+        data_type: string
+        description: "Foreign key referencing the product dimension (dim_product)."
+
+      - name: day_products_quantity
+        data_type: double
+        description: "The total quantity sold for a given product on a specific day."
+
+      - name: day_products_sub_total
+        data_type: double
+        description: "The total subtotal revenue (before discounts) for a given product on a specific day."
+
+      - name: discount_sub_total
+        data_type: double
+        description: "The total value of all discounts applied for a given product on a specific day."

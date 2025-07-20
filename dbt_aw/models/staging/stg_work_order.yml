@@ -1,0 +1,37 @@
+version: 2
+models:
+  - name: stg_work_order
+    description: "Staging model for work order data."
+    columns:
+      - name: work_due_date
+        description: "The due date for the work order."
+
+      - name: work_end_date
+        description: "The date the work order was completed."
+
+      - name: modified_date
+        description: "Date and time the record was last modified in the source system."
+
+      - name: order_qty
+        description: "The quantity of products requested in the work order."
+
+      - name: product_id
+        description: "Foreign key to the product being manufactured."
+
+      - name: scrap_reason_id
+        description: "Foreign key for the reason the product was scrapped, if applicable."
+
+      - name: scrapped_qty
+        description: "The quantity of products scrapped during production."
+
+      - name: work_start_date
+        description: "The start date for the work order production."
+
+      - name: stocked_qty
+        description: "The quantity of products from the order that were stocked in inventory."
+
+      - name: work_order_id
+        description: "Primary key for the work order."
+
+      - name: load_at
+        description: "Timestamp of when the record was loaded into the staging table."

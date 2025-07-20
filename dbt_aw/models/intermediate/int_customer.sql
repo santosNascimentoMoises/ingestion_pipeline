@@ -28,7 +28,6 @@ with
             , stg_customer.customer_id
             , stg_customer.person_id
             , stg_customer.store_id
-
             , stg_person.business_entity_id
             , stg_person.email_promotion
             , stg_person.demographics

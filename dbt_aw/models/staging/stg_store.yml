@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: stg_store
+    description: "Staging model for store or reseller data."
+    columns:
+      - name: business_entity_id
+        data_type: string
+        description: "Primary key for the store."
+
+      - name: demographics
+        data_type: string
+        description: "XML column containing store demographic information like annual sales and number of employees."
+
+      - name: store_name
+        data_type: string
+        description: "The name of the store."
+
+      - name: sales_person_id
+        data_type: string
+        description: "Foreign key to the salesperson assigned to the store."
+
+      - name: load_at
+        data_type: timestamp
+        description: "Timestamp of when the record was loaded into the staging table."

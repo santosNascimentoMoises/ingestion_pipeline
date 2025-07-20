@@ -49,7 +49,6 @@ with
             , stg_work_order.scrapped_qty
             , stg_work_order.work_start_date
             , stg_work_order.stocked_qty
-            /**/
             , stg_work_order_routing.actual_cost
             , stg_work_order_routing.actual_resource_hrs
             , stg_work_order_routing.location_id
@@ -60,7 +59,6 @@ with
             , stg_work_order_routing.scheduled_end_date
             , stg_work_order_routing.actual_end_date
             , stg_work_order_routing.actual_start_date
-            /**/
             , stg_location.location_availability
             , stg_location.cost_rate
             , stg_location.location_name

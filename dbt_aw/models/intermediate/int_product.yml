@@ -1,0 +1,118 @@
+version: 2
+
+models:
+  - name: int_product
+    description: ""
+    columns:
+      - name: class
+        data_type: string
+        description: "The class of the product (e.g., H for High, M for Medium, L for Low)."
+
+      - name: color
+        data_type: string
+        description: "The color of the product."
+
+      - name: days_to_manufacture
+        data_type: int
+        description: "The number of days required to manufacture the product."
+
+      - name: discontinued_date
+        data_type: string
+        description: "The date the product was discontinued."
+
+      - name: finished_goods_flag
+        data_type: string
+        description: "Flag indicating if the product is a salable finished good."
+
+      - name: list_price
+        data_type: float
+        description: "The selling price of the product."
+
+      - name: make_flag
+        data_type: string
+        description: "Flag indicating if the product is manufactured in-house (1) or purchased (0)."
+
+      - name: modified_date
+        data_type: timestamp
+        description: "Date and time the record was last modified in the source system."
+
+      - name: product_name
+        data_type: string
+        description: "The name of the product."
+
+      - name: product_id
+        data_type: string
+        description: "Primary key for the product."
+
+      - name: product_line
+        data_type: string
+        description: "The product line (e.g., R for Road, M for Mountain, T for Touring, S for Standard)."
+
+      - name: product_model_id
+        data_type: string
+        description: "Foreign key to the product model."
+
+      - name: product_number
+        data_type: string
+        description: "Unique identification number for the product."
+
+      - name: reorder_point
+        data_type: string
+        description: "The inventory level that triggers a new order."
+
+      - name: safety_stock_level
+        data_type: string
+        description: "The minimum inventory quantity."
+
+      - name: sell_end_date
+        data_type: timestamp
+        description: "The date that the product is no longer available for sale."
+
+      - name: sell_start_date
+        data_type: timestamp
+        description: "The date that the product can be sold."
+
+      - name: product_size
+        data_type: string
+        description: "The size of the product (e.g., 42, XL)."
+
+      - name: size_unit_measure_code
+        data_type: string
+        description: "Foreign key for the unit of measure for the product size."
+
+      - name: standard_cost
+        data_type: float
+        description: "The standard cost of the product."
+
+      - name: style
+        data_type: string
+        description: "The style of the product (e.g., W for Womens, M for Mens, U for Universal)."
+
+      - name: product_weight
+        data_type: float
+        description: "The weight of the product."
+
+      - name: weight_unit_measure_code
+        data_type: string
+        description: "Foreign key for the unit of measure for the product weight."
+
+      - name: load_at
+        data_type: timestamp
+        description: "Timestamp of when the record was loaded into the staging table."
+
+      - name: product_subcategory_name
+        data_type: string
+        description: "The name of the product subcategory."
+
+      - name: product_subcategory_id
+        data_type: string
+        description: "Primary key for the product subcategory."
+
+      - name: product_category_id
+        data_type: string
+        description: "Foreign key to the parent product category."
+
+      - name: product_category_name
+        data_type: string
+        description: "The name of the product category."
+

@@ -52,13 +52,11 @@ with
             , stg_address.city
             , stg_address.postal_code
             , stg_address.state_province_id
-
             , stg_state_province.country_region_code
             , stg_state_province.is_only_state_province_flag
             , stg_state_province.country_region_name
             , stg_state_province.state_province_code
             , stg_state_province.territory_id
-
             , stg_country_region.country_name
         from stg_business_entity_address
         left join stg_address

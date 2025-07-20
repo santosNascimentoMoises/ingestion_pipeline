@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: stg_product_subcategory
+    description: "Staging model for product subcategory data."
+    columns:
+      - name: product_subcategory_name
+        data_type: string
+        description: "The name of the product subcategory."
+
+      - name: product_category_id
+        data_type: string
+        description: "Foreign key to the parent product category."
+
+      - name: product_subcategory_id
+        data_type: string
+        description: "Primary key for the product subcategory."
+
+      - name: load_at
+        data_type: timestamp
+        description: "Timestamp of when the record was loaded into the staging table."

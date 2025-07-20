@@ -1,5 +1,5 @@
 
-with 
+with
     product_inventory as (
         select
             Bin

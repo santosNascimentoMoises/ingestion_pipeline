@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: fct_sales_day_price_acum
+    description: "Aggregated fact table that summarizes total sales revenue and order counts for each salesperson on a daily basis."
+    columns:
+      - name: date_order_date
+        data_type: date
+        description: "Foreign key referencing the date dimension (dim_dates), representing the day of the sales."
+
+      - name: sales_person_fk
+        data_type: string
+        description: "Foreign key referencing the salesperson dimension (dim_sales_person)."
+
+      - name: day_sales_price_sum
+        data_type: double
+        description: "The total sum of sales revenue for a given salesperson on a specific day."
+
+      - name: day_sales_order_quantity
+        data_type: bigint
+        description: "The total count of distinct sales orders for a given salesperson on a specific day."

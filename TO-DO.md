@@ -78,3 +78,30 @@ vai depender do execution delta.
 1h pra trás, a extra deu certo a transformacao vai continuar.
 
 dbt snapshot --select snp_iventory
+
+dbt ls
+
+auxílio para gerar arquivos yml, com descrição em inglês.
+
+use o padrão:
+version: 2
+models:
+- name: int_store
+  description: ''
+  columns:
+
+para esse modelo .sql do dbt:
+
+
+
+forneça as descrições (em inglês) das colunas nesse arquivo yml
+
+
+
+
+dbt docs generate
+dbt docs serve
+lsof -i :8080
+
+
+dbt run-operation generate_model_yaml --args '{"model_names": ["stg_work_order"], "upstream_descriptions": true}' > dim_address.yml

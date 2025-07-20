@@ -21,7 +21,6 @@ with
             , stg_store.demographics
             , stg_store.store_name
             , stg_store.sales_person_id
-
             , stg_business_entity_address.address_id
         from stg_store
         left join stg_business_entity_address

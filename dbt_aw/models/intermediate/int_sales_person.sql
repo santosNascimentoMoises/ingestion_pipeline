@@ -48,7 +48,6 @@ with
             , stg_sales_person.sales_quota
             , stg_sales_person.sales_ytd
             , stg_sales_person.territory_id
-
             , stg_person.email_promotion
             , stg_person.first_name
             , stg_person.last_name
@@ -56,10 +55,8 @@ with
             , stg_person.person_type
             , stg_person.suffix
             , stg_person.title
-
             , stg_store.store_name
             , stg_store.sales_person_id 
-
             , stg_business_entity_address.address_id
         from stg_sales_person
         left join stg_person

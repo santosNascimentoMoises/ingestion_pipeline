@@ -118,7 +118,6 @@ with
             , stg_sales_order_header.date_due_date
             , stg_sales_order_header.time_due_date
             , stg_sales_order_header.epoch_sec_due_date
-
             , stg_sales_order_detail.carrier_tracking_number
             , stg_sales_order_detail.line_total
             , stg_sales_order_detail.order_qty

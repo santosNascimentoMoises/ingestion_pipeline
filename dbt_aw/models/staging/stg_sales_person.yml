@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: stg_sales_person
+    description: "Staging model for salesperson data, including performance metrics and territory."
+    columns:
+      - name: bonus
+        data_type: float
+        description: "Bonus amount earned during the current year."
+
+      - name: business_entity_id
+        data_type: string
+        description: "Primary key for the salesperson, linking to the person table."
+
+      - name: commission_pct
+        data_type: float
+        description: "The salesperson's commission percentage."
+
+      - name: sales_last_year
+        data_type: float
+        description: "Total sales from the previous year."
+
+      - name: sales_quota
+        data_type: float
+        description: "The sales quota for the salesperson for the current period."
+
+      - name: sales_ytd
+        data_type: float
+        description: "Total sales year-to-date."
+
+      - name: territory_id
+        data_type: string
+        description: "Foreign key to the sales territory the person is assigned to."
+
+      - name: load_at
+        data_type: timestamp
+        description: "Timestamp of when the record was loaded into the staging table."

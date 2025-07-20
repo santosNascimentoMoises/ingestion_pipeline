@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: fct_product_inventory
+    description: "Fact table containing a snapshot of product inventory levels at specific warehouse locations. Each record represents the quantity of a specific product in a given location."
+    columns:
+      - name: product_fk
+        data_type: string
+        description: "Foreign key (chave estrangeira) referencing the product dimension (dim_product)."
+
+      - name: quantity
+        data_type: int
+        description: "The quantity of the product in this specific inventory location."
+
+      - name: location_id
+        data_type: string
+        description: "The natural key for the inventory location from the source system."
+
+      - name: location_name
+        data_type: string
+        description: "The name of the location (e.g., a specific manufacturing station). Degenerate dimension attribute."
+
+      - name: bin
+        data_type: int
+        description: "The bin number where the product is stored. Degenerate dimension attribute."
+
+      - name: shelf
+        data_type: string
+        description: "The shelf where the product is stored. Degenerate dimension attribute."
+
+      - name: product_id
+        data_type: string
+        description: "The natural key for the product from the source system."
+
+      - name: modified_date
+        data_type: timestamp
+        description: "Date and time the record was last modified in the source system."

@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: int_product_inventory
+    description: ""
+    columns:
+      - name: bin
+        data_type: int
+        description: "The bin number where the product is stored."
+
+      - name: location_id
+        data_type: string
+        description: "Primary key for the location."
+
+      - name: modified_date
+        data_type: timestamp
+        description: "Date and time the record was last modified in the source system."
+
+      - name: product_id
+        data_type: string
+        description: "Foreign key to the product."
+
+      - name: quantity
+        data_type: int
+        description: "The quantity of the product in this specific inventory location."
+
+      - name: shelf
+        data_type: string
+        description: "The shelf where the product is stored."
+
+      - name: location_name
+        data_type: string
+        description: "The name of the location (e.g., a specific manufacturing station)."
+
