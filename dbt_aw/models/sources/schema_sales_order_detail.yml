@@ -1,0 +1,45 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: raw
+  tables:
+  - name: sales_order_detail
+    description: ''
+    columns:
+    - name: carriertrackingnumber
+      data_type: string
+      description: ''
+    - name: linetotal
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: orderqty
+      data_type: string
+      description: ''
+    - name: productid
+      data_type: string
+      description: ''
+    - name: salesorderdetailid
+      data_type: string
+      description: ''
+    - name: salesorderid
+      data_type: string
+      description: ''
+    - name: specialofferid
+      data_type: string
+      description: ''
+    - name: unitprice
+      data_type: string
+      description: ''
+    - name: unitpricediscount
+      data_type: string
+      description: ''
+    - name: rowguid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

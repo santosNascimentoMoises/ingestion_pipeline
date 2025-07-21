@@ -1,7 +1,7 @@
-
-
-
-
+01_estudos/
+tap_adventureworks_db
+logs/
+dbt_aw copy
 .env
 .enn-original
 
@@ -17,6 +17,7 @@
 *.tar.gz
 *.rar
 teste
+
 teste-meltano/
 teste_tap
 config.py
@@ -34,6 +35,6 @@ meltano_output/
 
 venv/
 .venv
-*.yml
+
 
 output

@@ -1,0 +1,27 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: raw
+  tables:
+  - name: business_entity_contact
+    description: ''
+    columns:
+    - name: businessentityid
+      data_type: string
+      description: ''
+    - name: contacttypeid
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: personid
+      data_type: string
+      description: ''
+    - name: rowguid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

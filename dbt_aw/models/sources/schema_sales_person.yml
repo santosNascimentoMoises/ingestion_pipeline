@@ -1,0 +1,39 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: raw
+  tables:
+  - name: sales_person
+    description: ''
+    columns:
+    - name: bonus
+      data_type: string
+      description: ''
+    - name: businessentityid
+      data_type: string
+      description: ''
+    - name: commissionpct
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: saleslastyear
+      data_type: string
+      description: ''
+    - name: salesquota
+      data_type: string
+      description: ''
+    - name: salesytd
+      data_type: string
+      description: ''
+    - name: territoryid
+      data_type: string
+      description: ''
+    - name: rowguid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

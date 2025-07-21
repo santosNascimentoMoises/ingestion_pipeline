@@ -1,0 +1,90 @@
+version: 2
+
+models:
+  - name: int_production
+    description: ""
+    columns:
+      - name: work_order_id
+        data_type: string
+        description: "Primary key for the work order."
+
+      - name: work_due_date
+        data_type: timestamp
+        description: "The due date for the work order."
+
+      - name: work_end_date
+        data_type: timestamp
+        description: "The date the work order was completed."
+
+      - name: order_qty
+        data_type: int
+        description: "The quantity of products requested in the work order."
+
+      - name: scrap_reason_id
+        data_type: string
+        description: "Foreign key for the reason the product was scrapped, if applicable."
+
+      - name: scrapped_qty
+        data_type: int
+        description: "The quantity of products scrapped during production."
+
+      - name: work_start_date
+        data_type: timestamp
+        description: "The start date for the work order production."
+
+      - name: stocked_qty
+        data_type: int
+        description: "The quantity of products from the order that were stocked in inventory."
+
+      - name: actual_cost
+        data_type: float
+        description: "The actual cost incurred for this manufacturing operation."
+
+      - name: actual_resource_hrs
+        data_type: float
+        description: "The actual number of resource hours spent on this operation."
+
+      - name: location_id
+        data_type: string
+        description: "Primary key for the location."
+
+      - name: operation_sequence
+        data_type: string
+        description: "The sequence number of this operation in the manufacturing routing."
+
+      - name: planned_cost
+        data_type: float
+        description: "The estimated, planned cost for this manufacturing operation."
+
+      - name: product_id
+        data_type: string
+        description: "Foreign key to the product being manufactured."
+
+      - name: scheduled_start_date
+        data_type: timestamp
+        description: "The scheduled start date and time for this manufacturing operation."
+
+      - name: scheduled_end_date
+        data_type: timestamp
+        description: "The scheduled end date and time for this manufacturing operation."
+
+      - name: actual_end_date
+        data_type: timestamp
+        description: "The actual date and time this manufacturing operation ended."
+
+      - name: actual_start_date
+        data_type: timestamp
+        description: "The actual date and time this manufacturing operation started."
+
+      - name: location_availability
+        data_type: int
+        description: "Available work-hour capacity for the location."
+
+      - name: cost_rate
+        data_type: float
+        description: "Standard cost rate at the location."
+
+      - name: location_name
+        data_type: string
+        description: "The name of the location (e.g., a specific manufacturing station)."
+

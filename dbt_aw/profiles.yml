@@ -1,0 +1,12 @@
+dbt_aw:
+  target: dev
+  outputs:
+    dev:
+      type: databricks
+      catalog: "{{ env_var('DATABRICKS_SERVER_CATALOG') }}"
+      schema: "{{ env_var('DATABRICKS_SERVER_SCHEMA', 'silver') }}"
+      host: "{{ env_var('DATABRICKS_SERVER_HOSTNAME') }}"
+      http_path: "{{ env_var('DATABRICKS_HTTP_PATH') }}"
+      token: "{{ env_var('DATABRICKS_ACCESS_TOKEN') }}"
+      threads: 2
+  target: dev

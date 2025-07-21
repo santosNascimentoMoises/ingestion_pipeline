@@ -1,0 +1,68 @@
+version: 2
+
+models:
+  - name: dim_address
+    description: ""
+    columns:
+      - name: address_sk
+        tests:
+          - not_null
+          - unique
+        data_type: string
+        description: ""
+
+      - name: address_id
+        data_type: string
+        description: "Primary key for the address."
+
+      - name: business_entity_id
+        data_type: string
+        description: "Foreign key to the business entity (e.g., a customer, a store)."
+
+      - name: territory_id
+        data_type: string
+        description: "Foreign key to the sales territory."
+
+      - name: country_name
+        data_type: string
+        description: "The name of the country or region."
+
+      - name: city
+        data_type: string
+        description: "The city name."
+
+      - name: address_line1
+        data_type: string
+        description: "First line of the street address."
+
+      - name: address_line2
+        data_type: string
+        description: "Second line of the street address (e.g., apartment, suite)."
+
+      - name: country_region_name
+        data_type: string
+        description: "The name of the country or region."
+
+      - name: state_province_code
+        data_type: string
+        description: "The official code for the state or province (e.g., CA for California)."
+
+      - name: state_province_id
+        data_type: string
+        description: "Primary key for the state or province."
+
+      - name: country_region_code
+        data_type: string
+        description: "The ISO standard code for the country or region."
+
+      - name: postal_code
+        data_type: string
+        description: "The postal or zip code for the address."
+
+      - name: address_type_id
+        data_type: string
+        description: "Foreign key for the type of address (e.g., Billing, Shipping)."
+
+      - name: is_only_state_province_flag
+        data_type: string
+        description: "Flag indicating if the state or province is the only one in its country."

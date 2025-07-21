@@ -1,0 +1,36 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: raw
+  tables:
+  - name: vendor
+    description: ''
+    columns:
+    - name: accountnumber
+      data_type: string
+      description: ''
+    - name: activeflag
+      data_type: string
+      description: ''
+    - name: businessentityid
+      data_type: string
+      description: ''
+    - name: creditrating
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: name
+      data_type: string
+      description: ''
+    - name: preferredvendorstatus
+      data_type: string
+      description: ''
+    - name: purchasingwebserviceurl
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

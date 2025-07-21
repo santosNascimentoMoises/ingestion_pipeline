@@ -1,0 +1,42 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: raw
+  tables:
+  - name: work_order
+    description: ''
+    columns:
+    - name: duedate
+      data_type: string
+      description: ''
+    - name: enddate
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: orderqty
+      data_type: string
+      description: ''
+    - name: productid
+      data_type: string
+      description: ''
+    - name: scrapreasonid
+      data_type: string
+      description: ''
+    - name: scrappedqty
+      data_type: string
+      description: ''
+    - name: startdate
+      data_type: string
+      description: ''
+    - name: stockedqty
+      data_type: string
+      description: ''
+    - name: workorderid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

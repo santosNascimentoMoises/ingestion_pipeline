@@ -1,0 +1,33 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: raw
+  tables:
+  - name: customer
+    description: ''
+    columns:
+    - name: accountnumber
+      data_type: string
+      description: ''
+    - name: customerid
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: personid
+      data_type: string
+      description: ''
+    - name: storeid
+      data_type: string
+      description: ''
+    - name: territoryid
+      data_type: string
+      description: ''
+    - name: rowguid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

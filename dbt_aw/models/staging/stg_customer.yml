@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: stg_customer
+    description: "Staging model for customer data."
+    columns:
+      - name: account_number
+        data_type: string
+        description: "Unique account number assigned to the customer."
+
+      - name: customer_id
+        data_type: string
+        description: "Primary key for the customer."
+
+      - name: person_id
+        data_type: string
+        description: "Foreign key to the person associated with this customer account."
+
+      - name: store_id
+        data_type: string
+        description: "Foreign key to the store where the customer was acquired or shops."
+
+      - name: territory_id
+        data_type: string
+        description: "Foreign key to the sales territory the customer belongs to."
+
+      - name: load_at
+        data_type: timestamp
+        description: "Timestamp of when the record was loaded into the staging table."

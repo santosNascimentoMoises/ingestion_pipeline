@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: stg_sales_order_detail
+    description: "Staging model for sales order detail data, representing individual line items in a sales order."
+    columns:
+      - name: carrier_tracking_number
+        description: "The tracking number provided by the shipping carrier."
+
+      - name: line_total
+        description: "The total price for this line item, calculated as (UnitPrice * (1 - UnitPriceDiscount) * OrderQty)."
+
+      - name: order_qty
+        description: "The quantity of the product ordered in this line item."
+
+      - name: product_id
+        description: "Foreign key to the product ordered."
+
+      - name: sales_order_detail_id
+        description: "Primary key for the sales order detail (line item)."
+
+      - name: sales_order_id
+        description: "Foreign key to the parent sales order header."
+
+      - name: special_offer_id
+        description: "Foreign key to the special offer applied to this line item."
+
+      - name: unit_price
+        description: "The price of a single unit of the product."
+
+      - name: unit_price_discount
+        description: "The discount applied to the unit price, represented as a decimal (e.g., 0.1 for 10% off)."
+
+      - name: load_at
+        description: "Timestamp of when the record was loaded into the staging table."

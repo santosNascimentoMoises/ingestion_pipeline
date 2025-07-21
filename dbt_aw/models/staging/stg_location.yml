@@ -1,0 +1,22 @@
+version: 2
+models:
+  - name: stg_location
+    description: "Staging model for location data, including inventory and cost information."
+    columns:
+      - name: location_availability
+        description: "Available work-hour capacity for the location."
+
+      - name: cost_rate
+        description: "Standard cost rate at the location."
+
+      - name: location_id
+        description: "Primary key for the location."
+
+      - name: modified_date
+        description: "Date and time the record was last modified in the source system."
+
+      - name: location_name
+        description: "The name of the location (e.g., a specific manufacturing station)."
+
+      - name: load_at
+        description: "Timestamp of when the record was loaded into the staging table."

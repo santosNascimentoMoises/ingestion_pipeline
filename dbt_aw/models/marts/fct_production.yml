@@ -1,0 +1,104 @@
+version: 2
+
+models:
+  - name: fct_production
+    description: "Fact table that captures production metrics for each work order. It details planned vs. actual costs, quantities, and times, providing a comprehensive view of the manufacturing process."
+    columns:
+      # --- Primary and Foreign Keys ---
+      - name: production_sk
+        tests:
+          - not_null
+          - unique
+        data_type: string
+        description: "The surrogate key for the production fact table."
+
+      - name: product_fk
+        data_type: string
+        description: "Foreign key referencing the product dimension (dim_product)."
+
+      - name: work_order_id
+        data_type: string
+        description: "The natural key for the work order, acting as a degenerate dimension."
+
+      # --- Measures (Facts) ---
+      - name: order_qty
+        data_type: int
+        description: "The quantity of products requested in the work order."
+        
+      - name: stocked_qty
+        data_type: int
+        description: "The quantity of products from the order that were stocked in inventory."
+
+      - name: scrapped_qty
+        data_type: int
+        description: "The quantity of products scrapped during production."
+
+      - name: planned_cost
+        data_type: float
+        description: "The estimated, planned cost for this manufacturing operation."
+
+      - name: actual_cost
+        data_type: float
+        description: "The actual cost incurred for this manufacturing operation."
+
+      - name: actual_resource_hrs
+        data_type: float
+        description: "The actual number of resource hours spent on this operation."
+        
+      - name: location_availability
+        data_type: int
+        description: "Available work-hour capacity for the location."
+
+      - name: cost_rate
+        data_type: float
+        description: "Standard cost rate at the location."
+
+      # --- Degenerate Dimensions and Other Attributes ---
+      - name: product_id
+        data_type: string
+        description: "The natural key for the product from the source system."
+        
+      - name: location_id
+        data_type: string
+        description: "The natural key for the location where production occurred."
+
+      - name: location_name
+        data_type: string
+        description: "The name of the location (e.g., a specific manufacturing station)."
+
+      - name: operation_sequence
+        data_type: string
+        description: "The sequence number of this operation in the manufacturing routing."
+
+      - name: scrap_reason_id
+        data_type: string
+        description: "The natural key for the reason a product was scrapped."
+
+      # --- Date/Time Stamps ---
+      - name: work_start_date
+        data_type: timestamp
+        description: "The start date for the work order production."
+
+      - name: work_end_date
+        data_type: timestamp
+        description: "The date the work order was completed."
+
+      - name: work_due_date
+        data_type: timestamp
+        description: "The due date for the work order."
+        
+      - name: scheduled_start_date
+        data_type: timestamp
+        description: "The scheduled start date and time for this manufacturing operation."
+
+      - name: scheduled_end_date
+        data_type: timestamp
+        description: "The scheduled end date and time for this manufacturing operation."
+
+      - name: actual_start_date
+        data_type: timestamp
+        description: "The actual date and time this manufacturing operation started."
+        
+      - name: actual_end_date
+        data_type: timestamp
+        description: "The actual date and time this manufacturing operation ended."

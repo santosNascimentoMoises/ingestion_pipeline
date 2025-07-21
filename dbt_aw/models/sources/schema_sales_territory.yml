@@ -1,0 +1,42 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: raw
+  tables:
+  - name: sales_territory
+    description: ''
+    columns:
+    - name: costlastyear
+      data_type: string
+      description: ''
+    - name: costytd
+      data_type: string
+      description: ''
+    - name: countryregioncode
+      data_type: string
+      description: ''
+    - name: group
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: name
+      data_type: string
+      description: ''
+    - name: saleslastyear
+      data_type: string
+      description: ''
+    - name: salesytd
+      data_type: string
+      description: ''
+    - name: territoryid
+      data_type: string
+      description: ''
+    - name: rowguid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

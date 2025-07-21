@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: stg_work_order_routing
+    description: "Staging model for work order routing, which details the sequence of operations in the manufacturing process."
+    columns:
+      - name: actual_cost
+        description: "The actual cost incurred for this manufacturing operation."
+
+      - name: actual_end_date
+        description: "The actual date and time this manufacturing operation ended."
+
+      - name: actual_resource_hrs
+        description: "The actual number of resource hours spent on this operation."
+
+      - name: actual_start_date
+        description: "The actual date and time this manufacturing operation started."
+
+      - name: location_id
+        description: "Foreign key to the manufacturing location where the operation took place."
+
+      - name: modified_date
+        description: "Date and time the record was last modified in the source system."
+
+      - name: operation_sequence
+        description: "The sequence number of this operation in the manufacturing routing."
+
+      - name: planned_cost
+        description: "The estimated, planned cost for this manufacturing operation."
+
+      - name: product_id
+        description: "Foreign key to the product being manufactured."
+
+      - name: scheduled_end_date
+        description: "The scheduled end date and time for this manufacturing operation."
+
+      - name: scheduled_start_date
+        description: "The scheduled start date and time for this manufacturing operation."
+
+      - name: work_order_id
+        description: "Foreign key to the parent work order."
+
+      - name: load_at
+        description: "Timestamp of when the record was loaded into the staging table."

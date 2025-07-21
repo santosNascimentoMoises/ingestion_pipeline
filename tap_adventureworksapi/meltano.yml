@@ -1,0 +1,67 @@
+version: 1
+send_anonymous_usage_stats: true
+project_id: "tap_adventureworksapi"
+default_environment: test
+venv:
+  backend: uv
+environments:
+- name: test
+plugins:
+  extractors:
+  - name: "tap_adventureworksapi"
+    namespace: "tap_adventureworksapi"
+    pip_url: -e .
+    capabilities:
+    - state
+    - catalog
+    - discover
+    - about
+    - stream-maps
+
+    # TODO: Declare settings and their types here:
+    settings:
+    - name: api_url
+      label: API URL
+      description: URL base API
+      required: true
+      default: ENV:API_URL
+      
+    - name: username
+      label: Username
+      description: The username to use for authentication
+      required: true
+      default: ENV:API_USER
+
+    - name: password
+      kind: string
+      label: Password
+      description: The password to use for authentication
+      sensitive: true
+      required: true
+      default: ENV:API_PASSWORD
+
+    - name: start_date
+      kind: date_iso8601
+      label: Start Date
+      description: Initial date to start extracting data from
+
+    # TODO: Declare required settings here:
+    settings_group_validation:
+    - [api_url, username, password]
+
+    # TODO: Declare default configuration values here:
+    config:
+      start_date: '1900-01-01T00:00:00Z'
+      # destination_path: /app/api_output/api
+    
+    select:
+    # - PurchaseOrderDetail.*
+    # - SalesOrderDetail.* # inferno!!!
+    # - SalesOrderHeader.*
+    # - PurchaseOrderHeader.*
+ 
+  loaders:
+  - name: target-jsonl
+    variant: andyh1203
+    pip_url: target-jsonl
+    destination_path: /app/output

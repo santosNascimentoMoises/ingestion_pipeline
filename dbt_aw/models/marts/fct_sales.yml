@@ -1,0 +1,208 @@
+version: 2
+
+models:
+  - name: fct_sales
+    description: "Transactional fact table containing one record per sales order line item. This table brings together details from sales orders, linking to various dimensions like customer, product, and salesperson."
+    columns:
+      #-- Primary & Foreign Keys --#
+      - name: sales_sk
+        tests:
+          - not_null
+          - unique
+        data_type: string
+        description: "The surrogate key for the sales fact table, uniquely identifying each sales order line item record."
+
+      - name: product_fk
+        tests:
+          - not_null
+        data_type: string
+        description: "Foreign key referencing the product dimension (dim_product)."
+
+      - name: sales_person_fk
+        data_type: string
+        description: "Foreign key referencing the salesperson dimension (dim_sales_person)."
+
+      - name: customer_fk
+        data_type: string
+        description: "Foreign key referencing the customer dimension (dim_customer)."
+
+      - name: date_order_date
+        data_type: date
+        description: "Foreign key referencing the date dimension for the order date."
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "> '2010-01-01'"
+
+      - name: date_ship_date
+        data_type: date
+        description: "Foreign key referencing the date dimension for the shipping date."
+
+      - name: date_due_date
+        data_type: date
+        description: "Foreign key referencing the date dimension for the payment due date."
+
+      #-- Measures (Facts) --#
+      - name: line_total
+        data_type: float
+        description: "The total revenue for the line item, calculated as (UnitPrice * (1 - UnitPriceDiscount) * OrderQty)."
+
+      - name: order_qty
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+        data_type: string
+        description: "The quantity of the product ordered in this line item."
+
+      - name: sub_total
+        data_type: float
+        description: "The order subtotal, before tax and freight."
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: tax_amt
+        data_type: float
+        description: "The tax amount for the order."
+
+      - name: freight
+        data_type: float
+        description: "The shipping cost for the order."
+        
+      - name: total_duenumer
+        data_type: float
+        description: "The total amount due for the entire order, calculated as SubTotal + TaxAmt + Freight."
+
+      - name: unit_price
+        data_type: float
+        description: "The price of a single unit of the product."
+
+      - name: unit_price_discount
+        data_type: float
+        description: "The discount applied to the unit price, represented as a decimal (e.g., 0.1 for 10% off)."
+
+      #-- Degenerate Dimensions & Other Attributes --#
+      - name: sales_order_id
+        data_type: string
+        description: "The natural key of the sales order header, acting as a degenerate dimension."
+
+      - name: sales_order_detail_id
+        data_type: string
+        description: "The natural key of the sales order line item, acting as a degenerate dimension."
+
+      - name: sales_order_number
+        data_type: string
+        description: "The unique, public-facing sales order number."
+
+      - name: carrier_tracking_number
+        data_type: string
+        description: "The tracking number provided by the shipping carrier."
+
+      - name: sales_status
+        data_type: string
+        description: "The status of the order (e.g., 1=In process, 5=Shipped)."
+      
+      - name: online_order_flag
+        data_type: string
+        description: "Flag indicating if the order was placed online (1) or by a salesperson (0)."
+
+      - name: purchase_order_number
+        data_type: string
+        description: "The customer's purchase order number."
+
+      - name: comment
+        data_type: string
+        description: "Sales representative's comments about the order."
+
+      #-- Natural Keys (for reference) & Other IDs --#
+      - name: customer_id
+        data_type: string
+        description: "The natural key for the customer from the source system."
+
+      - name: sales_person_id
+        data_type: string
+        description: "The natural key for the salesperson from the source system."
+
+      - name: product_id
+        data_type: string
+        description: "The natural key for the product from the source system."
+
+      - name: account_number
+        data_type: string
+        description: "The customer's account number."
+
+      - name: credit_card_id
+        data_type: string
+        description: "The natural key for the credit card used for the purchase."
+
+      - name: special_offer_id
+        data_type: string
+        description: "The natural key for the special offer applied to this line item."
+
+      - name: currency_rate_id
+        data_type: string
+        description: "The natural key for the currency rate used for the transaction."
+
+      - name: bill_to_address_id
+        data_type: string
+        description: "The natural key for the billing address."
+
+      - name: ship_to_address_id
+        data_type: string
+        description: "The natural key for the shipping address."
+
+      - name: territory_id
+        data_type: string
+        description: "The natural key for the sales territory where the sale was made."
+        
+      - name: ship_method_id
+        data_type: string
+        description: "The natural key for the shipping method."
+
+      - name: revision_number
+        data_type: string
+        description: "The revision number of the sales order. Incremented for each change."
+
+      - name: credit_card_approval_code
+        data_type: string
+        description: "The approval code for the credit card transaction."
+
+      #-- Unformatted Date/Time Columns (if needed for analysis) --#
+      - name: order_date
+        data_type: string
+        description: "The raw order date from the source system."
+
+      - name: due_date
+        data_type: string
+        description: "The raw payment due date from the source system."
+
+      - name: ship_date
+        data_type: string
+        description: "The raw shipping date from the source system."
+        
+      - name: time_order_date
+        data_type: string
+        description: "The time part of the order date in HH:mm:ss format."
+
+      - name: epoch_sec_oder_date
+        data_type: bigint
+        description: "The order date and time represented in Unix epoch seconds."
+
+      - name: time_ship_date
+        data_type: string
+        description: "The time part of the shipping date in HH:mm:ss format."
+
+      - name: epoch_sec_ship_date
+        data_type: bigint
+        description: "The shipping date and time represented in Unix epoch seconds."
+
+      - name: time_due_date
+        data_type: string
+        description: "The time part of the payment due date in HH:mm:ss format."
+
+      - name: epoch_sec_due_date
+        data_type: bigint
+        description: "The payment due date and time represented in Unix epoch seconds."
+
+      #-- Audit Column --#
+      - name: load_at
+        data_type: timestamp
+        description: "Timestamp of when the record was loaded into the fact table."

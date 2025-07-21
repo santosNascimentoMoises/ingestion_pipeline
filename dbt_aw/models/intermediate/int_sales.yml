@@ -1,0 +1,173 @@
+version: 2
+
+models:
+  - name: int_sales
+    description: "Intermediate model that enriches sales order data with detailed line items and formatted date/time columns."
+    columns:
+      - name: account_number
+        data_type: string
+        description: "The customer's account number."
+
+      - name: bill_to_address_id
+        data_type: string
+        description: "Foreign key to the billing address."
+
+      - name: comment
+        data_type: string
+        description: "Sales representative's comments about the order."
+
+      - name: credit_card_approval_code
+        data_type: string
+        description: "The approval code for the credit card transaction."
+
+      - name: credit_card_id
+        data_type: string
+        description: "Foreign key to the credit card used for the purchase."
+
+      - name: currency_rate_id
+        data_type: string
+        description: "Foreign key to the currency rate used for the transaction."
+
+      - name: customer_id
+        data_type: string
+        description: "Foreign key to the customer who placed the order."
+
+      - name: freight
+        data_type: float
+        description: "The shipping cost for the order."
+
+      - name: online_order_flag
+        data_type: string
+        description: "Flag indicating if the order was placed online (1) or by a salesperson (0)."
+
+      - name: purchase_order_number
+        data_type: string
+        description: "The customer's purchase order number."
+
+      - name: revision_number
+        data_type: string
+        description: "The revision number of the sales order. Incremented for each change."
+
+      - name: sales_order_id
+        data_type: string
+        description: "Foreign key to the parent sales order header."
+
+      - name: sales_order_number
+        data_type: string
+        description: "The unique, public-facing sales order number."
+
+      - name: sales_person_id
+        data_type: string
+        description: "Foreign key to the salesperson who processed the order. Null for online orders."
+
+      - name: ship_method_id
+        data_type: string
+        description: "Foreign key to the shipping method."
+
+      - name: ship_to_address_id
+        data_type: string
+        description: "Foreign key to the shipping address."
+
+      - name: sales_status
+        data_type: string
+        description: "The status of the order (e.g., 1=In process, 5=Shipped)."
+
+      - name: sub_total
+        data_type: float
+        description: "The order subtotal, before tax and freight."
+
+      - name: tax_amt
+        data_type: float
+        description: "The tax amount for the order."
+
+      - name: territory_id
+        data_type: string
+        description: "Foreign key to the sales territory where the sale was made."
+
+      - name: total_duenumer
+        data_type: float
+        description: "The total amount due, calculated as SubTotal + TaxAmt + Freight."
+
+      - name: order_date
+        data_type: string
+        description: "The date the order was placed."
+
+      - name: due_date
+        data_type: string
+        description: "The date the payment is due."
+
+      - name: ship_date
+        data_type: string
+        description: "The date the order was shipped."
+
+      - name: date_order_date
+        data_type: date
+        description: "The date part of the order date."
+
+      - name: time_order_date
+        data_type: string
+        description: "The time part of the order date in HH:mm:ss format."
+
+      - name: epoch_sec_oder_date
+        data_type: bigint
+        description: "The order date and time represented in Unix epoch seconds."
+
+      - name: date_ship_date
+        data_type: date
+        description: "The date part of the shipping date."
+
+      - name: time_ship_date
+        data_type: string
+        description: "The time part of the shipping date in HH:mm:ss format."
+
+      - name: epoch_sec_ship_date
+        data_type: bigint
+        description: "The shipping date and time represented in Unix epoch seconds."
+
+      - name: date_due_date
+        data_type: date
+        description: "The date part of the payment due date."
+
+      - name: time_due_date
+        data_type: string
+        description: "The time part of the payment due date in HH:mm:ss format."
+
+      - name: epoch_sec_due_date
+        data_type: bigint
+        description: "The payment due date and time represented in Unix epoch seconds."
+
+      - name: carrier_tracking_number
+        data_type: string
+        description: "The tracking number provided by the shipping carrier."
+
+      - name: line_total
+        data_type: float
+        description: "The total price for this line item, calculated as (UnitPrice * (1 - UnitPriceDiscount) * OrderQty)."
+
+      - name: order_qty
+        data_type: string
+        description: "The quantity of the product ordered in this line item."
+
+      - name: product_id
+        data_type: string
+        description: "Foreign key to the product ordered."
+
+      - name: sales_order_detail_id
+        data_type: string
+        description: "Primary key for the sales order detail (line item)."
+
+      - name: special_offer_id
+        data_type: string
+        description: "Foreign key to the special offer applied to this line item."
+
+      - name: unit_price
+        data_type: float
+        description: "The price of a single unit of the product."
+
+      - name: unit_price_discount
+        data_type: float
+        description: "The discount applied to the unit price, represented as a decimal (e.g., 0.1 for 10% off)."
+
+      - name: load_at
+        data_type: timestamp
+        description: "Timestamp of when the record was loaded into the staging table."

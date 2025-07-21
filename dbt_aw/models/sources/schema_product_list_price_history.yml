@@ -1,0 +1,27 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: raw
+  tables:
+  - name: product_list_price_history
+    description: ''
+    columns:
+    - name: enddate
+      data_type: string
+      description: ''
+    - name: listprice
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: productid
+      data_type: string
+      description: ''
+    - name: startdate
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

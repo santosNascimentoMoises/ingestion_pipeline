@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: stg_product_inventory
+    description: "Staging model for product inventory levels at specific warehouse locations."
+    columns:
+      - name: bin
+        description: "The bin number where the product is stored."
+
+      - name: location_id
+        description: "Foreign key to the inventory location."
+
+      - name: modified_date
+        description: "Date and time the record was last modified in the source system."
+
+      - name: product_id
+        description: "Foreign key to the product."
+
+      - name: quantity
+        description: "The quantity of the product in this specific inventory location."
+
+      - name: shelf
+        description: "The shelf where the product is stored."
+
+      - name: load_at
+        description: "Timestamp of when the record was loaded into the staging table."

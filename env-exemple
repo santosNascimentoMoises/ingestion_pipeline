@@ -1,15 +1,33 @@
-MSQL_DB_HOST="sql-server-example.database.windows.net"
-MSQL_DB_PORT="1234"
-MSQL_DB_USER="cloud_admin"
-MSQL_DB_PASSWORD="S3cur3P@ssw0rd!2024"
-MSQL_DB_NAME="AdventureWorksLT"
+# SQL Credentials
+export MSQL_DB_HOST='11.111.111.111'
+export MSQL_DB_PORT=1111
+export MSQL_DB_USER='useruser'
+export MSQL_DB_PASSWORD='senhasenha'
+export MSQL_DB_NAME='dbname_dbname'
 
-DATABRICKS_TOKEN="dapi1234567890abcdef1234567890abcdef"
-DATABRICKS_HOST="https://adb-123456789012345.1.azuredatabricks.net"
-DATABRICKS_CLUSTER_ID="1234-567890-cluster123"
-JOB_ID="987654321"
-DATABRICKS_INSTANCE="adb-123456789012345.1.databricks.azure.net"
+# API Credentials
+export API_URL="http://11.111.111.11:111"
+export API_USER="useruser"
+export API_PASSWORD="senhasenha"
 
-AZURE_CONTAINER_NAME="landing-zone"
-AZURE_STORAGE_ACCOUNT_NAME="datalakecompany001"
-AZURE_STORAGE_ACCOUNT_KEY="s7VCk9pwH123/dyiJXBeARCcBg+/j/xMyBcya/gLCB+AStSronjw=="
+# DATABRICKS Credentials
+export DATABRICKS_CLUSTER_ID='a1a1a1a1a1a1a1a1'
+export JOB_ID='111111111111'
+export JOB_ID_START_CLUSTER='1111111111111'
+export DATABRICKS_ACCESS_TOKEN='dapi111111111111111111111111111111'
+export DATABRICKS_INSTANCE='abc-fghi-1234'
+export DATABRICKS_USER='useruser'
+export DATABRICKS_HTTP_PATH='/sql/1.0/warehouses/111111111111111'
+export DATABRICKS_SERVER_CATALOG='catalogcatalog'
+export DATABRICKS_SERVER_HOSTNAME='https://dbc-abcd-efgh.cloud.databricks.com'
+export DATABRICKS_SERVER_SCHEMA='silver'
+
+# DATABRICKS Volume paths
+export RAW_DB_VOLUME_PATH='dbfs:/Volumes/adventure_works/raw_extract/raw_db/'
+export RAW_API_VOLUME_PATH='dbfs:/Volumes/adventure_works/raw_extract/raw_api/'
+
+# AIRFLOW SECRET KEY (any string)
+export AIRFLOW__WEBSERVER__SECRET_KEY='any'
+
+# Teste
+export TESTE='TESTE_OK'

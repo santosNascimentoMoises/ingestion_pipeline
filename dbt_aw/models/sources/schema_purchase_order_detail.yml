@@ -1,0 +1,45 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: raw
+  tables:
+  - name: purchase_order_detail
+    description: ''
+    columns:
+    - name: duedate
+      data_type: string
+      description: ''
+    - name: linetotal
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: orderqty
+      data_type: string
+      description: ''
+    - name: productid
+      data_type: string
+      description: ''
+    - name: purchaseorderdetailid
+      data_type: string
+      description: ''
+    - name: purchaseorderid
+      data_type: string
+      description: ''
+    - name: receivedqty
+      data_type: string
+      description: ''
+    - name: rejectedqty
+      data_type: string
+      description: ''
+    - name: stockedqty
+      data_type: string
+      description: ''
+    - name: unitprice
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

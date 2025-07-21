@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: stg_person
+    description: "Staging model for individual person data, including names and contact preferences."
+    columns:
+      - name: business_entity_id
+        data_type: string
+        description: "Primary key for the person, linking them to other business entities."
+
+      - name: email_promotion
+        data_type: string
+        description: "Indicates the type of email promotions the person wishes to receive (0=None, 1=Standard, 2=All)."
+
+      - name: demographics
+        data_type: string
+        description: "XML column containing demographic information such as birth date and marital status."
+
+      - name: first_name
+        data_type: string
+        description: "The person's first name."
+
+      - name: last_name
+        data_type: string
+        description: "The person's last name."
+
+      - name: middle_name
+        data_type: string
+        description: "The person's middle name or initial."
+
+      - name: person_type
+        data_type: string
+        description: "The type of person (e.g., SC for Store Contact, IN for Individual Customer)."
+
+      - name: suffix
+        data_type: string
+        description: "Suffix for the person's name (e.g., Jr., Sr.)."
+
+      - name: title
+        data_type: string
+        description: "Title for the person's name (e.g., Mr., Ms., Dr.)."
+
+      - name: load_at
+        data_type: timestamp
+        description: "Timestamp of when the record was loaded into the staging table."

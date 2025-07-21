@@ -1,0 +1,45 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: raw
+  tables:
+  - name: special_offer
+    description: ''
+    columns:
+    - name: category
+      data_type: string
+      description: ''
+    - name: description
+      data_type: string
+      description: ''
+    - name: discountpct
+      data_type: string
+      description: ''
+    - name: enddate
+      data_type: string
+      description: ''
+    - name: maxqty
+      data_type: string
+      description: ''
+    - name: minqty
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: specialofferid
+      data_type: string
+      description: ''
+    - name: startdate
+      data_type: string
+      description: ''
+    - name: type
+      data_type: string
+      description: ''
+    - name: rowguid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

@@ -1,0 +1,80 @@
+version: 2
+
+models:
+  - name: stg_sales_order_header
+    description: "Staging model for sales order header data, containing overall information about each sale."
+    columns:
+      - name: account_number
+        description: "The customer's account number."
+
+      - name: bill_to_address_id
+        description: "Foreign key to the billing address."
+
+      - name: comment
+        description: "Sales representative's comments about the order."
+
+      - name: credit_card_approval_code
+        description: "The approval code for the credit card transaction."
+
+      - name: credit_card_id
+        description: "Foreign key to the credit card used for the purchase."
+
+      - name: currency_rate_id
+        description: "Foreign key to the currency rate used for the transaction."
+
+      - name: customer_id
+        description: "Foreign key to the customer who placed the order."
+
+      - name: due_date
+        description: "The date the payment is due."
+
+      - name: freight
+        description: "The shipping cost for the order."
+
+      - name: online_order_flag
+        description: "Flag indicating if the order was placed online (1) or by a salesperson (0)."
+
+      - name: order_date
+        description: "The date the order was placed."
+
+      - name: purchase_order_number
+        description: "The customer's purchase order number."
+
+      - name: revision_number
+        description: "The revision number of the sales order. Incremented for each change."
+
+      - name: sales_order_id
+        description: "Primary key for the sales order."
+
+      - name: sales_order_number
+        description: "The unique, public-facing sales order number."
+
+      - name: sales_person_id
+        description: "Foreign key to the salesperson who processed the order. Null for online orders."
+
+      - name: ship_date
+        description: "The date the order was shipped."
+
+      - name: ship_method_id
+        description: "Foreign key to the shipping method."
+
+      - name: ship_to_address_id
+        description: "Foreign key to the shipping address."
+
+      - name: sales_status
+        description: "The status of the order (e.g., 1=In process, 5=Shipped)."
+
+      - name: sub_total
+        description: "The order subtotal, before tax and freight."
+
+      - name: tax_amt
+        description: "The tax amount for the order."
+
+      - name: territory_id
+        description: "Foreign key to the sales territory where the sale was made."
+
+      - name: total_duenumer
+        description: "The total amount due, calculated as SubTotal + TaxAmt + Freight."
+
+      - name: load_at
+        description: "Timestamp of when the record was loaded into the staging table."

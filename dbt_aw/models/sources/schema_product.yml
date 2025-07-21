@@ -1,0 +1,87 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: raw
+  tables:
+  - name: product
+    description: ''
+    columns:
+    - name: class
+      data_type: string
+      description: ''
+    - name: color
+      data_type: string
+      description: ''
+    - name: daystomanufacture
+      data_type: string
+      description: ''
+    - name: discontinueddate
+      data_type: string
+      description: ''
+    - name: finishedgoodsflag
+      data_type: string
+      description: ''
+    - name: listprice
+      data_type: string
+      description: ''
+    - name: makeflag
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: name
+      data_type: string
+      description: ''
+    - name: productid
+      data_type: string
+      description: ''
+    - name: productline
+      data_type: string
+      description: ''
+    - name: productmodelid
+      data_type: string
+      description: ''
+    - name: productnumber
+      data_type: string
+      description: ''
+    - name: productsubcategoryid
+      data_type: string
+      description: ''
+    - name: reorderpoint
+      data_type: string
+      description: ''
+    - name: safetystocklevel
+      data_type: string
+      description: ''
+    - name: sellenddate
+      data_type: string
+      description: ''
+    - name: sellstartdate
+      data_type: string
+      description: ''
+    - name: size
+      data_type: string
+      description: ''
+    - name: sizeunitmeasurecode
+      data_type: string
+      description: ''
+    - name: standardcost
+      data_type: string
+      description: ''
+    - name: style
+      data_type: string
+      description: ''
+    - name: weight
+      data_type: string
+      description: ''
+    - name: weightunitmeasurecode
+      data_type: string
+      description: ''
+    - name: rowguid
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

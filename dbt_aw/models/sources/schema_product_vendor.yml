@@ -1,0 +1,45 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: raw
+  tables:
+  - name: product_vendor
+    description: ''
+    columns:
+    - name: averageleadtime
+      data_type: string
+      description: ''
+    - name: businessentityid
+      data_type: string
+      description: ''
+    - name: lastreceiptcost
+      data_type: string
+      description: ''
+    - name: lastreceiptdate
+      data_type: string
+      description: ''
+    - name: maxorderqty
+      data_type: string
+      description: ''
+    - name: minorderqty
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: onorderqty
+      data_type: string
+      description: ''
+    - name: productid
+      data_type: string
+      description: ''
+    - name: standardprice
+      data_type: string
+      description: ''
+    - name: unitmeasurecode
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''

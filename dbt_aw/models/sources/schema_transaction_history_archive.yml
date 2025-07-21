@@ -1,0 +1,39 @@
+version: 2
+sources:
+- name: raw
+  database: adventure_works
+  schema: raw
+  tables:
+  - name: transaction_history_archive
+    description: ''
+    columns:
+    - name: actualcost
+      data_type: string
+      description: ''
+    - name: modifieddate
+      data_type: string
+      description: ''
+    - name: productid
+      data_type: string
+      description: ''
+    - name: quantity
+      data_type: string
+      description: ''
+    - name: referenceorderid
+      data_type: string
+      description: ''
+    - name: referenceorderlineid
+      data_type: string
+      description: ''
+    - name: transactiondate
+      data_type: string
+      description: ''
+    - name: transactionid
+      data_type: string
+      description: ''
+    - name: transactiontype
+      data_type: string
+      description: ''
+    - name: load_at
+      data_type: string
+      description: ''
