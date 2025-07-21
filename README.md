@@ -34,7 +34,7 @@ Necessário instalar as bibliotecas listadas no arquivo **requirements.txt**.
 
 ## CONFIG 
 
-Pasta onde se configura (via script python) quais endpoins ou schema.table serão extraidos. Basta configurar para 'False' e o endpoints/tabelas serão preteridos.
+Pasta onde se configura (via script python) quais endpoints ou schema.table serão extraidos. Basta configurar para 'False' e o endpoint/tabelas serão preteridos.
 
 ## SPARK - Extração de Dados com PySpark via JDBC SQL Server
 
