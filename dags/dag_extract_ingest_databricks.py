@@ -10,7 +10,7 @@ from config.config_streams_meltano_api import get_streams_select
 from config.config_schema_table_db import get_schema_table_select
 from airflow.operators.python import PythonOperator
 from airflow.operators.empty import EmptyOperator
-from scripts.job_databricks import trigger_databricks_job, databricks_job_completion
+from scripts.job_databricks import trigger_databricks_start_cluster, trigger_databricks_job, databricks_job_completion
 
 
 # Define os parâmetros padrão para a DAG (retries, delay, etc.)
@@ -32,7 +32,7 @@ target_databricks_data_path = '/app/output'
 
 #------------------------ DEFINIÇÃO DOS DOCKER_OPERATORS
 docker_meltano_extract = {
-    "image": "meltano-api-xcon",
+    "image": "meltano-api",
     "api_version": "auto",
     "network_mode": "bridge",
     "auto_remove": True,
@@ -67,18 +67,11 @@ docker_spark_extract = {
 docker_dbt = {
     "image": "dbt-aw",
     "api_version": "auto",
-    "network_mode": "bridge",
     "auto_remove": False,
     "mount_tmp_dir": False,
-    # "command": [
-    #     "/bin/sh", "-c",
-    #     "dbt deps && "
-    #     "dbt run --project-dir /dbt && "
-    #     "dbt snapshot --project-dir /dbt"
-    #     "dbt test --project-dir /dbt"
-    # ],
     "working_dir": "/dbt",
     "docker_url":"unix://var/run/docker.sock",
+    "network_mode":"airflow_net",
 }
 
 #------------------------ DEFINIÇÃO DA FUNÇÃO DE TASKS
@@ -204,6 +197,15 @@ with DAG(
     tags=["meltano", "sdk", "databricks", "dbt"],
     default_args=default_args
 ) as dag:
+    
+    # Job databricks para iniciar Cluster
+    def start():
+        job_id = os.getenv('JOB_ID_START_CLUSTER')
+        trigger_databricks_start_cluster(job_id=job_id)
+    run_databricks_start_cluster = PythonOperator(
+        task_id='run_databricks_start_cluster',
+        python_callable=start
+    )
 
     with TaskGroup(group_id="meltano_extract_endpoint") as extract_group:
         
@@ -252,7 +254,7 @@ with DAG(
 
             ingest_api_tasks[name] = docker_task_ingest_api
 
-            extract_meltano_tasks[name] >> ingest_api_tasks[name] >> end_pipeline_api
+            run_databricks_start_cluster >> extract_meltano_tasks[name] >> ingest_api_tasks[name] >> end_pipeline_api
 
     with TaskGroup(group_id="databricks_ingest_raw_db") as ingest_group:
 
@@ -271,7 +273,7 @@ with DAG(
 
             ingest_db_tasks[name] = docker_task_ingest_db
 
-            extract_spark_tasks[name] >> ingest_db_tasks[name] >> end_pipeline_db
+            run_databricks_start_cluster >> extract_spark_tasks[name] >> ingest_db_tasks[name] >> end_pipeline_db
 
     def executar_job_databricks():
         resultado = trigger_databricks_job()
@@ -279,24 +281,14 @@ with DAG(
             raise Exception("Erro ao disparar job Databricks.")
         databricks_job_completion(resultado.get("run_id"))
 
-    # Job databricks para gerar Bronze no formato delta
+    # Job databricks para gerar RAW DELTA
     run_databricks_job = PythonOperator(
-        task_id='run_databricks_job_raw_to_bronze',
+        task_id='run_databricks_job_raw',
         python_callable=executar_job_databricks,
     )
 
-    # command_run = [
-        
-    # ]
-    # command_test = [
-
-    # ]
-    # command_docs = [
-
-    # ]
-
     task_dbt_run = dbt_task(command_run,'run')
     task_dbt_test = dbt_task(command_test,'test')
-    task_dbt_docs = dbt_task(command_docs,'docs')
+    # task_dbt_docs = dbt_task(command_docs,'docs')
 
-    [end_pipeline_db,end_pipeline_api] >> run_databricks_job >> task_dbt_run >> task_dbt_test >> task_dbt_docs
+    [end_pipeline_db,end_pipeline_api] >> run_databricks_job >> task_dbt_run >> task_dbt_test # >> task_dbt_docs

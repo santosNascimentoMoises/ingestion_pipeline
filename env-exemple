@@ -1,26 +1,33 @@
 # SQL Credentials
-export MSQL_DB_HOST=
-export MSQL_DB_PORT=
-export MSQL_DB_USER=
-export MSQL_DB_PASSWORD=
-export MSQL_DB_NAME=
+export MSQL_DB_HOST='11.111.111.111'
+export MSQL_DB_PORT=1111
+export MSQL_DB_USER='useruser'
+export MSQL_DB_PASSWORD='senhasenha'
+export MSQL_DB_NAME='dbname_dbname'
 
 # API Credentials
-export API_URL=
-export API_USER=
-export API_PASSWORD=
+export API_URL="http://11.111.111.11:111"
+export API_USER="useruser"
+export API_PASSWORD="senhasenha"
 
 # DATABRICKS Credentials
-export JOB_ID=
-export DATABRICKS_ACCESS_TOKEN=
-export DATABRICKS_INSTANCE=
-export DATABRICKS_USER=
+export DATABRICKS_CLUSTER_ID='a1a1a1a1a1a1a1a1'
+export JOB_ID='111111111111'
+export JOB_ID_START_CLUSTER='1111111111111'
+export DATABRICKS_ACCESS_TOKEN='dapi111111111111111111111111111111'
+export DATABRICKS_INSTANCE='abc-fghi-1234'
+export DATABRICKS_USER='useruser'
+export DATABRICKS_HTTP_PATH='/sql/1.0/warehouses/111111111111111'
+export DATABRICKS_SERVER_CATALOG='catalogcatalog'
+export DATABRICKS_SERVER_HOSTNAME='https://dbc-abcd-efgh.cloud.databricks.com'
+export DATABRICKS_SERVER_SCHEMA='silver'
 
-# AZURE Credentials
-export AZURE_CONTAINER_NAME=
-export AZURE_STORAGE_ACCOUNT_NAME=
-export AZURE_STORAGE_ACCOUNT_KEY=
+# DATABRICKS Volume paths
+export RAW_DB_VOLUME_PATH='dbfs:/Volumes/adventure_works/raw_extract/raw_db/'
+export RAW_API_VOLUME_PATH='dbfs:/Volumes/adventure_works/raw_extract/raw_api/'
 
-export AIRFLOW__WEBSERVER__SECRET_KEY=
+# AIRFLOW SECRET KEY (any string)
+export AIRFLOW__WEBSERVER__SECRET_KEY='any'
 
+# Teste
 export TESTE='TESTE_OK'

@@ -22,7 +22,7 @@ down:
 build_pipeline:
 	docker volume create shared-api
 	docker volume create shared-db
-	docker compose build meltano-api-xcon
+	docker compose build meltano-api
 	docker compose build databricks-ingest
 	docker compose build spark-db
 	docker compose build dbt-aw
@@ -34,7 +34,5 @@ build_pipeline:
 	docker compose up -d airflow-webserver airflow-scheduler airflow-db redis airflow-worker airflow-triggerer
 	@echo "🌐 Acesse: http://localhost:8080"
 	@echo "configurado execução automática da DAG"
-	sleep 30 && docker compose exec airflow-webserver airflow dags trigger el_extract_ingest_databricks
-
-
+# sleep 30 && docker compose exec airflow-webserver airflow dags trigger el_extract_ingest_databricks
 # dbt deps && dbt run --project-dir /dbt --profiles-dir /root/.dbt && dbt snapshot --project-dir /dbt --profiles-dir /root/.dbt

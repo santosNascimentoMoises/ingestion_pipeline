@@ -1,20 +1,9 @@
-
 services:
-  # meltano-api:
-  #   build:
-  #     context: ./tap_adventureworksapi
-  #     dockerfile: meltano_api.Dockerfile
-  #   image: meltano-api:latest
-  #   env_file: .env
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #     - shared-api:/app/output
-
-  meltano-api-xcon:
+  meltano-api:
     build:
-      context: ./tap_adventureworksapi_teste_xcon
+      context: ./tap_adventureworksapi
       dockerfile: meltano_api.Dockerfile
-    image: meltano-api-xcon:latest
+    image: meltano-api:latest
     env_file: .env
     volumes:
       - ./output/api:/app/output
@@ -23,26 +12,12 @@ services:
 
   spark-db:
     build:
-      context: ./spark-db-copy
+      context: ./spark-db
       dockerfile: spark.Dockerfile
     image: spark-db:latest
     env_file: .env
     volumes:
-      # - ./output/db:/app/spark_output/db    # Volume dedicado para DB
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./output/teste_db:/app/output/db
-      # - shared-db:/output/db
-
-  # databricks-upload:
-  #   build: 
-  #     context: ./databricks-upload
-  #     dockerfile: databricks-upload.Dockerfile
-  #   image: databricks-upload:latest
-  #   env_file: .env
-  #   volumes:
-  #     - ./output/db:/app/output/bd
-  #     - ./output/api:/app/output/api
-  #     - /var/run/docker.sock:/var/run/docker.sock
 
   databricks-ingest:
     build:
@@ -55,17 +30,6 @@ services:
     volumes:
       - shared-api:/app/output/api
       - /var/run/docker.sock:/var/run/docker.sock
-      - shared-db:/output/db
-
-  # alpine:
-  #   build:
-  #     context: ./alpine
-  #     dockerfile: alpine.Dockerfile
-  #   container_name: alpine
-  #   image: alpine
-  #   env_file:
-  #     - .env
-  #   restart: "no"
 
   dbt-aw:
     build:
@@ -74,6 +38,8 @@ services:
     image: dbt-aw:latest
     ports:
       - "8099:8099"
+    networks:
+      - airflow_net
     container_name: dbt_aw
     env_file:
       - .env
@@ -176,6 +142,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock       # Adiciona esse volume expor o socket do Docker
       - ./config:/opt/airflow/config:ro
       - shared-api:/opt/airflow/output/api
+      - ./dbt_aw:/opt/airflow/dbt
     command: scheduler
     networks:
       - airflow_net
@@ -270,3 +237,4 @@ volumes:
 # Rede interna para comunicação entre os contêineres
 networks:
   airflow_net:
+    name: airflow_net
