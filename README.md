@@ -2,22 +2,16 @@
 
 Pipeline modular para extração, ingestão e processamento de dados utilizando PySpark, Azure Blob Storage e Databricks.
 
-## Visão Geral
-
-[SQL Server] 
-  → (via JDBC) → [PySpark → config.py] 
-  → (parallel) → [Parquet Files] 
-  → (Azure SDK) → [Blob Storage] 
-  → (ABFS) → [Databricks: Delta Conversion] 
-  → [Managed Tables]
-  ↗ (API) → [Job Orchestration]
-
 # Configuração do Ambiente
 
 ## Clonando o projeto
 
 Primeiramente, é necessário clonar o repo localmente via SSH utilizando o comando `git clone` no link. 
 * `git clone git@github.com:santosNascimentoMoises/ingestion_pipeline.git`
+
+Esse projeto trabalha inteiramente com docker, portando é necessário a instalação no pc local.
+
+Em casos de testes ou features, vai ser necessário configurar ambientes virtuais python.
 
 ## Criando um ambiente virtual
 
@@ -38,146 +32,78 @@ Necessário instalar as bibliotecas listadas no arquivo **requirements.txt**.
 
 # Ferramentas e Scripts
 
+## CONFIG 
+
+Pasta onde se configura (via script python) quais endpoins ou schema.table serão extraidos. Basta configurar para 'False' e o endpoints/tabelas serão preteridos.
+
 ## SPARK - Extração de Dados com PySpark via JDBC SQL Server
 
-### Config.py
-- Lista de schemas a serem extraídos, onde os comentados são preterídos
-
-```python
-schema_list_extract = [
-    'HumanResources',
-    # 'Person',
-    # 'Production',
-    # 'Purchasing',
-    # 'Sales'...
-]
-```
-- Autenticação via variáveis de ambiente. (ver .env-exemple de exemplo)
-- Extração seletiva de schemas, configurada via arquivo `config.py`.
----
-### spark_script.py
 - Leitura dinâmica dos **schemas** e respectivas **tabelas** de um banco SQL Server.
 - Salvamento dos dados no formato **Parquet**.
 - Execução escalável com **Apache Spark** local.
 - Conexão: JDBC via driver **mssql-jdbc-12.10.0.jre8.jar**.
 - Processamento distribuído: Spark rodando em modo local (**local[2]**).
-- Exporta cada tabela como um arquivo Parquet no diretório configurado ( **output/db** ).
-
-### Docker - spark.Dockerfile
-- Características:
-- Base: eclipse-temurin:17-jdk-jammy.
-- Instalação do Python 3.11 e dependências de sistema.
-- Instalação do PySpark 3.5.0.
-- Inclusão do driver JDBC SQL Server.
-- Executa automaticamente o script spark_script.py.
-
-### Execução Local (Sem Docker)
-- Pré-requisitos:
-- Python >= 3.11
-- Java (JDK) >= 8
-- Spark >= 3.5
-- Driver JDBC (mssql-jdbc-12.10.0.jre8.jar) na raiz do projeto
-
-## Variáveis de Ambiente: .env
-
+- Exporta cada tabela como um arquivo jsonl no volume configurado no docker compose:
 ```bash
-export MSQL_DB_NAME=seu_banco
-export MSQL_DB_USER=seu_usuario
-export MSQL_DB_PASSWORD=sua_senha
-export MSQL_DB_HOST=ip_ou_host_do_sqlserver
+shared-api:
+    driver: local
+shared-db:
+      driver: local
 ```
+## Meltano SDK
+
+**Tap Singer personalizado** utilizando o Meltano SDK, projetado para realizar **extração de dados de APIs RESTful** de forma modular e escalável.
 
 ---
-## AZURE - Igestão de dados no container
-Este realizar a **ingestão de dados em arquivos Parquet** no serviço **Azure Blob Storage**, utilizando a biblioteca oficial `azure-storage-blob`.
+
+## Dependências
+
+- **Meltano SDK for Singer Taps**
+- **Python 3.8+**
+- Estrutura modular baseada em:
+  - `tap.py` — ponto de entrada e configuração global do tap
+  - `streams/` — definição de endpoints e regras de paginação
+  - `schemas/` — validação dos dados extraídos via JSON Schema
+
+---
+
+## Databricks injest
+Realiza a **ingestão de dados armazenados localmente**, para o ambiente RAW no databricks.
 
 ### Funcionalidades
 
-- **Renomeação automatizada** dos arquivos Parquet para um padrão consistente (`schema-tabela.parquet`).
-- Upload dos arquivos para o **Azure Blob Storage**, utilizando autenticação via **connection string** segura.
-- Organização dos blobs dentro do container Azure no diretório lógico `/teste/`.
+utiliza o WorkspaceClient para realizar a escritas dos dados brutos no ambiente em nuvem.
 
-### Conexão com o Azure Blob Storage:
-A configuração de conexão é feita através de variáveis de ambiente e da string em **config.py**.
-
-```python
-storage_account_name = os.getenv('AZURE_STORAGE_ACCOUNT_NAME')
-sas_token = os.getenv('AZURE_STORAGE_ACCOUNT_KEY')
-
-connection_string = (
-    "DefaultEndpointsProtocol=https;"
-    f"AccountName={storage_account_name};"
-    f"AccountKey={sas_token};"
-    "EndpointSuffix=core.windows.net"
-)
-container_name_string = os.getenv('AZURE_CONTAINER_NAME')
-```
-### Docker — azure-ingestion.Dockerfile
-- Pré-requisitos:
-- Python >= 3.11
-- Biblioteca: azure-storage-blob
-
-### Variáveis de Ambiente
-```bash
-export AZURE_STORAGE_ACCOUNT_NAME=seu_storage
-export AZURE_STORAGE_ACCOUNT_KEY=sua_chave
-export AZURE_CONTAINER_NAME=seu_container
-```
----
-## JOB Databricks Notebook
-Realiza a **ingestão de dados armazenados no Azure Blob Storage**, a leitura dos arquivos no Databricks (parquet), transformação para Delta Lake e criação de tabelas gerenciadas no metastore do Databricks.
-Adicionalmente, contempla um script externo que permite **acionar programaticamente jobs no Databricks via API REST**, permitindo orquestrações CI/CD, automações ou execuções sob demanda.
-
-### Funcionalidades
-
-- Conexão com o **Azure Blob Storage** via `connection_string`.
-- Listagem dinâmica dos arquivos em uma pasta lógica no container Azure.
-- Leitura dos arquivos Parquet diretamente do blob.
-- Escrita dos dados no formato Delta Lake e criação de tabelas no catálogo.
-- Acionamento externo de jobs configurados no Databricks via **API REST v2.1**.
 ---
 
-### Notebook Databricks
+### Notebooks Databricks
 
-#### Dependências
+**transform_jsonl_to_delta**
+Realiza a transformação dos dados brutos extraidos para tabelas Delta.
 
-- `pandas`
-- `azure-storage-blob`
-- `azure-storage-filedatalake`
-- `pyspark` (nativo do Databricks)
+**start_cluster**
+Um notebook simples (print) para iniciar o cluster, ganhando tempo equanto a exttração de fato ocorre. Ao fim da extração, o cluster estará disponível para gerar as tabelas Delta.
 
-#### Conexão com Azure Blob Storage
+### Airflow - via docker compose
 
-```python
-from azure.storage.blob import ContainerClient, BlobClient
-from io import BytesIO
-import pandas as pd
-```
+Versão: apache/airflow:2.10.4-python3.11
 
-```python
-connection_string = (
-    "DefaultEndpointsProtocol=https;"
-    "AccountName=<account_name>;"
-    "AccountKey=<account_key>;"
-    "EndpointSuffix=core.windows.net"
-)
-
-container_name = "<container_name>"
-
-```
-### Lógica de Leitura e Escrita
-
-- Para cada blob:
-- Faz o download em memória (BytesIO).
-- Converte para DataFrame Pandas → Spark DataFrame.
-- Realiza saneamento dos nomes das colunas (substituição de espaços, traços e pontos por underscore).
-- Persiste como tabela Delta no catálogo .
+Realiza a orquestração das tasks do pipeline.
 
 # CI/CD
 Uma das formas de ativar o pipeline na ordem de execução correta é atravez do **MAKEFILE**
 
-[Clean Docker] → [Clear Memory] → [Build Spark] → [Run Spark] 
-→ [Build Azure] → [Upload Blob] → [Build Databricks] 
-→ [Trigger Notebooks] → [Cleanup]
+comando:
 
-comando: *make pipeline*
+*make build_pipeline*
+
+### função
+Realiza a criação das imagens dockers.
+Adcionalmente dispara a DAG do pipeline.
+
+# Limpeza do ambiente
+O mesmo makefile contem o comando:
+
+*make clear*
+
+Realiza a limpeza de todos os dados relacionados ao docker compose do pc HOST (local)
