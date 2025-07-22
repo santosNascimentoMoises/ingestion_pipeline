@@ -97,7 +97,7 @@ def trigger_databricks_start_cluster(job_id=None, token=None, instance=None):
 
 def databricks_job_completion(run_id):
 
-    logger.error(f"[JOB DATABRICKS] Aguardando fim do JOB")
+    logger.info(f"[JOB DATABRICKS] Aguardando fim do JOB")
     # job_id = os.getenv('JOB_ID')
     token = os.getenv('DATABRICKS_ACCESS_TOKEN')
     instance = os.getenv('DATABRICKS_INSTANCE')
@@ -109,7 +109,7 @@ def databricks_job_completion(run_id):
     }
     logger.info(f"[JOB DATABRICKS] Consultado - Job em andamento")
     logger.info(f"[JOB DATABRICKS] Aguardando 5 min ")
-    time.sleep(300)
+    time.sleep(230)
     while True:
 
         response = requests.get(
