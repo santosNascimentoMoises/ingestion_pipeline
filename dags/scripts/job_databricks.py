@@ -108,8 +108,8 @@ def databricks_job_completion(run_id):
         'Authorization': f'Bearer {token}'
     }
     logger.info(f"[JOB DATABRICKS] Consultado - Job em andamento")
-    logger.info(f"[JOB DATABRICKS] Aguardando 5 min ")
-    time.sleep(230)
+    logger.info(f"[JOB DATABRICKS] Aguardando finalização")
+    time.sleep(210)
     while True:
 
         response = requests.get(

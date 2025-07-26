@@ -192,7 +192,7 @@ STREAMS_METADATA_DB = get_schema_table_select()
 with DAG(
     dag_id="el_extract_ingest_databricks",
     start_date=datetime(1990, 1, 1),
-    schedule_interval="@daily",
+    schedule_interval="0 6 * * *",
     catchup=False,
     tags=["meltano", "sdk", "databricks", "dbt"],
     default_args=default_args
