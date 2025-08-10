@@ -109,7 +109,7 @@ def databricks_job_completion(run_id):
     }
     logger.info(f"[JOB DATABRICKS] Consultado - Job em andamento")
     logger.info(f"[JOB DATABRICKS] Aguardando finalização")
-    time.sleep(210)
+    time.sleep(120)
     while True:
 
         response = requests.get(

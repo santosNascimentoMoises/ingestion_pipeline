@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental'
-        , unique_key=['sales_person_fk','date_order_date']
+        , unique_key=['sales_order_detail_id','date_order_date']
         , incremental_strategy='merge'
     )
 }}
@@ -16,9 +16,12 @@ with
     , acum_sales as (
         select
             date_order_date
-            , sales_person_fk
-            , sum(unit_price) as day_sales_price_sum
+            , sum(unit_price*order_qty) as day_sales_price_sum
             , count(sales_order_id) as day_sales_order_quantity
+            , sum(sum(unit_price * order_qty)) over (
+                order by date_order_date
+                rows between unbounded preceding and current row
+            ) as cumulative_sales_price_sum
         from {{ ref('fct_sales') }}
         cross join max_data
 
@@ -29,7 +32,6 @@ with
 
         group by
             date_order_date
-            , sales_person_fk
 )
 
 select *
