@@ -84,11 +84,11 @@ EXTRACT_SCHEMA_TABLE_INDICATOR = {
         },
         "Sales": {
             "CountryRegionCurrency": True,
-            "CreditCard": True,
+            "CreditCard": False,
             "Currency": True,
             "CurrencyRate": True,
             "Customer": True,
-            "PersonCreditCard": True,
+            "PersonCreditCard": False,
             "SalesOrderDetail": True,
             "SalesOrderHeader": True,
             "SalesOrderHeaderSalesReason": True,
