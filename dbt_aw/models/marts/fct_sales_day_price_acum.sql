@@ -1,11 +1,3 @@
-{{
-    config(
-        materialized='incremental'
-        , unique_key=['sales_order_detail_id','date_order_date']
-        , incremental_strategy='merge'
-    )
-}}
-
 with
     max_data as (
         select
@@ -24,12 +16,6 @@ with
             ) as cumulative_sales_price_sum
         from {{ ref('fct_sales') }}
         cross join max_data
-
-        {% if is_incremental() %}
-        /*                       current_date()*/
-        where date_order_date >= max_data.max_order_date - interval 45 days
-        {% endif %}
-
         group by
             date_order_date
 )

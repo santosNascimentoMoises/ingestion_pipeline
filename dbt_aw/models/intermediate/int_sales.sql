@@ -5,6 +5,11 @@ with
             , bill_to_address_id
             , comment
             , credit_card_approval_code
+            , case
+                when credit_card_approval_code is null
+                    then 'other'
+                else 'credit card'
+            end as payment_type
             , credit_card_id
             , currency_rate_id
             , customer_id
@@ -112,6 +117,7 @@ with
             , stg_sales_order_header.tax_amt
             , stg_sales_order_header.territory_id
             , stg_sales_order_header.total_duenumer
+            , stg_sales_order_header.payment_type
             /*sales_order_header date time columns*/
             , stg_sales_order_header.order_date
             , stg_sales_order_header.due_date
@@ -135,6 +141,11 @@ with
             , stg_sales_order_detail.unit_price_discount
             , stg_sales_order_detail.load_at
             , stg_header_sales_reason.sales_reason_id
+            , case
+                when stg_header_sales_reason.sales_reason_id is null
+                    then 'other'
+                else stg_header_sales_reason.sales_reason_id
+            end as sales_reason_id_all_categorized
         from stg_sales_order_header
         left join stg_sales_order_detail
             on stg_sales_order_header.sales_order_id = stg_sales_order_detail.sales_order_id
