@@ -1,6 +1,6 @@
 with
     raw_dates as (
-        {{ dbt_date.get_date_dimension("2005-01-01", "2019-12-31") }}
+        {{ dbt_date.get_date_dimension("2011-01-01", "2014-12-31") }}
     )
 
     , dim_dates as (

@@ -22,6 +22,7 @@ with
             , tax_amt
             , territory_id
             , total_duenumer
+            , payment_type
             /*date time columns*/
             , order_date
             , due_date
@@ -45,6 +46,7 @@ with
             , unit_price_discount
             , load_at
             , sales_reason_id
+            , sales_reason_id_all_categorized
         from {{ ref('int_sales') }}
     )
 
@@ -114,6 +116,8 @@ with
             , sales.carrier_tracking_number
             , sales.line_total
             , sales.comment
+            , sales.payment_type
+            , sales.sales_reason_id_all_categorized
             /*sales.sales date time columns*/
             , sales.order_date
             , sales.due_date
@@ -178,6 +182,7 @@ with
             , sales_status
             , tax_amt
             , credit_card_id
+            , payment_type
             , ship_method_id
             , product_fk
             , sales_person_fk
@@ -211,6 +216,7 @@ with
             , epoch_sec_due_date
             , load_at
             , sales_reason_id
+            , sales_reason_id_all_categorized
             , reason_fk
         from sales_joined
     )

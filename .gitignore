@@ -35,6 +35,3 @@ meltano_output/
 
 venv/
 .venv
-
-
-output
