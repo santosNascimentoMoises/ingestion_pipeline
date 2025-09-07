@@ -8,15 +8,10 @@ pip install scikit-learn
 
 import os
 import holidays
-# import datetime
 import numpy as np
 import pandas as pd
 import xgboost as xgb
 import matplotlib.pyplot as plt
-# import statsmodels.api as sm
-# from sklearn.model_selection import train_test_split
-# from sklearn.model_selection import TimeSeriesSplit
-# from statsmodels.tsa.seasonal import seasonal_decompose
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import logging
 import mlflow
@@ -37,12 +32,6 @@ logger.addHandler(fh)
 
 def registrar_csv(file):
     logger.info(f"{file}")
-
-# Lista de lags
-# lag_list = [91, 92, 93, 94, 95, 96, 97, 98, 100, 105, 112, 119, 126, 150,
-#             182, 200, 220, 250, 300, 350, 355, 360, 361, 362, 363, 364,
-#             365, 370, 375, 380, 546, 600, 650, 680, 690, 700, 710, 728,
-#             730, 800, 900, 950, 990, 1000, 1050, 1090, 1095]
 
 lag_list = [2,5,15,30,50,90,100]
 
@@ -104,25 +93,20 @@ def cria_atributos_date_time(df):
     df['is_weekend'] = (df['data'].dt.weekday >= 5).astype(int)
     df['start_of_month'] = df['data'].dt.is_month_start.astype(int)
     df['end_of_month'] = df['data'].dt.is_month_end.astype(int)
-    # df['is_holiday'] = np.where(df['data'].isin(lista_holidays(df)), 1, 0)
 
     return df
 
 lista = [i.replace('.csv','') for i in os.listdir('./output')]
 lista_output = [i.replace('xgboost_prediction_','').replace('.png','') for i in os.listdir('./figures')]
 
-# a = True
-# if a:
 for file in lista:
         
-        # file = 'aaaaa'
-    # if file not in lista_output:
         comand('make memoria')
-        # print(file)
+
         df_model_metrics = pd.DataFrame(columns=['file_output','model_mae','model_mse','mean_3_mae','mean_3_mse'])
 
         file_name = file
-        # file_name = "bib_shorts-sure_and_reliable_sporting_goods"
+
         dados = pd.read_csv('./output/' + file_name  + '.csv')
 
         df = cria_atributos_date_time(dados)
@@ -139,9 +123,6 @@ for file in lista:
         df = pd.get_dummies(df, columns = ['day_of_week', 'month'])
 
         # preparação dos dados
-
-        # Coloca os dados da variável alvo na mesma escala
-        # df['itens_vendidos'] = np.log1p(df["product_qty_day"].values)
         df['itens_vendidos'] = df["product_qty_day"].values
 
         # Colunas sem informações úteis ou com informações já derivadas serão descartadas.
@@ -163,12 +144,11 @@ for file in lista:
 
         n_amostras = len(X)
 
-        # 2. Definir os pontos de corte para a divisão 60% (treino), 20% (val), 20% (teste)
+        # 2. Definir os pontos de corte para a divisão 70% (treino), 20% (val), 10% (teste)
         ponto_corte_treino = int(n_amostras * 0.7)
-        ponto_corte_val = int(n_amostras * 0.9)  # 60% (treino) + 20% (validação)
+        ponto_corte_val = int(n_amostras * 0.9)  # 70% (treino) + 10% (validação)
 
-        # 3. Fazer a divisão cronológica usando a localização das linhas (.iloc)
-        # O conjunto de treino contém os primeiros 60% dos dados (o passado)
+        # O conjunto de treino contém os primeiros 90% dos dados (o passado)
         X_treino = X.iloc[:ponto_corte_treino]
         y_treino = Y.iloc[:ponto_corte_treino]
 
@@ -176,22 +156,22 @@ for file in lista:
         X_val = X.iloc[ponto_corte_treino:ponto_corte_val]
         y_val = Y.iloc[ponto_corte_treino:ponto_corte_val]
 
-        # O conjunto de teste contém os últimos 20% (o futuro distante)
+        # O conjunto de teste contém os últimos 10% (o futuro distante)
         X_teste = X.iloc[ponto_corte_val:]
         y_teste = Y.iloc[ponto_corte_val:]
 
         y_teste_3_months_mean = Y_3_mean.iloc[ponto_corte_val:]
 
         modelo = xgb.XGBRegressor(
-            n_estimators=3000,        # mais árvores, mas controlado por early stopping
-            learning_rate=0.04,       # menor taxa, mais suave
-            max_depth=7,              # limitar profundidade
-            min_child_weight=3,       # evita splits muito pequenos
-            subsample=0.8,            # usa 80% das linhas por árvore
-            colsample_bytree=0.8,     # usa 80% das colunas por árvore
-            reg_alpha=0.1,            # L1 regularization
-            reg_lambda=1,             # L2 regularization
-            early_stopping_rounds=50, # mais paciência no early stopping
+            n_estimators=3000,
+            learning_rate=0.04,
+            max_depth=7,
+            min_child_weight=3,
+            subsample=0.8,
+            colsample_bytree=0.8,
+            reg_alpha=0.1,
+            reg_lambda=1,
+            early_stopping_rounds=50,
             eval_metric=["rmse","mae"],
             random_state=42
         )
@@ -290,7 +270,7 @@ for file in lista:
 
             # Summary Plot SHAP
             fig = plt.figure(figsize=(16, 10))
-            shap.summary_plot(shap_values, X_teste, show=False)  # show=False para não travar
+            shap.summary_plot(shap_values, X_teste, show=False)
             fig_path_shap = f"./figures/shap_summary_{file_name}.png"
             plt.savefig(fig_path_shap, bbox_inches="tight")
             plt.close(fig)
@@ -308,7 +288,6 @@ for file in lista:
 
             mlflow.log_artifact(fig_path_shap_inter)
 
-            # df_model_metrics = pd.DataFrame(columns=['file_output','model_mae','model_mse','mean_3_mae','mean_3_mse'])
             df_model_metrics.loc[len(df_model_metrics)] = {
                 'file_output': file_name,
                 'model_mae': mae,
@@ -327,11 +306,6 @@ for file in lista:
 
             hist = df.copy()
             future_preds = pd.DataFrame()
-
-            # for step in range(future_days):
-            #     last_row = hist.iloc[-1:].copy()
-            #     next_date = pd.to_datetime(last_row['date_day'].values[0]) + pd.Timedelta(days=1)
-            #     future = pd.DataFrame({'date_day':[next_date]})
 
             for step in range(future_days):
                 last_row = hist.iloc[-1:].copy()
