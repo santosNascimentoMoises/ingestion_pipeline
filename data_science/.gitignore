@@ -1,12 +1,11 @@
 __pycache__
 by_sc/
-output/
-output_metrics
-prep_teste_output
-x_predict
 *.csv
-
-
+figures
+*.png
+figures_
+figuras_boas_relatorio_
+*.txt
 
 
 
