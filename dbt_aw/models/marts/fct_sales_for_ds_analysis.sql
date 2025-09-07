@@ -33,8 +33,8 @@ with
         select
             sales.date_order_date
             , sales.sales_sk
+            , order_qty
             , dim_product.product_subcategory_name
-            , sum(order_qty) as product_qty_day
             , dim_addres.address_id
             , dim_customer.person_type
             , case
@@ -51,18 +51,31 @@ with
             on sales.customer_fk = dim_customer.customer_sk
         left join dim_addres
             on sales.ship_to_address_id = dim_addres.address_id
-        left join dim_dates
-            on sales.date_order_date = dim_dates.date_day
         left join dim_store
             on sales.sales_person_id = dim_store.sales_person_id
-        group by
-            sales.date_order_date
+        qualify row_number() over (
+            partition by
+                sales.sales_sk
+            order by sales.sales_sk
+        ) = 1
+    )
+
+    , final as (
+        select 
+            date_order_date
             , product_subcategory_name
-            , dim_addres.address_id
+            , address_id
             , person_type
-            , dim_store.store_name
-            , sales.sales_sk
+            , store_name
+            , sum(order_qty) as product_qty_day
+        from sales_joined
+        group by
+            date_order_date
+            , product_subcategory_name
+            , address_id
+            , person_type
+            , store_name
     )
 
 select *
-from sales_joined
+from final
