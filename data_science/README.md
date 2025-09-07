@@ -219,3 +219,37 @@ memoria:
 	sudo sysctl -w vm.drop_caches=3
 	sudo free
 ```
+
+# Consolidação e Análise de Previsões de Vendas - concat_forecast_qty
+
+Este script Python foi projetado para automatizar o processo de consolidação de dados de previsão de vendas. Ele lê múltiplos arquivos CSV de um diretório, soma os valores de previsão de cada um e, em seguida, realiza uma análise para identificar qual país tem a maior previsão de demanda. Por fim, exporta os resultados para arquivos CSV para facilitar o consumo e o compartilhamento.
+
+-----
+
+### ⚙️ Funcionalidades
+
+  * **Leitura Automatizada**: Itera sobre todos os arquivos CSV em um diretório especificado.
+  * **Extração de Metadados**: Extrai o nome do produto e o país diretamente do nome do arquivo CSV.
+  * **Soma de Previsões**: Calcula o valor total da demanda prevista (`forecast_qty`) para cada arquivo.
+  * **Análise de Crescimento**: Agrupa as previsões por país e identifica aquele com a maior demanda total.
+  * **Exportação de Relatórios**: Salva dois relatórios em formato CSV na raiz do projeto, um com os dados brutos consolidados e outro com a análise por país.
+
+-----
+
+### 🚀 Como Usar
+
+1.  **Estrutura de Arquivos**: Coloque todos os arquivos CSV que você deseja consolidar em um diretório específico (por padrão, o script espera uma pasta chamada `./x_predict`).
+2.  **Formato do Nome**: Certifique-se de que os nomes dos arquivos CSV seguem a convenção `x_predict_produto-país.csv` (por exemplo, `x_predict_bib_shorts-canada.csv`), pois o script depende dessa estrutura para extrair as informações.
+3.  **Execução**: Rode o script a partir do seu terminal:
+    ```bash
+    python concat_forecast_qty.py
+    ```
+
+-----
+
+### 📊 Saídas do Script
+
+Após a execução, o script exibirá uma análise detalhada no console e gerará dois arquivos CSV na raiz do projeto:
+
+1.  **`relatorio_previsoes_consolidadas.csv`**: Contém a lista completa de todos os produtos e países processados, com suas respectivas previsões de demanda total. Este é o relatório bruto da consolidação.
+2.  **`relatorio_analise_paises.csv`**: Contém um resumo das previsões agrupadas por país, ordenadas do maior para o menor total de demanda. Este é o relatório de análise, ideal para entender a tendência de crescimento por região.
