@@ -1,3 +1,28 @@
+hoje dia 18/11/2026 eu vim "visitar" esse código, não sei porque kkk
+vi que alguém "clonou" esse repositório kkk (loucura).
+bom, eu fui um dos caras mais fodas do LH, mesmo assim, a contratação não veio.
+se tu entender "metade" da lógica que eu tentei implementar nesse projeto, tu também é um cara foda kkk
+muito provavelmente deve haver erros, então, não copie tudo as cegas.
+que tudo dê certo pra ti, boa sorte...
+
+
+... ou não!!! kkkkkk
+
+hoje, a IA consegue "programar", então a saída pra se dar bem no LH seria fazer algo "fora do padrão esperado".
+ex.: caso seja o mesmo "projeto/case" - coisas que eu fiz que a IA provavelmente não daria uma "resposta":
+
+- configurar um mesmo docker que consegue fazer extração de vários endpoints concomitantes, um do outro;
+- configurar um databricks work para enviar um "ok" ao seu Airflow (local) para iniciar a rodagem do dbt (sem necessidade de "chutar" quanto tempo vai demorar pra finalizar o a ingestão no databricks, pra só depois rodar o dbt);
+- melhorar o tap de extração da API (o segredo é ser BRUTO!!! KKK puxar o máximo de linhas possível de uma vez só, e configurar um "retry" consistente);
+acho que já rodei todo esse pipeline em 8 min (mas a média é 12 min por conta da API).
+
+fora esse lance de "pensar fora da caixa", tem que saber se COMUNICAR bem (a IA pode até saber programar, mas quem vai apresentar o trampo é VC!), estudar inglês e interagir com o máximo de pessoas possíveis (sem ser "chato").
+
+enfim, foram bons tempos #saudade.
+foi uma das coisas mais FODAS! que eu fiz na vida.
+pra superar isso aqui só fazendo um filho ou passando em um concurso que pague uns 30k kkk
+
+
 # PIPELINE
 
 Pipeline modular para extração, ingestão e processamento de dados utilizando PySpark, Azure Blob Storage e Databricks.
